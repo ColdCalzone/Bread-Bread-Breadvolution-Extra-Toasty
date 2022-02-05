@@ -1,0 +1,85 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://objects/BG/white-stars-Sheet.png" type="Texture" id=1]
+[ext_resource path="res://objects/BG/gray-stars-sheet.png" type="Texture" id=2]
+[ext_resource path="res://objects/BG/VerticalParallaxBackground.gd" type="Script" id=3]
+
+[sub_resource type="Animation" id=1]
+resource_name = "idle"
+length = 4.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("GrayStarsLayer/GrayStarsSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1, 2, 3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 3 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("WhiteStarsLayer/WhiteStarsSprite:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.5, 1.5, 2.5, 3.5 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 3 ]
+}
+
+[node name="BackgroundScene" type="Node2D"]
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+offset = Vector2( 640, 0 )
+rotation = 1.5708
+transform = Transform2D( -4.37114e-08, 1, -1, -4.37114e-08, 640, 0 )
+script = ExtResource( 3 )
+
+[node name="SkyLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0, 0 )
+
+[node name="DarkBlue" type="ColorRect" parent="ParallaxBackground/SkyLayer"]
+margin_right = 640.0
+margin_bottom = 640.0
+color = Color( 0.0470588, 0.0470588, 0.172549, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GrayStarsLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0.5, 0.5 )
+motion_mirroring = Vector2( 720, 440 )
+
+[node name="GrayStarsSprite" type="Sprite" parent="ParallaxBackground/GrayStarsLayer"]
+position = Vector2( 324, 168 )
+texture = ExtResource( 2 )
+hframes = 4
+
+[node name="WhiteStarsLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_mirroring = Vector2( 720, 440 )
+
+[node name="WhiteStarsSprite" type="Sprite" parent="ParallaxBackground/WhiteStarsLayer"]
+position = Vector2( 318, 192 )
+texture = ExtResource( 1 )
+hframes = 4
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ParallaxBackground"]
+autoplay = "idle"
+anims/idle = SubResource( 1 )
+
+[node name="DarknessLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0, 0 )
+
+[node name="CUSTOMIZE_THIS" type="ColorRect" parent="ParallaxBackground/DarknessLayer"]
+margin_right = 640.0
+margin_bottom = 640.0
+color = Color( 0, 0, 0, 0.709804 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

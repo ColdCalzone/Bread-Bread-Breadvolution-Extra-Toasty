@@ -1,0 +1,252 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://src/KarmaticArcade.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://src/ChartEditor.tres" type="Theme" id=2]
+[ext_resource path="res://sprites/Play.png" type="Texture" id=3]
+[ext_resource path="res://sprites/BreadGrabber.png" type="Texture" id=4]
+[ext_resource path="res://scenes/ChartEditor.gd" type="Script" id=5]
+[ext_resource path="res://src/Karmatic.tres" type="DynamicFont" id=6]
+[ext_resource path="res://sprites/SweetMeterBacking.png" type="Texture" id=7]
+
+[sub_resource type="DynamicFont" id=3]
+outline_size = 2
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 1 )
+
+[sub_resource type="Theme" id=4]
+default_font = ExtResource( 6 )
+
+[sub_resource type="DynamicFont" id=5]
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 1 )
+
+[sub_resource type="StyleBoxTexture" id=6]
+texture = ExtResource( 7 )
+region_rect = Rect2( 0, 0, 130, 15 )
+
+[sub_resource type="StyleBoxTexture" id=7]
+texture = ExtResource( 7 )
+region_rect = Rect2( 0, 0, 130, 15 )
+
+[node name="ChartEditor" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 1
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ChartBox" type="HBoxContainer" parent="."]
+margin_left = 4.0
+margin_right = 164.0
+margin_bottom = 360.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ChartCenter" type="CenterContainer" parent="ChartBox"]
+margin_right = 88.0
+margin_bottom = 360.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Chart" type="GridContainer" parent="ChartBox/ChartCenter"]
+margin_top = 180.0
+margin_right = 88.0
+margin_bottom = 180.0
+rect_min_size = Vector2( 88, 0 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ChartBox"]
+margin_left = 92.0
+margin_right = 154.0
+margin_bottom = 360.0
+custom_constants/separation = 0
+
+[node name="Control" type="Control" parent="ChartBox/VBoxContainer"]
+margin_right = 62.0
+margin_bottom = 336.0
+rect_min_size = Vector2( 0, 336 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BarNum" type="SpinBox" parent="ChartBox/VBoxContainer"]
+margin_top = 336.0
+margin_right = 62.0
+margin_bottom = 359.0
+rect_min_size = Vector2( 0, 23 )
+theme = ExtResource( 2 )
+min_value = 1.0
+max_value = -1.0
+value = 1.0
+allow_greater = true
+align = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_left = 96.0
+margin_top = 3.0
+margin_right = 275.0
+margin_bottom = 360.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Song" type="HBoxContainer" parent="VBoxContainer"]
+margin_right = 184.0
+margin_bottom = 19.0
+custom_constants/separation = 8
+
+[node name="Label" type="Label" parent="VBoxContainer/Song"]
+margin_right = 66.0
+margin_bottom = 19.0
+custom_fonts/font = SubResource( 3 )
+text = "Song:"
+
+[node name="Button" type="Button" parent="VBoxContainer/Song"]
+margin_left = 74.0
+margin_right = 171.0
+margin_bottom = 19.0
+custom_fonts/font = ExtResource( 6 )
+text = "Select File"
+
+[node name="Name" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 23.0
+margin_right = 184.0
+margin_bottom = 53.0
+custom_constants/separation = 8
+
+[node name="Label" type="Label" parent="VBoxContainer/Name"]
+margin_top = 5.0
+margin_right = 86.0
+margin_bottom = 24.0
+custom_fonts/font = SubResource( 3 )
+text = "Name:     "
+
+[node name="Text" type="TextEdit" parent="VBoxContainer/Name"]
+margin_left = 94.0
+margin_right = 184.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 90, 30 )
+custom_fonts/font = ExtResource( 6 )
+
+[node name="Artist" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 57.0
+margin_right = 184.0
+margin_bottom = 87.0
+custom_constants/separation = 8
+
+[node name="Label" type="Label" parent="VBoxContainer/Artist"]
+margin_top = 5.0
+margin_right = 85.0
+margin_bottom = 24.0
+custom_fonts/font = SubResource( 3 )
+text = "Artist:"
+
+[node name="Text" type="TextEdit" parent="VBoxContainer/Artist"]
+margin_left = 93.0
+margin_right = 183.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 90, 30 )
+custom_fonts/font = ExtResource( 6 )
+
+[node name="BPM" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 91.0
+margin_right = 184.0
+margin_bottom = 115.0
+custom_constants/separation = 8
+
+[node name="Label" type="Label" parent="VBoxContainer/BPM"]
+margin_top = 2.0
+margin_right = 84.0
+margin_bottom = 21.0
+custom_fonts/font = SubResource( 3 )
+text = "BPM:        "
+
+[node name="BPM" type="SpinBox" parent="VBoxContainer/BPM"]
+margin_left = 92.0
+margin_right = 154.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 40, 24 )
+theme = ExtResource( 2 )
+max_value = 0.0
+step = 0.1
+allow_greater = true
+
+[node name="Speed" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 119.0
+margin_right = 184.0
+margin_bottom = 143.0
+custom_constants/separation = 8
+
+[node name="Label" type="Label" parent="VBoxContainer/Speed"]
+margin_top = 2.0
+margin_right = 84.0
+margin_bottom = 21.0
+custom_fonts/font = SubResource( 3 )
+text = "Speed: "
+
+[node name="Speed" type="SpinBox" parent="VBoxContainer/Speed"]
+margin_left = 92.0
+margin_right = 154.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 40, 24 )
+theme = ExtResource( 2 )
+max_value = 0.0
+step = 0.1
+allow_greater = true
+
+[node name="Label" type="Label" parent="."]
+margin_left = 283.0
+margin_top = 24.0
+margin_right = 640.0
+margin_bottom = 58.0
+theme = SubResource( 4 )
+custom_fonts/font = SubResource( 5 )
+text = "Number of measures: 9999999"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Audio" type="HBoxContainer" parent="."]
+margin_left = 283.0
+margin_top = 59.0
+margin_right = 640.0
+margin_bottom = 103.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button" type="Button" parent="Audio"]
+margin_right = 44.0
+margin_bottom = 44.0
+icon = ExtResource( 3 )
+
+[node name="HSlider" type="HSlider" parent="Audio"]
+margin_left = 48.0
+margin_right = 348.0
+margin_bottom = 44.0
+rect_min_size = Vector2( 300, 44 )
+custom_icons/grabber_highlight = ExtResource( 4 )
+custom_icons/grabber = ExtResource( 4 )
+custom_styles/slider = SubResource( 6 )
+custom_styles/grabber_area = SubResource( 7 )
+max_value = 1.0
+step = 0.0
+scrollable = false
+tick_count = 5
+ticks_on_borders = true
+
+[node name="FileDialog" type="FileDialog" parent="."]
+margin_top = 39.0
+margin_right = 640.0
+margin_bottom = 360.0
+rect_min_size = Vector2( 150, 52.5 )
+
+[connection signal="pressed" from="VBoxContainer/Song/Button" to="." method="_on_SongFile_pressed"]
+[connection signal="pressed" from="Audio/Button" to="." method="_on_MusicPlay_pressed"]
+[connection signal="gui_input" from="Audio/HSlider" to="." method="_on_HSlider_gui_input"]
+[connection signal="value_changed" from="Audio/HSlider" to="." method="_on_HSlider_value_changed"]
+[connection signal="file_selected" from="FileDialog" to="." method="_on_FileDialog_file_selected"]
