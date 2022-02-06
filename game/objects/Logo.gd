@@ -9,6 +9,8 @@ onready var title = $VBoxContainer/TextureRect2
 
 onready var tween = $Tween
 onready var tween_scale = $TweenScale
+onready var tween_bounce = $TweenBounce
+onready var audio = $Click
 
 func hide_extra():
 	extra_toasty.visible = false
@@ -29,3 +31,13 @@ func pulse(amount : float):
 	tween_scale.interpolate_property(extra_toasty, "rect_scale", extra_toasty.rect_scale, Vector2.ONE * amount, 0.2, Tween.TRANS_QUART, Tween.EASE_OUT)
 	tween_scale.interpolate_property(extra_toasty, "rect_scale", Vector2.ONE * amount, Vector2.ONE, 0.4, Tween.TRANS_LINEAR, Tween.EASE_OUT_IN, 0.2)
 	tween_scale.start()
+
+func _on_BigBread_gui_input(event):
+	if event is InputEventMouseButton:
+		if event.pressed and event.button_index < 3:
+			tween_bounce.stop_all()
+			audio.pitch_scale = 1/bread.rect_scale.x
+			audio.play()
+			tween_bounce.interpolate_property(bread, "rect_scale", bread.rect_scale, bread.rect_scale * 0.79, 0.1, Tween.TRANS_CUBIC, Tween.EASE_OUT)
+			tween_bounce.interpolate_property(bread, "rect_scale", bread.rect_scale * 0.79, Vector2.ONE, 0.5, Tween.TRANS_BOUNCE, Tween.EASE_OUT, 0.1)
+			tween_bounce.start()

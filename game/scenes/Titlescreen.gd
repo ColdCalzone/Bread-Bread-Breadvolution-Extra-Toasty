@@ -1,7 +1,6 @@
 extends Control
 
 onready var logo = $CenterContainer/Logo
-onready var fps = $Label
 var spectrum 
 
 const MIN_DB = 60
@@ -29,4 +28,3 @@ func _process(delta):
 			has_pulsed = true
 	else:
 		has_pulsed = false
-	fps.text = "FPS: " + String(Engine.get_frames_per_second())

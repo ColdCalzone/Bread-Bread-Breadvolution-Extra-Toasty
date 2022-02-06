@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://objects/BG/BackgroundScene.tscn" type="PackedScene" id=1]
 [ext_resource path="res://objects/Logo.tscn" type="PackedScene" id=2]
@@ -9,7 +9,6 @@
 [ext_resource path="res://sprites/ButtonQuitPressed.png" type="Texture" id=7]
 [ext_resource path="res://sprites/ButtonSettingsPressed.png" type="Texture" id=8]
 [ext_resource path="res://sprites/ButtonPlayPressed.png" type="Texture" id=9]
-[ext_resource path="res://src/Karmatic.tres" type="DynamicFont" id=10]
 
 [node name="Titlescreen" type="Control"]
 anchor_right = 1.0
@@ -31,9 +30,9 @@ __meta__ = {
 
 [node name="Logo" parent="CenterContainer" instance=ExtResource( 2 )]
 margin_left = 85.0
-margin_top = 15.0
+margin_top = 12.0
 margin_right = 341.0
-margin_bottom = 85.0
+margin_bottom = 88.0
 rect_pivot_offset = Vector2( 97, 26 )
 
 [node name="CenterContainer2" type="CenterContainer" parent="."]
@@ -66,8 +65,3 @@ margin_right = 192.0
 margin_bottom = 200.0
 texture_normal = ExtResource( 5 )
 texture_focused = ExtResource( 7 )
-
-[node name="Label" type="Label" parent="."]
-margin_right = 40.0
-margin_bottom = 14.0
-custom_fonts/font = ExtResource( 10 )

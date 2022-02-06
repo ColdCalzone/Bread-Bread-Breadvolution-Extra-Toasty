@@ -10,6 +10,7 @@ onready var artist = $VBoxContainer/Artist/Text
 onready var bpm = $VBoxContainer/BPM/BPM
 onready var speed = $VBoxContainer/Speed/Speed
 onready var file_dialog = $FileDialog
+onready var measures_amount = $Label
 
 onready var music_button = $Audio/Button
 onready var music_progress = $Audio/HSlider
@@ -63,6 +64,7 @@ var current_bar = 1
 
 var delay = AudioServer.get_time_to_next_mix() + AudioServer.get_output_latency()
 
+var song_path : String = ""
 # I experimented with being able to add more than 4 coloums / keys. that didn't work. it crashed the
 #game. The scene never even got added to the tree. I don't know why. I don't want to know why. 
 
@@ -194,10 +196,13 @@ func _on_FileDialog_file_selected(path : String):
 				if data is Dictionary:
 					song_name.text = data.song_info.name
 					artist.text = data.song_info.artist
-					song_button.text = data.song_info.song
-					bpm.value = data.song_info.bpm
+					song_path = data.song_info.song
+					song_button.text = song_path.rsplit("/", false, 1)[1]
 					bpm_value = data.song_info.bpm
 					speed.value = data.song_info.speed
+					audio = load(song_path)
+					MusicPlayer.set_music(audio)
+					bpm.value = data.song_info.bpm
 					var pattern = data.pattern
 					var formatted_pattern = []
 					var bar = []
@@ -241,6 +246,7 @@ func _on_FileDialog_file_selected(path : String):
 		# Loading a song
 		else:
 			song_button.text = path.rsplit("/", false, 1)[1]
+			song_path = path
 			audio = load(path)
 			MusicPlayer.set_music(audio)
 	# Saving a bread file
@@ -255,7 +261,7 @@ func _on_FileDialog_file_selected(path : String):
 				"song_info": {
 					"name" : song_name.text,
 					"artist" : artist.text,
-					"song" : song_button.text,
+					"song" : song_path,
 					"bpm" : bpm_value,
 					"speed" : speed.value
 				},
@@ -332,3 +338,4 @@ func _on_BarNum_value_changed(value):
 
 func _on_BPM_value_changed(value):
 	bpm_value = value
+	measures_amount.text = "Number of measures: " + String(ceil(audio.get_length() / 60 * bpm_value))
