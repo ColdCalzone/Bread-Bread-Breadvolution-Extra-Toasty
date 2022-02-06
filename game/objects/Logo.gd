@@ -4,12 +4,14 @@ const NORMAL_TITLE = Vector2(192, 52.5)
 const EXPANDED_TITLE = Vector2(256, 70)
 
 onready var extra_toasty = $VBoxContainer/HBoxContainer/TextureRect3
-onready var bread = $TextureRect
+onready var bread = $BreadSpin/TextureRect
+onready var bread_spin = $BreadSpin
 onready var title = $VBoxContainer/TextureRect2
 
 onready var tween = $Tween
 onready var tween_scale = $TweenScale
 onready var tween_bounce = $TweenBounce
+onready var tween_spin = $TweenBreadRotate
 onready var audio = $Click
 
 func hide_extra():
@@ -36,7 +38,13 @@ func _on_BigBread_gui_input(event):
 	if event is InputEventMouseButton:
 		if event.pressed and event.button_index < 3:
 			tween_bounce.stop_all()
-			audio.pitch_scale = 1/bread.rect_scale.x
+			if bread.rect_scale.x == bread.rect_scale.y:
+				audio.pitch_scale = 1/bread.rect_scale.y
+			if randi() % 30 == 0:
+				tween_spin.reset_all()
+				tween_spin.interpolate_property(bread_spin, "rect_scale", Vector2.ONE, Vector2.LEFT + Vector2.DOWN, 0.3, Tween.TRANS_QUART, Tween.EASE_OUT)
+				tween_spin.interpolate_property(bread_spin, "rect_scale", Vector2.LEFT + Vector2.DOWN, Vector2.ONE, 0.3, Tween.TRANS_QUART, Tween.EASE_OUT, 0.3)
+				tween_spin.start()
 			audio.play()
 			tween_bounce.interpolate_property(bread, "rect_scale", bread.rect_scale, bread.rect_scale * 0.79, 0.1, Tween.TRANS_CUBIC, Tween.EASE_OUT)
 			tween_bounce.interpolate_property(bread, "rect_scale", bread.rect_scale * 0.79, Vector2.ONE, 0.5, Tween.TRANS_BOUNCE, Tween.EASE_OUT, 0.1)
