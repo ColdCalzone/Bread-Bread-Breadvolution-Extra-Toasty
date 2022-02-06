@@ -13,6 +13,7 @@ onready var tween_scale = $TweenScale
 onready var tween_bounce = $TweenBounce
 onready var tween_spin = $TweenBreadRotate
 onready var audio = $Click
+onready var audio_spin = $Spin
 
 func hide_extra():
 	extra_toasty.visible = false
@@ -38,10 +39,10 @@ func _on_BigBread_gui_input(event):
 	if event is InputEventMouseButton:
 		if event.pressed and event.button_index < 3:
 			tween_bounce.stop_all()
-			if bread.rect_scale.x == bread.rect_scale.y:
-				audio.pitch_scale = 1/bread.rect_scale.y
-			if randi() % 30 == 0:
+			audio.pitch_scale = 1/bread.rect_scale.y - 0.25
+			if randi() % 15 == 0:
 				tween_spin.reset_all()
+				audio_spin.play()
 				tween_spin.interpolate_property(bread_spin, "rect_scale", Vector2.ONE, Vector2.LEFT + Vector2.DOWN, 0.3, Tween.TRANS_QUART, Tween.EASE_OUT)
 				tween_spin.interpolate_property(bread_spin, "rect_scale", Vector2.LEFT + Vector2.DOWN, Vector2.ONE, 0.3, Tween.TRANS_QUART, Tween.EASE_OUT, 0.3)
 				tween_spin.start()
