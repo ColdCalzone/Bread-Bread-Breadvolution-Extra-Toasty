@@ -7,23 +7,36 @@ onready var bar_selector = $ChartBox/VBoxContainer/BarNum
 onready var song_button = $VBoxContainer/Song/Button
 onready var song_name = $VBoxContainer/Name/Text
 onready var artist = $VBoxContainer/Artist/Text
-onready var BPM = $VBoxContainer/BPM/BPM
+onready var bpm = $VBoxContainer/BPM/BPM
 onready var speed = $VBoxContainer/Speed/Speed
 onready var file_dialog = $FileDialog
 
 onready var music_button = $Audio/Button
 onready var music_progress = $Audio/HSlider
 
-onready var chart_button = Panel.new()
+onready var chart_button = ChartButton.new()
+
+onready var music_button_icons = [
+	preload("res://sprites/Play.png"),
+	preload("res://sprites/Pause.png")
+]
 
 onready var chart_buttons = [
-	preload("res://sprites/bread_left.png"), 
-	preload("res://sprites/bread_down.png"), 
-	preload("res://sprites/bread_up.png"), 
-	preload("res://sprites/bread_right.png"), 
+	preload("res://sprites/bread_left.png") as StreamTexture, 
+	preload("res://sprites/bread_down.png") as StreamTexture, 
+	preload("res://sprites/bread_up.png") as StreamTexture, 
+	preload("res://sprites/bread_right.png") as StreamTexture, 
+]
+
+onready var hold_buttons = [
+	preload("res://sprites/baguette_start.png") as StreamTexture,
+	preload("res://sprites/baguette.png") as StreamTexture,
+	preload("res://sprites/baguette_end.png") as StreamTexture,
 ]
 
 onready var chart_style = preload("res://src/chart_checkerboard.tres")
+
+onready var chart_grid : Array = []
 
 var loading_chart : bool = false
 
@@ -33,6 +46,20 @@ var stored_val : float = 0.0
 
 # audio stream - used for werid math stuff and also other things!!!!
 var audio = load("res://sfx/bloop.ogg")
+
+# initialized with one value, fills to 16 in add_rows
+var notes = [[
+	[0,0,0,0]
+]]
+
+# 16th notes
+var current_note = 0
+
+var bpm_value = 60
+var current_bar = 1
+
+var delay = AudioServer.get_time_to_next_mix() + AudioServer.get_output_latency()
+
 # I experimented with being able to add more than 4 coloums / keys. that didn't work. it crashed the
 #game. The scene never even got added to the tree. I don't know why. I don't want to know why. 
 
@@ -50,25 +77,99 @@ func add_rows():
 	for i in range(16):
 		for button in range(4):
 			var new_button = chart_button.duplicate()
-			var button_texture = TextureButton.new()
-			button_texture.toggle_mode = true
-			button_texture.rect_size = Vector2(22, 22)
-			button_texture.texture_pressed = chart_buttons[button]
-			button_texture.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-			button_texture.expand = true
-			new_button.add_child(button_texture)
+			new_button.current_direction = button
+			new_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+			new_button.connect("pressed", self, "change_note", [i * 4 + button])
 			if (i + button) % 2 == 0:
 				new_button.set("custom_styles/panel", chart_style)
 			chart.add_child(new_button)
+			new_button.normal_note = chart_buttons[button]
+	chart_grid = chart.get_children()
+	for i in range(15):
+		notes[current_bar - 1].append(notes[current_bar - 1][0].duplicate())
 
 func _ready():
 	add_rows()
 	MusicPlayer.set_music(audio)
+	MusicPlayer.connect("finished", self, "reset_audio_player")
 
 func _process(delta):
 	if MusicPlayer.playing:
 		if !edit_slider:
 			music_progress.value = MusicPlayer.get_playback_position() / audio.get_length()
+		current_note = (MusicPlayer.get_playback_position() / 60 * bpm_value * 16) - delay # BPM -> BPS -> 16th notes
+		for i in range(chart_grid.size()):
+			chart_grid[i].modulate = Color.white
+		for i in range(4):
+			chart_grid[int(current_note) % 16 * 4 + i].modulate = Color.red
+		if int(current_note / 16) > current_bar:
+			bar_selector.value = int(current_note / 16)
+
+func change_note(mode : int, index : int):
+	var old_mode = notes[current_bar - 1][floor(index / 4)][index % 4]
+	chart_grid[index].set_mode(mode)
+	notes[current_bar - 1][floor(index / 4)][index % 4] = mode * int(chart_grid[index].pressed)
+	if old_mode == 2:
+		var holds = []
+		var success = false
+		for i in range(index, (notes.size() * 4) - 1, 4):
+			if (notes[current_bar - 1][floor(i / 4)][i % 4] != 2 and notes[current_bar - 1][floor(i / 4)][i % 4] != 3) or index == i:
+				holds.append(i)
+			else:
+				success = true
+				break
+		if success:
+			for note in holds:
+				change_note(0, note)
+	if old_mode == 3:
+		var holds = []
+		var success = false
+		for i in range(index, -1, -4):
+			if (notes[current_bar - 1][floor(i / 4)][i % 4] != 2 and notes[current_bar - 1][floor(i / 4)][i % 4] != 3) or index == i:
+				holds.append(i)
+			else:
+				success = true
+				break
+		if success:
+			for note in holds:
+				change_note(0, note)
+	if mode == 2:
+		var holds = []
+		var success = false
+		for i in range(index, notes[current_bar - 1].size() * 4 , 4):
+			if index == i: continue
+			match notes[current_bar - 1][floor(i / 4)][i % 4]:
+				0, 1:
+					holds.append(i)
+				2:
+					break
+				3:
+					success = true
+					break
+		if success:
+			for note in holds:
+				change_note(4, note)
+	if mode == 3:
+		var holds = []
+		var success = false
+		for i in range(index, -1, -4):
+			if index == i: continue
+			match notes[current_bar - 1][floor(i / 4)][i % 4]:
+				0, 1:
+					holds.append(i)
+				2:
+					success = true
+					break
+				3:
+					break
+		if success:
+			for note in holds:
+				change_note(4, note)
+	
+
+func reset_audio_player():
+	music_button.pressed = false
+	music_button.icon = music_button_icons[0]
 
 func _on_SongFile_pressed():
 	file_dialog.set_mode(FileDialog.MODE_OPEN_FILE)
@@ -76,25 +177,33 @@ func _on_SongFile_pressed():
 	file_dialog.add_filter("*.wav ; WAV audio file")
 	file_dialog.popup()
 
-
 func _on_FileDialog_file_selected(path : String):
 	file_dialog.clear_filters()
 	if file_dialog.mode == FileDialog.MODE_OPEN_FILE:
+		# Loading a bread file
 		if loading_chart:
-			pass
+			loading_chart = false
+		# Loading a song
 		else:
 			song_button.text = path.rsplit("/", false, 1)[1]
 			audio = load(path)
 			MusicPlayer.set_music(audio)
+	# Saving a bread file
+	else:
+		pass
 
 
 func _on_MusicPlay_pressed():
 	if !MusicPlayer.playing:
 		MusicPlayer.play()
-		music_button.icon = load("res://sprites/Pause.png")
+		MusicPlayer.seek((current_bar - 1) / bpm_value * 60)
+		music_button.icon = music_button_icons[1]
+		delay = AudioServer.get_time_to_next_mix() + AudioServer.get_output_latency()
 	else:
 		MusicPlayer.stop()
-		music_button.icon = load("res://sprites/Play.png")
+		for button in chart_grid:
+			button.modulate = Color.white
+		music_button.icon = music_button_icons[0]
 
 
 func _on_HSlider_gui_input(event : InputEvent):
@@ -108,3 +217,45 @@ func _on_HSlider_gui_input(event : InputEvent):
 func _on_HSlider_value_changed(value : float):
 	if edit_slider:
 		stored_val = value
+
+func _on_Speed_value_changed(value : float):
+	MusicPlayer.pitch_scale = value
+
+func _on_Save_pressed():
+	file_dialog.set_mode(FileDialog.MODE_SAVE_FILE)
+	file_dialog.add_filter("*.bread ; BBB Chart File")
+	file_dialog.popup()
+
+func _on_Load_pressed():
+	file_dialog.set_mode(FileDialog.MODE_OPEN_FILE)
+	file_dialog.add_filter("*.bread ; BBB Chart File")
+	loading_chart = true
+	file_dialog.popup()
+
+
+func _on_OutputChart_pressed():
+	print("\n")
+	for bar in notes:
+		for note in bar:
+			print(note)
+		print("------------")
+
+
+func _on_BarNum_value_changed(value):
+	current_bar = value
+	for button in chart_grid:
+			button.modulate = Color.white
+	if current_bar > notes.size():
+		var blank = [0,0,0,0]
+		var bar = []
+		for i in range(16):
+			bar.append(blank.duplicate())
+		while current_bar > notes.size():
+			notes.append(bar.duplicate(true))
+	for button in chart_grid.size():
+		chart_grid[button].pressed = false
+		chart_grid[button].set_mode(notes[current_bar - 1][button / 4][button % 4])
+
+
+func _on_BPM_value_changed(value):
+	bpm_value = value

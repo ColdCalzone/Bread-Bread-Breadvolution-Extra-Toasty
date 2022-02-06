@@ -8,6 +8,16 @@
 
 config_version=4
 
+_global_script_classes=[ {
+"base": "Panel",
+"class": "ChartButton",
+"language": "GDScript",
+"path": "res://objects/ChartButton.gd"
+} ]
+_global_script_class_icons={
+"ChartButton": ""
+}
+
 [application]
 
 config/name="Bread Bread Breadvolution: Extra Toasty"
