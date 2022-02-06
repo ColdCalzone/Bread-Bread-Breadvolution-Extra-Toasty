@@ -44,6 +44,9 @@ var edit_slider : bool = false
 # value stored for music progress editing
 var stored_val : float = 0.0
 
+# value used for auto-switching bars, no other purpose
+var last_bar : int = 0
+
 # audio stream - used for werid math stuff and also other things!!!!
 var audio = load("res://sfx/bloop.ogg")
 
@@ -55,7 +58,7 @@ var notes = [[
 # 16th notes
 var current_note = 0
 
-var bpm_value = 60
+var bpm_value : float = 60.0
 var current_bar = 1
 
 var delay = AudioServer.get_time_to_next_mix() + AudioServer.get_output_latency()
@@ -97,22 +100,23 @@ func _process(delta):
 	if MusicPlayer.playing:
 		if !edit_slider:
 			music_progress.value = MusicPlayer.get_playback_position() / audio.get_length()
-		current_note = (MusicPlayer.get_playback_position() / 60 * bpm_value * 16) - delay # BPM -> BPS -> 16th notes
+		current_note = (MusicPlayer.get_playback_position() / 60 * bpm_value * 16) + delay # BPM -> BPS -> 16th notes
 		for i in range(chart_grid.size()):
 			chart_grid[i].modulate = Color.white
 		for i in range(4):
 			chart_grid[int(current_note) % 16 * 4 + i].modulate = Color.red
-		if int(current_note / 16) > current_bar:
-			bar_selector.value = int(current_note / 16)
+		if int((current_note) / 16) > last_bar:
+			last_bar = int((current_note) / 16)
+			bar_selector.value = last_bar + 1
 
 func change_note(mode : int, index : int):
 	var old_mode = notes[current_bar - 1][floor(index / 4)][index % 4]
 	chart_grid[index].set_mode(mode)
 	notes[current_bar - 1][floor(index / 4)][index % 4] = mode * int(chart_grid[index].pressed)
-	if old_mode == 2:
+	if old_mode == 2: 
 		var holds = []
 		var success = false
-		for i in range(index, (notes.size() * 4) - 1, 4):
+		for i in range(index, (notes[current_bar - 1].size() * 4) - 1, 4):
 			if (notes[current_bar - 1][floor(i / 4)][i % 4] != 2 and notes[current_bar - 1][floor(i / 4)][i % 4] != 3) or index == i:
 				holds.append(i)
 			else:
@@ -136,7 +140,7 @@ func change_note(mode : int, index : int):
 	if mode == 2:
 		var holds = []
 		var success = false
-		for i in range(index, notes[current_bar - 1].size() * 4 , 4):
+		for i in range(index, (notes[current_bar - 1].size() * 4) - 1, 4):
 			if index == i: continue
 			match notes[current_bar - 1][floor(i / 4)][i % 4]:
 				0, 1:
@@ -172,6 +176,7 @@ func reset_audio_player():
 	music_button.icon = music_button_icons[0]
 
 func _on_SongFile_pressed():
+	loading_chart = false
 	file_dialog.set_mode(FileDialog.MODE_OPEN_FILE)
 	file_dialog.add_filter("*.ogg ; OGG Vorbis audio file")
 	file_dialog.add_filter("*.wav ; WAV audio file")
@@ -183,6 +188,56 @@ func _on_FileDialog_file_selected(path : String):
 		# Loading a bread file
 		if loading_chart:
 			loading_chart = false
+			var file = File.new()
+			if !file.open(path, File.READ):
+				var data = JSON.parse(file.get_as_text()).result
+				if data is Dictionary:
+					song_name.text = data.song_info.name
+					artist.text = data.song_info.artist
+					song_button.text = data.song_info.song
+					bpm.value = data.song_info.bpm
+					bpm_value = data.song_info.bpm
+					speed.value = data.song_info.speed
+					var pattern = data.pattern
+					var formatted_pattern = []
+					var bar = []
+					for note in pattern:
+						# CAN I PLEASE GET YOUR ATTENTION
+						# TODO: LOOK AT THIS. THIS IS WORKING JUST LOOK AT IT
+						# look at me
+						# Look at me.
+						# I am grabbing you rn. cupping your face.
+						# hi
+						# look at this shit
+						# I spent like an hour figuring out why after loading a file
+						# hold notes wouldn't place until i removed one end of it
+						# well guess what
+						# this is the fix
+						# you know how Javascript and by extension JSON have no int vs float
+						# just "number"
+						# well when going from JSON to GDScript it casts to float
+						# makes sense
+						# but when you have a match case for 0
+						# 0.0 doesn't equal 0 stupid
+						# but it still prints as 0
+						# so you'd never fuckin know
+						# unless you thought of this
+						# I literally thought "this better not fucking work" before writing it
+						# look at that
+						# it worked
+						var notes = []
+						for number in note[0]:
+							notes.append(int(number))
+						bar.append(notes.duplicate())
+						if bar.size() == 16:
+							formatted_pattern.append(bar.duplicate(true))
+							bar = []
+					notes = formatted_pattern.duplicate(true)
+					# Hacky. i do not care !
+					bar_selector.value = 1
+					current_bar = 1
+					_on_BarNum_value_changed(1)
+				
 		# Loading a song
 		else:
 			song_button.text = path.rsplit("/", false, 1)[1]
@@ -190,7 +245,24 @@ func _on_FileDialog_file_selected(path : String):
 			MusicPlayer.set_music(audio)
 	# Saving a bread file
 	else:
-		pass
+		var file = File.new()
+		if !file.open(path, File.WRITE):
+			var pattern = []
+			for bar in notes.size():
+				for note in notes[bar].size():
+					pattern.append([notes[bar][note], (bar * 16 + note) * 60 / bpm_value / 16])
+			var data = {
+				"song_info": {
+					"name" : song_name.text,
+					"artist" : artist.text,
+					"song" : song_button.text,
+					"bpm" : bpm_value,
+					"speed" : speed.value
+				},
+				"pattern" : pattern
+			}
+			file.store_string(JSON.print(data))
+			file.close()
 
 
 func _on_MusicPlay_pressed():
@@ -201,6 +273,7 @@ func _on_MusicPlay_pressed():
 		delay = AudioServer.get_time_to_next_mix() + AudioServer.get_output_latency()
 	else:
 		MusicPlayer.stop()
+		last_bar = 0
 		for button in chart_grid:
 			button.modulate = Color.white
 		music_button.icon = music_button_icons[0]
