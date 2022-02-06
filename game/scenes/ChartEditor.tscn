@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://src/KarmaticArcade.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://src/ChartEditor.tres" type="Theme" id=2]
@@ -9,6 +9,11 @@
 [ext_resource path="res://sprites/SweetMeterBacking.png" type="Texture" id=7]
 
 [sub_resource type="DynamicFont" id=3]
+outline_size = 2
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=11]
 outline_size = 2
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 1 )
@@ -215,6 +220,23 @@ max_value = 999.0
 value = 200.0
 allow_greater = true
 
+[node name="Label" type="Label" parent="VBoxContainer"]
+margin_top = 147.0
+margin_right = 184.0
+margin_bottom = 166.0
+custom_fonts/font = SubResource( 11 )
+text = "Icons:"
+
+[node name="Default" type="Button" parent="VBoxContainer"]
+margin_top = 170.0
+margin_right = 184.0
+margin_bottom = 190.0
+
+[node name="Clicked" type="Button" parent="VBoxContainer"]
+margin_top = 194.0
+margin_right = 184.0
+margin_bottom = 214.0
+
 [node name="Label" type="Label" parent="."]
 margin_left = 283.0
 margin_top = 24.0
@@ -289,14 +311,27 @@ scrollable = false
 tick_count = 5
 ticks_on_borders = true
 
-[node name="SpdLabel" type="Label" parent="."]
+[node name="SpdLabel0" type="Label" parent="."]
 margin_left = 331.0
+margin_top = 144.0
+margin_right = 345.0
+margin_bottom = 163.0
+theme = SubResource( 4 )
+custom_fonts/font = SubResource( 5 )
+text = "0"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SpdLabel1" type="Label" parent="."]
+margin_left = 617.0
 margin_top = 144.0
 margin_right = 630.0
 margin_bottom = 163.0
 theme = SubResource( 4 )
 custom_fonts/font = SubResource( 5 )
-text = "0                                                                    1"
+text = "1"
 valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
@@ -328,10 +363,10 @@ custom_fonts/font = SubResource( 10 )
 text = "Load Chart"
 
 [node name="OutputChart" type="Button" parent="."]
-margin_left = 215.0
-margin_top = 212.0
-margin_right = 368.0
-margin_bottom = 232.0
+margin_left = 281.0
+margin_top = 337.0
+margin_right = 434.0
+margin_bottom = 357.0
 text = "Output chart contents"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -349,6 +384,8 @@ __meta__ = {
 [connection signal="value_changed" from="ChartBox/VBoxContainer/BarNum" to="." method="_on_BarNum_value_changed"]
 [connection signal="pressed" from="VBoxContainer/Song/Button" to="." method="_on_SongFile_pressed"]
 [connection signal="value_changed" from="VBoxContainer/BPM/BPM" to="." method="_on_BPM_value_changed"]
+[connection signal="pressed" from="VBoxContainer/Default" to="." method="_on_DefaultIcon_pressed"]
+[connection signal="pressed" from="VBoxContainer/Clicked" to="." method="_on_ClickedIcon_pressed"]
 [connection signal="pressed" from="Audio/Button" to="." method="_on_MusicPlay_pressed"]
 [connection signal="gui_input" from="Audio/HSlider" to="." method="_on_HSlider_gui_input"]
 [connection signal="value_changed" from="Audio/HSlider" to="." method="_on_HSlider_value_changed"]

@@ -15,6 +15,15 @@ onready var measures_amount = $Label
 onready var music_button = $Audio/Button
 onready var music_progress = $Audio/HSlider
 
+onready var default_icon_button = $VBoxContainer/Default
+onready var clicked_icon_button = $VBoxContainer/Clicked
+
+var default_icon : Image = Image.new()
+var clicked_icon : Image = Image.new()
+
+var default_icon_path : String = ""
+var clicked_icon_path : String = ""
+
 onready var chart_button = ChartButton.new()
 
 onready var music_button_icons = [
@@ -39,7 +48,9 @@ onready var chart_style = preload("res://src/chart_checkerboard.tres")
 
 onready var chart_grid : Array = []
 
-var loading_chart : bool = false
+enum LoadingMode { CHART, SONG, DEFAULT_ICON, CLICK_ICON }
+
+var loading_mode = LoadingMode.SONG
 
 var edit_slider : bool = false
 # value stored for music progress editing
@@ -102,7 +113,7 @@ func _process(delta):
 	if MusicPlayer.playing:
 		if !edit_slider:
 			music_progress.value = MusicPlayer.get_playback_position() / audio.get_length()
-		current_note = (MusicPlayer.get_playback_position() / 60 * bpm_value * 16) + delay # BPM -> BPS -> 16th notes
+		current_note = (MusicPlayer.get_playback_position() / 60 * bpm_value * 4) + delay # BPM -> BPS -> 16th notes
 		for i in range(chart_grid.size()):
 			chart_grid[i].modulate = Color.white
 		for i in range(4):
@@ -178,7 +189,7 @@ func reset_audio_player():
 	music_button.icon = music_button_icons[0]
 
 func _on_SongFile_pressed():
-	loading_chart = false
+	loading_mode = LoadingMode.SONG
 	file_dialog.set_mode(FileDialog.MODE_OPEN_FILE)
 	file_dialog.add_filter("*.ogg ; OGG Vorbis audio file")
 	file_dialog.add_filter("*.wav ; WAV audio file")
@@ -188,67 +199,92 @@ func _on_FileDialog_file_selected(path : String):
 	file_dialog.clear_filters()
 	if file_dialog.mode == FileDialog.MODE_OPEN_FILE:
 		# Loading a bread file
-		if loading_chart:
-			loading_chart = false
-			var file = File.new()
-			if !file.open(path, File.READ):
-				var data = JSON.parse(file.get_as_text()).result
-				if data is Dictionary:
-					song_name.text = data.song_info.name
-					artist.text = data.song_info.artist
-					song_path = data.song_info.song
-					song_button.text = song_path.rsplit("/", false, 1)[1]
-					bpm_value = data.song_info.bpm
-					speed.value = data.song_info.speed
-					audio = load(song_path)
-					MusicPlayer.set_music(audio)
-					bpm.value = data.song_info.bpm
-					var pattern = data.pattern
-					var formatted_pattern = []
-					var bar = []
-					for note in pattern:
-						# CAN I PLEASE GET YOUR ATTENTION
-						# TODO: LOOK AT THIS. THIS IS WORKING JUST LOOK AT IT
-						# look at me
-						# Look at me.
-						# I am grabbing you rn. cupping your face.
-						# hi
-						# look at this shit
-						# I spent like an hour figuring out why after loading a file
-						# hold notes wouldn't place until i removed one end of it
-						# well guess what
-						# this is the fix
-						# you know how Javascript and by extension JSON have no int vs float
-						# just "number"
-						# well when going from JSON to GDScript it casts to float
-						# makes sense
-						# but when you have a match case for 0
-						# 0.0 doesn't equal 0 stupid
-						# but it still prints as 0
-						# so you'd never fuckin know
-						# unless you thought of this
-						# I literally thought "this better not fucking work" before writing it
-						# look at that
-						# it worked
-						var notes = []
-						for number in note[0]:
-							notes.append(int(number))
-						bar.append(notes.duplicate())
-						if bar.size() == 16:
-							formatted_pattern.append(bar.duplicate(true))
-							bar = []
-					notes = formatted_pattern.duplicate(true)
-					# Hacky. i do not care !
-					bar_selector.value = 1
-					current_bar = 1
-					_on_BarNum_value_changed(1)
-				
-		# Loading a song
-		else:
-			song_button.text = path.rsplit("/", false, 1)[1]
-			song_path = path
-			audio = load(path)
-			MusicPlayer.set_music(audio)
+		match loading_mode:
+			LoadingMode.CHART:
+				var file = File.new()
+				if !file.open(path, File.READ):
+					var data = JSON.parse(file.get_as_text()).result
+					if data is Dictionary:
+						song_name.text = data.song_info.name
+						artist.text = data.song_info.artist
+						song_path = data.song_info.song
+						song_button.text = song_path.rsplit("/", false, 1)[1]
+						bpm_value = data.song_info.bpm
+						speed.value = data.song_info.speed
+						audio = load(song_path)
+						MusicPlayer.set_music(audio)
+						bpm.value = data.song_info.bpm
+						
+						#LoadingMode.DEFAULT_ICON:
+						default_icon_path = data.song_info.icons[0]
+						default_icon.load(default_icon_path)
+						var texture = ImageTexture.new()
+						texture.create_from_image(default_icon)
+						default_icon_button.icon = texture
+						#LoadingMode.CLICK_ICON:
+						clicked_icon_path = data.song_info.icons[1]
+						clicked_icon.load(clicked_icon_path)
+						texture = ImageTexture.new()
+						texture.create_from_image(clicked_icon)
+						clicked_icon_button.icon = texture
+						
+						var pattern = data.pattern
+						var formatted_pattern = []
+						var bar = []
+						for note in pattern:
+							# CAN I PLEASE GET YOUR ATTENTION
+							# TODO: LOOK AT THIS. THIS IS WORKING JUST LOOK AT IT
+							# look at me
+							# Look at me.
+							# I am grabbing you rn. cupping your face.
+							# hi
+							# look at this shit
+							# I spent like an hour figuring out why after loading a file
+							# hold notes wouldn't place until i removed one end of it
+							# well guess what
+							# this is the fix
+							# you know how Javascript and by extension JSON have no int vs float
+							# just "number"
+							# well when going from JSON to GDScript it casts to float
+							# makes sense
+							# but when you have a match case for 0
+							# 0.0 doesn't equal 0 stupid
+							# but it still prints as 0
+							# so you'd never fuckin know
+							# unless you thought of this
+							# I literally thought "this better not fucking work" before writing it
+							# look at that
+							# it worked
+							var notes = []
+							for number in note[0]:
+								notes.append(int(number))
+							bar.append(notes.duplicate())
+							if bar.size() == 16:
+								formatted_pattern.append(bar.duplicate(true))
+								bar = []
+						notes = formatted_pattern.duplicate(true)
+						# Hacky. i do not care !
+						bar_selector.value = 1
+						current_bar = 1
+						_on_BarNum_value_changed(1)
+			# Loading a song
+			LoadingMode.SONG:
+				song_button.text = path.rsplit("/", false, 1)[1]
+				song_path = path
+				audio = load(path)
+				MusicPlayer.set_music(audio)
+			LoadingMode.DEFAULT_ICON:
+				default_icon_path = path
+				default_icon.load(path)
+				var texture = ImageTexture.new()
+				texture.create_from_image(default_icon)
+				default_icon_button.icon = texture
+			LoadingMode.CLICK_ICON:
+				clicked_icon_path = path
+				clicked_icon.load(path)
+				var texture = ImageTexture.new()
+				texture.create_from_image(clicked_icon)
+				clicked_icon_button.icon = texture
 	# Saving a bread file
 	else:
 		var file = File.new()
@@ -256,14 +292,15 @@ func _on_FileDialog_file_selected(path : String):
 			var pattern = []
 			for bar in notes.size():
 				for note in notes[bar].size():
-					pattern.append([notes[bar][note], (bar * 16 + note) * 60 / bpm_value / 16])
+					pattern.append([notes[bar][note], (bar * 4 + note) * 60 / bpm_value / 16])
 			var data = {
 				"song_info": {
 					"name" : song_name.text,
 					"artist" : artist.text,
 					"song" : song_path,
 					"bpm" : bpm_value,
-					"speed" : speed.value
+					"speed" : speed.value,
+					"icons" : [default_icon_path, clicked_icon_path]
 				},
 				"pattern" : pattern
 			}
@@ -308,7 +345,7 @@ func _on_Save_pressed():
 func _on_Load_pressed():
 	file_dialog.set_mode(FileDialog.MODE_OPEN_FILE)
 	file_dialog.add_filter("*.bread ; BBB Chart File")
-	loading_chart = true
+	loading_mode = LoadingMode.CHART
 	file_dialog.popup()
 
 
@@ -338,4 +375,18 @@ func _on_BarNum_value_changed(value):
 
 func _on_BPM_value_changed(value):
 	bpm_value = value
-	measures_amount.text = "Number of measures: " + String(ceil(audio.get_length() / 60 * bpm_value))
+	measures_amount.text = "Number of measures: " + String(ceil(audio.get_length() / 60 * bpm_value / 4))
+
+
+func _on_DefaultIcon_pressed():
+	file_dialog.set_mode(FileDialog.MODE_OPEN_FILE)
+	file_dialog.add_filter("*.png ; PNG Images")
+	loading_mode = LoadingMode.DEFAULT_ICON
+	file_dialog.popup()
+
+
+func _on_ClickedIcon_pressed():
+	file_dialog.set_mode(FileDialog.MODE_OPEN_FILE)
+	file_dialog.add_filter("*.png ; PNG Images")
+	loading_mode = LoadingMode.CLICK_ICON
+	file_dialog.popup()
