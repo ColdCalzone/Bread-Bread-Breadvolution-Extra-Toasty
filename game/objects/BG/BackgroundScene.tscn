@@ -43,7 +43,7 @@ motion_scale = Vector2( 0, 0 )
 
 [node name="DarkBlue" type="ColorRect" parent="ParallaxBackground/SkyLayer"]
 margin_right = 640.0
-margin_bottom = 640.0
+margin_bottom = 360.0
 color = Color( 0.0470588, 0.0470588, 0.172549, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -75,7 +75,7 @@ motion_scale = Vector2( 0, 0 )
 
 [node name="CUSTOMIZE_THIS" type="ColorRect" parent="ParallaxBackground/DarknessLayer"]
 margin_right = 640.0
-margin_bottom = 640.0
+margin_bottom = 360.0
 color = Color( 0, 0, 0, 0.447059 )
 __meta__ = {
 "_edit_use_anchors_": false

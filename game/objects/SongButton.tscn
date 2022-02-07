@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://src/Normal.tres" type="Theme" id=1]
+[ext_resource path="res://sprites/ButtonPressed.png" type="Texture" id=2]
+[ext_resource path="res://sprites/Button.png" type="Texture" id=3]
+[ext_resource path="res://objects/SongButton.gd" type="Script" id=4]
+
+[node name="SongButton" type="TextureButton"]
+margin_right = 40.0
+margin_bottom = 40.0
+texture_normal = ExtResource( 3 )
+texture_focused = ExtResource( 2 )
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+margin_right = 191.0
+margin_bottom = 69.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="CenterContainer"]
+margin_left = 95.0
+margin_top = 22.0
+margin_right = 95.0
+margin_bottom = 46.0
+theme = ExtResource( 1 )

@@ -13,6 +13,7 @@ shader = ExtResource( 3 )
 shader_param/time = 0.0
 shader_param/speed = 3.0
 shader_param/delay = 3.0
+shader_param/base_alpha = 0.3
 
 [node name="Ident" type="Control"]
 anchor_right = 1.0

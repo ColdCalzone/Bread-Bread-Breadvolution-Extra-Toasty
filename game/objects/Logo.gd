@@ -32,7 +32,7 @@ func rotate_to(degrees : float, dur : float):
 func pulse(amount : float):
 	tween_scale.stop_all()
 	tween_scale.interpolate_property(extra_toasty, "rect_scale", extra_toasty.rect_scale, Vector2.ONE * amount, 0.2, Tween.TRANS_QUART, Tween.EASE_OUT)
-	tween_scale.interpolate_property(extra_toasty, "rect_scale", Vector2.ONE * amount, Vector2.ONE, 0.4, Tween.TRANS_LINEAR, Tween.EASE_OUT_IN, 0.2)
+	tween_scale.interpolate_property(extra_toasty, "rect_scale", Vector2.ONE * amount, Vector2.ONE, 0.4, Tween.TRANS_QUART, Tween.EASE_IN, 0.2)
 	tween_scale.start()
 
 func _on_BigBread_gui_input(event):

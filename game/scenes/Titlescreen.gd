@@ -28,3 +28,8 @@ func _process(delta):
 			has_pulsed = true
 	else:
 		has_pulsed = false
+
+# Buttons
+
+func _on_Quit_pressed():
+	get_tree().quit()

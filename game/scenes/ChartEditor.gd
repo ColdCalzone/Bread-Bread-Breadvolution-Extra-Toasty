@@ -133,7 +133,7 @@ func change_note(mode : int, index : int):
 			if (notes[current_bar - 1][floor(i / 4)][i % 4] != 2 and notes[current_bar - 1][floor(i / 4)][i % 4] != 3) or index == i:
 				holds.append(i)
 			else:
-				success = true
+				success = notes[current_bar - 1][floor(i / 4)][i % 4] != 2
 				break
 		if success:
 			for note in holds:
@@ -145,7 +145,7 @@ func change_note(mode : int, index : int):
 			if (notes[current_bar - 1][floor(i / 4)][i % 4] != 2 and notes[current_bar - 1][floor(i / 4)][i % 4] != 3) or index == i:
 				holds.append(i)
 			else:
-				success = true
+				success = notes[current_bar - 1][floor(i / 4)][i % 4] != 3
 				break
 		if success:
 			for note in holds:
@@ -215,18 +215,19 @@ func _on_FileDialog_file_selected(path : String):
 						MusicPlayer.set_music(audio)
 						bpm.value = data.song_info.bpm
 						
-						#LoadingMode.DEFAULT_ICON:
-						default_icon_path = data.song_info.icons[0]
-						default_icon.load(default_icon_path)
-						var texture = ImageTexture.new()
-						texture.create_from_image(default_icon)
-						default_icon_button.icon = texture
-						#LoadingMode.CLICK_ICON:
-						clicked_icon_path = data.song_info.icons[1]
-						clicked_icon.load(clicked_icon_path)
-						texture = ImageTexture.new()
-						texture.create_from_image(clicked_icon)
-						clicked_icon_button.icon = texture
+						if data.song_info.has("icons"):
+							#LoadingMode.DEFAULT_ICON:
+							default_icon_path = data.song_info.icons[0]
+							default_icon.load(default_icon_path)
+							var texture = ImageTexture.new()
+							texture.create_from_image(default_icon)
+							default_icon_button.icon = texture
+							#LoadingMode.CLICK_ICON:
+							clicked_icon_path = data.song_info.icons[1]
+							clicked_icon.load(clicked_icon_path)
+							texture = ImageTexture.new()
+							texture.create_from_image(clicked_icon)
+							clicked_icon_button.icon = texture
 						
 						var pattern = data.pattern
 						var formatted_pattern = []
@@ -290,9 +291,19 @@ func _on_FileDialog_file_selected(path : String):
 		var file = File.new()
 		if !file.open(path, File.WRITE):
 			var pattern = []
+			var consecutive_empty_bars : int = 0
 			for bar in notes.size():
+				var consecutive_empty_notes : int = 0
 				for note in notes[bar].size():
-					pattern.append([notes[bar][note], (bar * 4 + note) * 60 / bpm_value / 16])
+					if notes[bar][note] == [0, 0, 0, 0]:
+						consecutive_empty_notes += 1
+					pattern.append([notes[bar][note], (bar * 4 + note) * 60 / bpm_value / 4])
+				if consecutive_empty_notes == 16:
+					consecutive_empty_bars += 1
+				else:
+					consecutive_empty_bars = 0
+			for i in range(consecutive_empty_bars * 16):
+				pattern.pop_back()
 			var data = {
 				"song_info": {
 					"name" : song_name.text,
@@ -311,7 +322,7 @@ func _on_FileDialog_file_selected(path : String):
 func _on_MusicPlay_pressed():
 	if !MusicPlayer.playing:
 		MusicPlayer.play()
-		MusicPlayer.seek((current_bar - 1) / bpm_value * 60)
+		MusicPlayer.seek((current_bar - 1) / bpm_value * 60 * 4)
 		music_button.icon = music_button_icons[1]
 		delay = AudioServer.get_time_to_next_mix() + AudioServer.get_output_latency()
 	else:

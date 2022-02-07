@@ -6,6 +6,7 @@ func set_music(audio_path, play : bool = false):
 		audio = load(audio_path)
 	elif audio_path is AudioStream:
 		audio = audio_path
-	self.stream = audio
-	if play:
-		self.play()
+	if self.stream != audio:
+		self.stream = audio
+		if play:
+			self.play()

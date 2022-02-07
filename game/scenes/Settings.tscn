@@ -1,0 +1,153 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://objects/BG/BackgroundScene.tscn" type="PackedScene" id=1]
+[ext_resource path="res://sprites/ButtonBackPressed.png" type="Texture" id=2]
+[ext_resource path="res://sprites/ButtonBack.png" type="Texture" id=3]
+[ext_resource path="res://src/Normal.tres" type="Theme" id=4]
+[ext_resource path="res://scenes/Settings.gd" type="Script" id=5]
+
+[node name="Settings" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_pivot_offset = Vector2( -242, 0 )
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BackgroundScene" parent="." instance=ExtResource( 1 )]
+z_index = 4096
+
+[node name="Options" type="GridContainer" parent="."]
+margin_left = 1.0
+margin_top = 12.0
+margin_right = 665.0
+margin_bottom = 280.0
+custom_constants/hseparation = 5
+columns = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SoundOptions" type="VBoxContainer" parent="Options"]
+margin_right = 317.5
+margin_bottom = 136.0
+rect_min_size = Vector2( 317.5, 0 )
+custom_constants/separation = 20
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Music" type="VBoxContainer" parent="Options/SoundOptions"]
+margin_right = 317.0
+margin_bottom = 58.0
+
+[node name="Label" type="Label" parent="Options/SoundOptions/Music"]
+margin_right = 317.0
+margin_bottom = 24.0
+theme = ExtResource( 4 )
+text = "Music Volume: "
+
+[node name="HSlider" type="HSlider" parent="Options/SoundOptions/Music"]
+margin_top = 28.0
+margin_right = 317.0
+margin_bottom = 58.0
+rect_min_size = Vector2( 200, 30 )
+theme = ExtResource( 4 )
+max_value = 1.0
+step = 0.0
+value = 1.0
+tick_count = 6
+ticks_on_borders = true
+
+[node name="SFX" type="VBoxContainer" parent="Options/SoundOptions"]
+margin_top = 78.0
+margin_right = 317.0
+margin_bottom = 136.0
+
+[node name="Label" type="Label" parent="Options/SoundOptions/SFX"]
+margin_right = 317.0
+margin_bottom = 24.0
+theme = ExtResource( 4 )
+text = "Sound Volume: "
+
+[node name="HSlider" type="HSlider" parent="Options/SoundOptions/SFX"]
+margin_top = 28.0
+margin_right = 317.0
+margin_bottom = 58.0
+rect_min_size = Vector2( 200, 30 )
+theme = ExtResource( 4 )
+max_value = 1.0
+step = 0.0
+value = 1.0
+tick_count = 6
+ticks_on_borders = true
+
+[node name="Visual" type="VBoxContainer" parent="Options"]
+margin_left = 322.0
+margin_right = 639.5
+margin_bottom = 136.0
+rect_min_size = Vector2( 317.5, 135 )
+custom_constants/separation = 38
+alignment = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Fullscreen" type="VBoxContainer" parent="Options/Visual"]
+margin_top = 18.0
+margin_right = 317.0
+margin_bottom = 58.0
+
+[node name="CheckButton" type="CheckButton" parent="Options/Visual/Fullscreen"]
+margin_right = 317.0
+margin_bottom = 40.0
+focus_mode = 0
+theme = ExtResource( 4 )
+text = "Fullscreen"
+
+[node name="FPS" type="VBoxContainer" parent="Options/Visual"]
+margin_top = 96.0
+margin_right = 317.0
+margin_bottom = 136.0
+
+[node name="CheckButton" type="CheckButton" parent="Options/Visual/FPS"]
+margin_right = 317.0
+margin_bottom = 40.0
+focus_mode = 0
+theme = ExtResource( 4 )
+pressed = true
+text = "Show fps"
+
+[node name="LatencyComp" type="VBoxContainer" parent="Options"]
+margin_top = 140.0
+margin_right = 317.0
+margin_bottom = 202.0
+
+[node name="Label" type="Label" parent="Options/LatencyComp"]
+margin_right = 317.0
+margin_bottom = 24.0
+theme = ExtResource( 4 )
+text = "Lag compensation:"
+
+[node name="SpinBox" type="SpinBox" parent="Options/LatencyComp"]
+margin_top = 28.0
+margin_right = 317.0
+margin_bottom = 62.0
+theme = ExtResource( 4 )
+max_value = 1000.0
+allow_greater = true
+suffix = "ms"
+
+[node name="Back" type="TextureButton" parent="."]
+margin_left = 3.0
+margin_top = 293.0
+margin_right = 195.0
+margin_bottom = 357.0
+texture_normal = ExtResource( 3 )
+texture_focused = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="pressed" from="Back" to="." method="_on_Back_pressed"]

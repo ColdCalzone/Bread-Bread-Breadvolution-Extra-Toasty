@@ -19,6 +19,7 @@ __meta__ = {
 }
 
 [node name="BackgroundScene" parent="." instance=ExtResource( 1 )]
+z_index = 4096
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 margin_right = 427.0
@@ -33,12 +34,14 @@ margin_left = 85.0
 margin_top = 12.0
 margin_right = 341.0
 margin_bottom = 88.0
-rect_pivot_offset = Vector2( 97, 26 )
 
 [node name="CenterContainer2" type="CenterContainer" parent="."]
 margin_top = 150.0
 margin_right = 640.0
 margin_bottom = 360.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer2"]
 margin_left = 224.0
@@ -52,16 +55,18 @@ margin_bottom = 64.0
 texture_normal = ExtResource( 4 )
 texture_focused = ExtResource( 9 )
 
-[node name="Play2" type="TextureButton" parent="CenterContainer2/VBoxContainer"]
+[node name="Settings" type="TextureButton" parent="CenterContainer2/VBoxContainer"]
 margin_top = 68.0
 margin_right = 192.0
 margin_bottom = 132.0
 texture_normal = ExtResource( 6 )
 texture_focused = ExtResource( 8 )
 
-[node name="Play3" type="TextureButton" parent="CenterContainer2/VBoxContainer"]
+[node name="Quit" type="TextureButton" parent="CenterContainer2/VBoxContainer"]
 margin_top = 136.0
 margin_right = 192.0
 margin_bottom = 200.0
 texture_normal = ExtResource( 5 )
 texture_focused = ExtResource( 7 )
+
+[connection signal="pressed" from="CenterContainer2/VBoxContainer/Quit" to="." method="_on_Quit_pressed"]

@@ -31,6 +31,12 @@ func _ready():
 
 var time = 0.0
 
+func _input(event):
+	if event is InputEventKey:
+		tween.stop_all()
+		FPS.show_fps()
+		get_tree().change_scene("res://scenes/Titlescreen.tscn")
+
 func _process(delta):
 	if time < 3:
 		time += delta

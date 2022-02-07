@@ -2,7 +2,6 @@ extends CanvasLayer
 
 onready var fps = $Label
 onready var ifps = $Label2
-
 # Called when the node enters the scene tree for the first time.
 func _physics_process(delta):
 	fps.text = "FPS: " + String(Engine.get_frames_per_second())
