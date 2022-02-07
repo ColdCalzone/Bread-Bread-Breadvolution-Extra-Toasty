@@ -101,15 +101,17 @@ func add_rows():
 			chart.add_child(new_button)
 			new_button.normal_note = chart_buttons[button]
 	chart_grid = chart.get_children()
-	for i in range(15):
+	for _i in range(15):
 		notes[current_bar - 1].append(notes[current_bar - 1][0].duplicate())
 
 func _ready():
 	add_rows()
 	MusicPlayer.set_music(audio)
+	
+# warning-ignore:return_value_discarded
 	MusicPlayer.connect("finished", self, "reset_audio_player")
 
-func _process(delta):
+func _process(_delta):
 	if MusicPlayer.playing:
 		if !edit_slider:
 			music_progress.value = MusicPlayer.get_playback_position() / audio.get_length()
@@ -123,16 +125,21 @@ func _process(delta):
 			bar_selector.value = last_bar + 1
 
 func change_note(mode : int, index : int):
+# warning-ignore:integer_division
 	var old_mode = notes[current_bar - 1][floor(index / 4)][index % 4]
 	chart_grid[index].set_mode(mode)
+# warning-ignore:integer_division
 	notes[current_bar - 1][floor(index / 4)][index % 4] = mode * int(chart_grid[index].pressed)
 	if old_mode == 2: 
 		var holds = []
 		var success = false
 		for i in range(index, (notes[current_bar - 1].size() * 4) - 1, 4):
+# warning-ignore:integer_division
+# warning-ignore:integer_division
 			if (notes[current_bar - 1][floor(i / 4)][i % 4] != 2 and notes[current_bar - 1][floor(i / 4)][i % 4] != 3) or index == i:
 				holds.append(i)
 			else:
+# warning-ignore:integer_division
 				success = notes[current_bar - 1][floor(i / 4)][i % 4] != 2
 				break
 		if success:
@@ -142,9 +149,12 @@ func change_note(mode : int, index : int):
 		var holds = []
 		var success = false
 		for i in range(index, -1, -4):
+# warning-ignore:integer_division
+# warning-ignore:integer_division
 			if (notes[current_bar - 1][floor(i / 4)][i % 4] != 2 and notes[current_bar - 1][floor(i / 4)][i % 4] != 3) or index == i:
 				holds.append(i)
 			else:
+# warning-ignore:integer_division
 				success = notes[current_bar - 1][floor(i / 4)][i % 4] != 3
 				break
 		if success:
@@ -155,6 +165,7 @@ func change_note(mode : int, index : int):
 		var success = false
 		for i in range(index, (notes[current_bar - 1].size() * 4) - 1, 4):
 			if index == i: continue
+# warning-ignore:integer_division
 			match notes[current_bar - 1][floor(i / 4)][i % 4]:
 				0, 1:
 					holds.append(i)
@@ -171,6 +182,7 @@ func change_note(mode : int, index : int):
 		var success = false
 		for i in range(index, -1, -4):
 			if index == i: continue
+# warning-ignore:integer_division
 			match notes[current_bar - 1][floor(i / 4)][i % 4]:
 				0, 1:
 					holds.append(i)
@@ -218,12 +230,14 @@ func _on_FileDialog_file_selected(path : String):
 						if data.song_info.has("icons"):
 							#LoadingMode.DEFAULT_ICON:
 							default_icon_path = data.song_info.icons[0]
+# warning-ignore:return_value_discarded
 							default_icon.load(default_icon_path)
 							var texture = ImageTexture.new()
 							texture.create_from_image(default_icon)
 							default_icon_button.icon = texture
 							#LoadingMode.CLICK_ICON:
 							clicked_icon_path = data.song_info.icons[1]
+# warning-ignore:return_value_discarded
 							clicked_icon.load(clicked_icon_path)
 							texture = ImageTexture.new()
 							texture.create_from_image(clicked_icon)
@@ -256,10 +270,10 @@ func _on_FileDialog_file_selected(path : String):
 							# I literally thought "this better not fucking work" before writing it
 							# look at that
 							# it worked
-							var notes = []
+							var local_notes = []
 							for number in note[0]:
-								notes.append(int(number))
-							bar.append(notes.duplicate())
+								local_notes.append(int(number))
+							bar.append(local_notes.duplicate())
 							if bar.size() == 16:
 								formatted_pattern.append(bar.duplicate(true))
 								bar = []
@@ -268,6 +282,7 @@ func _on_FileDialog_file_selected(path : String):
 						bar_selector.value = 1
 						current_bar = 1
 						_on_BarNum_value_changed(1)
+				file.close()
 			# Loading a song
 			LoadingMode.SONG:
 				song_button.text = path.rsplit("/", false, 1)[1]
@@ -276,12 +291,14 @@ func _on_FileDialog_file_selected(path : String):
 				MusicPlayer.set_music(audio)
 			LoadingMode.DEFAULT_ICON:
 				default_icon_path = path
+# warning-ignore:return_value_discarded
 				default_icon.load(path)
 				var texture = ImageTexture.new()
 				texture.create_from_image(default_icon)
 				default_icon_button.icon = texture
 			LoadingMode.CLICK_ICON:
 				clicked_icon_path = path
+# warning-ignore:return_value_discarded
 				clicked_icon.load(path)
 				var texture = ImageTexture.new()
 				texture.create_from_image(clicked_icon)
@@ -302,7 +319,7 @@ func _on_FileDialog_file_selected(path : String):
 					consecutive_empty_bars += 1
 				else:
 					consecutive_empty_bars = 0
-			for i in range(consecutive_empty_bars * 16):
+			for _i in range(consecutive_empty_bars * 16):
 				pattern.pop_back()
 			var data = {
 				"song_info": {
@@ -375,7 +392,7 @@ func _on_BarNum_value_changed(value):
 	if current_bar > notes.size():
 		var blank = [0,0,0,0]
 		var bar = []
-		for i in range(16):
+		for _i in range(16):
 			bar.append(blank.duplicate())
 		while current_bar > notes.size():
 			notes.append(bar.duplicate(true))

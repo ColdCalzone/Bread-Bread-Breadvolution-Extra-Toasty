@@ -69,4 +69,6 @@ margin_bottom = 200.0
 texture_normal = ExtResource( 5 )
 texture_focused = ExtResource( 7 )
 
+[connection signal="pressed" from="CenterContainer2/VBoxContainer/Play" to="." method="_on_Play_pressed"]
+[connection signal="pressed" from="CenterContainer2/VBoxContainer/Settings" to="." method="_on_Settings_pressed"]
 [connection signal="pressed" from="CenterContainer2/VBoxContainer/Quit" to="." method="_on_Quit_pressed"]

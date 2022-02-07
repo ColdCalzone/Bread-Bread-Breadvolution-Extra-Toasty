@@ -3,7 +3,9 @@ extends CanvasLayer
 var scenes = {
 	"title" : preload("res://scenes/Titlescreen.tscn"),
 	"settings" : preload("res://scenes/Settings.tscn"),
-	"chart" : preload("res://scenes/ChartEditor.tscn")
+	"chart" : preload("res://scenes/ChartEditor.tscn"),
+	"play" : preload("res:///scenes/Play.tscn"),
+	"game" : preload("res://scenes/Game.tscn")
 }
 
 onready var tween = $TransitionManager/Tween

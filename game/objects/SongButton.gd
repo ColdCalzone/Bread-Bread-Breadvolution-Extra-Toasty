@@ -1,10 +1,13 @@
-extends TextureButton
+extends HBoxContainer
 
-onready var label = $CenterContainer/Label
+onready var button : TextureButton = $TextureButton
+onready var label = $TextureButton/CenterContainer/Label
+onready var score = $VBoxContainer/Score
+onready var trinkets = $VBoxContainer/Trinkets.get_children()
 
 func set_textures(default : Texture, clicked : Texture):
-	self.texture_normal = default
-	self.texture_focused = clicked
+	button.texture_normal = default
+	button.texture_focused = clicked
 	label.visible = false
 
 func set_label(text : String):
