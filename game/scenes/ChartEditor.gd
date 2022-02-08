@@ -40,7 +40,7 @@ onready var chart_buttons = [
 
 onready var hold_buttons = [
 	preload("res://sprites/baguette_start.png") as StreamTexture,
-	preload("res://sprites/baguette.png") as StreamTexture,
+	preload("res://sprites/baguette_mid.png") as StreamTexture,
 	preload("res://sprites/baguette_end.png") as StreamTexture,
 ]
 
@@ -314,7 +314,7 @@ func _on_FileDialog_file_selected(path : String):
 				for note in notes[bar].size():
 					if notes[bar][note] == [0, 0, 0, 0]:
 						consecutive_empty_notes += 1
-					pattern.append([notes[bar][note], (bar * 4 + note) * 60 / bpm_value / 4])
+					pattern.append([notes[bar][note], (bar * 16 + note) * 60 / bpm_value / 4])
 				if consecutive_empty_notes == 16:
 					consecutive_empty_bars += 1
 				else:

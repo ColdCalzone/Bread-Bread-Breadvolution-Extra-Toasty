@@ -13,9 +13,21 @@ _global_script_classes=[ {
 "class": "ChartButton",
 "language": "GDScript",
 "path": "res://objects/ChartButton.gd"
+}, {
+"base": "Control",
+"class": "HoldNote",
+"language": "GDScript",
+"path": "res://objects/HoldNote.gd"
+}, {
+"base": "Control",
+"class": "Note",
+"language": "GDScript",
+"path": "res://objects/Note.gd"
 } ]
 _global_script_class_icons={
-"ChartButton": ""
+"ChartButton": "",
+"HoldNote": "",
+"Note": ""
 }
 
 [application]
@@ -49,6 +61,26 @@ window/stretch/aspect="keep"
 left_mouse={
 "deadzone": 0.5,
 "events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":1,"pressed":false,"doubleclick":false,"script":null)
+ ]
+}
+key_left={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":68,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
+ ]
+}
+key_down={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":70,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
+ ]
+}
+key_up={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":74,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
+ ]
+}
+key_right={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":75,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
  ]
 }
 

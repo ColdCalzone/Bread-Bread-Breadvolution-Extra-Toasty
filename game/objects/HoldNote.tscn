@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://sprites/baguette.png" type="Texture" id=1]
+[ext_resource path="res://objects/HoldNote.gd" type="Script" id=2]
+
+[node name="HoldNote" type="Control" groups=["note"]]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -576.0
+margin_bottom = -296.0
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 128, 64, 64 )

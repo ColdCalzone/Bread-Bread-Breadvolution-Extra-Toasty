@@ -17,7 +17,7 @@ var pressed = false
 
 export(StreamTexture) onready var normal_note = preload("res://sprites/bread_left.png")
 export(StreamTexture) onready var hold_start = preload("res://sprites/baguette_start.png")
-export(StreamTexture) onready var hold_middle = preload("res://sprites/baguette.png")
+export(StreamTexture) onready var hold_middle = preload("res://sprites/baguette_mid.png")
 export(StreamTexture) onready var hold_end = preload("res://sprites/baguette_end.png")
 
 signal pressed(mode)
