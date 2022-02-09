@@ -61,6 +61,8 @@ func spawn_hold(target_start, target_end):
 		
 	self.notes.append(end_note)
 
-func remove_note(which):
+func remove_note(which, delayed = false):
 	self.notes[which].queue_free()
 	self.notes.remove(which)
+	if delayed:
+		yield(get_tree().create_timer(1), "timeout")

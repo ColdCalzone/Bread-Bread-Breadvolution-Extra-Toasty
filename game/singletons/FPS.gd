@@ -11,10 +11,12 @@ func _process(delta):
 
 func hide_fps():
 	set_physics_process(false)
+	set_process(false)
 	fps.visible = false
 	ifps.visible = false
 
 func show_fps():
 	set_physics_process(true)
+	set_process(true)
 	fps.visible = true
 	ifps.visible = true

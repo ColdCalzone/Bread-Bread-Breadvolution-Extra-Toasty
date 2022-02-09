@@ -44,6 +44,7 @@ MusicPlayer="*res://singletons/MusicPlayer.tscn"
 FPS="*res://singletons/FPS.tscn"
 TransitionManager="*res://singletons/TransitionManager.tscn"
 SongData="*res://singletons/SongData.gd"
+Settings="*res://singletons/Settings.gd"
 
 [debug]
 

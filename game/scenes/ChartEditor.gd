@@ -105,6 +105,7 @@ func add_rows():
 		notes[current_bar - 1].append(notes[current_bar - 1][0].duplicate())
 
 func _ready():
+	FPS.hide_fps()
 	add_rows()
 	MusicPlayer.set_music(audio)
 	
@@ -418,3 +419,9 @@ func _on_ClickedIcon_pressed():
 	file_dialog.add_filter("*.png ; PNG Images")
 	loading_mode = LoadingMode.CLICK_ICON
 	file_dialog.popup()
+
+func _on_Titlescreen_pressed():
+	if Settings.show_fps:
+		FPS.show_fps()
+	MusicPlayer.pitch_scale = 1
+	TransitionManager.transition_to("title")

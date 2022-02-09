@@ -1,15 +1,43 @@
 extends Control
 
-onready var music_vol = $Options/SoundOptions/Music/HSlider
-onready var sfx_vol = $Options/SoundOptions/SFX/HSlider
-onready var fullscreen = $Options/Visual/Fullscreen/CheckButton
-onready var fps = $Options/Visual/FPS/CheckButton
-onready var latency = $Options/LatencyComp/SpinBox
+onready var music_vol = $Options/SoundOptions/Music/MusicVol
+onready var sfx_vol = $Options/SoundOptions/SFX/SFXVol
+onready var fullscreen = $Options/Visual/Fullscreen/Fullscreen
+onready var fps = $Options/Visual/FPS/ShowFPS
+onready var latency = $Options/LatencyComp/Latency
 onready var back = $Back
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	music_vol.value = Settings.music_volume
+	sfx_vol.value = Settings.sound_volume
+	fullscreen.pressed = Settings.fullscreen
+	fps.pressed = Settings.show_fps
+	latency.value = Settings.latency
 
 func _on_Back_pressed():
 	TransitionManager.transition_to("title")
+
+
+func _on_MusicVol_value_changed(value):
+	Settings.set_music_volume(value)
+	Settings.save_config()
+
+
+func _on_SFXVol_value_changed(value):
+	Settings.set_sound_volume(value)
+	Settings.save_config()
+
+
+func _on_Fullscreen_toggled(button_pressed):
+	Settings.set_fullscreen(button_pressed)
+	Settings.save_config()
+
+
+func _on_ShowFPS_toggled(button_pressed):
+	Settings.set_fps(button_pressed)
+	Settings.save_config()
+
+
+func _on_Latency_value_changed(value):
+	Settings.latency = value
+	Settings.save_config()

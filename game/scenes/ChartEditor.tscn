@@ -381,6 +381,17 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Titlescreen" type="Button" parent="."]
+margin_left = 534.0
+margin_top = 3.0
+margin_right = 637.0
+margin_bottom = 22.0
+theme = ExtResource( 2 )
+text = "Titlescreen"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [connection signal="value_changed" from="ChartBox/VBoxContainer/BarNum" to="." method="_on_BarNum_value_changed"]
 [connection signal="pressed" from="VBoxContainer/Song/Button" to="." method="_on_SongFile_pressed"]
 [connection signal="value_changed" from="VBoxContainer/BPM/BPM" to="." method="_on_BPM_value_changed"]
@@ -394,3 +405,4 @@ __meta__ = {
 [connection signal="pressed" from="SaveLoadBox/Load" to="." method="_on_Load_pressed"]
 [connection signal="pressed" from="OutputChart" to="." method="_on_OutputChart_pressed"]
 [connection signal="file_selected" from="FileDialog" to="." method="_on_FileDialog_file_selected"]
+[connection signal="pressed" from="Titlescreen" to="." method="_on_Titlescreen_pressed"]

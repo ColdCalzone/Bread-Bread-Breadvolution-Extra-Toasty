@@ -7,6 +7,9 @@ var songs : Dictionary = {
 }
 
 func _ready():
+	load_songs()
+
+func load_songs():
 	var song_data = Directory.new()
 	if song_data.open("res://song_data/") == OK:
 		song_data.list_dir_begin(true)
@@ -16,6 +19,7 @@ func _ready():
 			if file.open("res://song_data/" + file_name, File.READ) == OK:
 				var data = JSON.parse(file.get_as_text()).result
 				if data is Dictionary:
+					if songs.has(data.song_info.name): continue
 					songs[data.song_info.name] = "res://song_data/" + file_name
 				file.close()
 			file_name = song_data.get_next()
