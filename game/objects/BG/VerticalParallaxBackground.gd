@@ -1,16 +1,15 @@
 extends ParallaxBackground
 
+export(int) var speed = 20
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
-
-
-# Called when the node enters the scene tree for the first time.
 func _ready():
-	pass
+	set_enabled(Settings.backgrounds)
 
+func set_enabled(enabled : bool):
+	set_process(enabled)
+	for node in get_children():
+		if node is ParallaxLayer:
+			node.visible = enabled
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	scroll_offset.x += 20*delta
+	scroll_offset.x += speed * delta

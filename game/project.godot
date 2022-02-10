@@ -46,10 +46,6 @@ TransitionManager="*res://singletons/TransitionManager.tscn"
 SongData="*res://singletons/SongData.gd"
 Settings="*res://singletons/Settings.gd"
 
-[debug]
-
-settings/fps/force_fps=240
-
 [display]
 
 window/size/width=640
@@ -82,6 +78,11 @@ key_up={
 key_right={
 "deadzone": 0.5,
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":75,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
+ ]
+}
+pause={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777217,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
  ]
 }
 

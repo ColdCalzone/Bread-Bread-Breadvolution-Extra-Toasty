@@ -21,7 +21,7 @@ z_index = 4096
 [node name="Options" type="GridContainer" parent="."]
 margin_left = 1.0
 margin_top = 12.0
-margin_right = 665.0
+margin_right = 640.0
 margin_bottom = 280.0
 custom_constants/hseparation = 5
 columns = 2
@@ -31,7 +31,7 @@ __meta__ = {
 
 [node name="SoundOptions" type="VBoxContainer" parent="Options"]
 margin_right = 317.5
-margin_bottom = 136.0
+margin_bottom = 196.0
 rect_min_size = Vector2( 317.5, 0 )
 custom_constants/separation = 20
 __meta__ = {
@@ -86,7 +86,7 @@ ticks_on_borders = true
 [node name="Visual" type="VBoxContainer" parent="Options"]
 margin_left = 322.0
 margin_right = 639.5
-margin_bottom = 136.0
+margin_bottom = 196.0
 rect_min_size = Vector2( 317.5, 135 )
 custom_constants/separation = 38
 alignment = 2
@@ -95,9 +95,8 @@ __meta__ = {
 }
 
 [node name="Fullscreen" type="VBoxContainer" parent="Options/Visual"]
-margin_top = 18.0
 margin_right = 317.0
-margin_bottom = 58.0
+margin_bottom = 40.0
 
 [node name="Fullscreen" type="CheckButton" parent="Options/Visual/Fullscreen"]
 margin_right = 317.0
@@ -107,9 +106,9 @@ theme = ExtResource( 4 )
 text = "Fullscreen"
 
 [node name="FPS" type="VBoxContainer" parent="Options/Visual"]
-margin_top = 96.0
+margin_top = 78.0
 margin_right = 317.0
-margin_bottom = 136.0
+margin_bottom = 118.0
 
 [node name="ShowFPS" type="CheckButton" parent="Options/Visual/FPS"]
 margin_right = 317.0
@@ -119,25 +118,39 @@ theme = ExtResource( 4 )
 pressed = true
 text = "Show fps"
 
-[node name="LatencyComp" type="VBoxContainer" parent="Options"]
-margin_top = 140.0
+[node name="Backgrounds" type="VBoxContainer" parent="Options/Visual"]
+margin_top = 156.0
 margin_right = 317.0
-margin_bottom = 202.0
+margin_bottom = 196.0
+
+[node name="Backgrounds" type="CheckButton" parent="Options/Visual/Backgrounds"]
+margin_right = 317.0
+margin_bottom = 40.0
+theme = ExtResource( 4 )
+pressed = true
+text = "Backgrounds"
+
+[node name="LatencyComp" type="VBoxContainer" parent="Options"]
+margin_top = 200.0
+margin_right = 317.0
+margin_bottom = 262.0
 
 [node name="Label" type="Label" parent="Options/LatencyComp"]
 margin_right = 317.0
 margin_bottom = 24.0
 theme = ExtResource( 4 )
-text = "Lag compensation:"
+text = "Lag compensation  (ms"
 
 [node name="Latency" type="SpinBox" parent="Options/LatencyComp"]
 margin_top = 28.0
 margin_right = 317.0
 margin_bottom = 62.0
 theme = ExtResource( 4 )
+min_value = -1000.0
 max_value = 1000.0
+step = 0.1
 allow_greater = true
-suffix = "ms"
+align = 1
 
 [node name="Back" type="TextureButton" parent="."]
 margin_left = 3.0
@@ -154,5 +167,6 @@ __meta__ = {
 [connection signal="value_changed" from="Options/SoundOptions/SFX/SFXVol" to="." method="_on_SFXVol_value_changed"]
 [connection signal="toggled" from="Options/Visual/Fullscreen/Fullscreen" to="." method="_on_Fullscreen_toggled"]
 [connection signal="toggled" from="Options/Visual/FPS/ShowFPS" to="." method="_on_ShowFPS_toggled"]
+[connection signal="toggled" from="Options/Visual/Backgrounds/Backgrounds" to="." method="_on_Backgrounds_toggled"]
 [connection signal="value_changed" from="Options/LatencyComp/Latency" to="." method="_on_Latency_value_changed"]
 [connection signal="pressed" from="Back" to="." method="_on_Back_pressed"]

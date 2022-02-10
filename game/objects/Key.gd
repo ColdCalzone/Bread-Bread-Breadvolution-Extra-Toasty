@@ -46,7 +46,6 @@ func spawn_hold(target_start, target_end):
 	end_note.time = target_end
 	end_note.part = end_note.Part.END
 	self.add_child(new_note)
-	self.add_child(end_note)
 	self.notes.append(new_note)
 	# measured in pixels per second
 	var distance = 64/speed
@@ -59,6 +58,7 @@ func spawn_hold(target_start, target_end):
 		self.notes.append(middle_note)
 		distance += 64/speed
 		
+	self.add_child(end_note)
 	self.notes.append(end_note)
 
 func remove_note(which, delayed = false):

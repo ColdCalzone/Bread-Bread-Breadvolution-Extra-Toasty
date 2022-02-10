@@ -68,6 +68,7 @@ motion_mirroring = Vector2( 720, 440 )
 position = Vector2( 318, 192 )
 texture = ExtResource( 1 )
 hframes = 4
+frame = 3
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="ParallaxBackground"]
 autoplay = "idle"

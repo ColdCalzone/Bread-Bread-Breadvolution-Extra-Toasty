@@ -377,6 +377,11 @@ margin_top = 39.0
 margin_right = 640.0
 margin_bottom = 360.0
 rect_min_size = Vector2( 150, 52.5 )
+access = 2
+show_hidden_files = true
+current_dir = "/home/cold/Desktop/programming/Godot/Bread Bread Breadvolution: Extra Toasty/game"
+current_file = "song_data"
+current_path = "/home/cold/Desktop/programming/Godot/Bread Bread Breadvolution: Extra Toasty/game/song_data"
 __meta__ = {
 "_edit_use_anchors_": false
 }
