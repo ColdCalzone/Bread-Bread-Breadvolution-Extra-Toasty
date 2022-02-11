@@ -1,0 +1,257 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://objects/Logo.tscn" type="PackedScene" id=1]
+[ext_resource path="res://sprites/ButtonQuitPressed.png" type="Texture" id=2]
+[ext_resource path="res://sprites/ButtonQuit.png" type="Texture" id=3]
+[ext_resource path="res://sprites/ButtonRestart.png" type="Texture" id=4]
+[ext_resource path="res://sprites/ButtonRestartPressed.png" type="Texture" id=5]
+[ext_resource path="res://src/Normal.tres" type="Theme" id=6]
+[ext_resource path="res://sprites/popups.png" type="Texture" id=7]
+[ext_resource path="res://objects/ResultsScreen.gd" type="Script" id=8]
+
+[node name="ResultsScreen" type="ColorRect"]
+margin_right = 640.0
+margin_bottom = 360.0
+mouse_filter = 1
+color = Color( 0, 0, 0, 0.396078 )
+script = ExtResource( 8 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_right = 320.0
+margin_bottom = 360.0
+custom_constants/separation = 30
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer"]
+margin_right = 320.0
+margin_bottom = 130.0
+rect_min_size = Vector2( 0, 130 )
+mouse_filter = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Logo" parent="VBoxContainer/CenterContainer" instance=ExtResource( 1 )]
+margin_left = 32.0
+margin_top = 27.0
+margin_right = 288.0
+margin_bottom = 103.0
+
+[node name="CenterContainer2" type="CenterContainer" parent="VBoxContainer"]
+margin_top = 160.0
+margin_right = 320.0
+margin_bottom = 300.0
+mouse_filter = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/CenterContainer2"]
+margin_left = 64.0
+margin_right = 256.0
+margin_bottom = 140.0
+custom_constants/separation = 12
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Restart" type="TextureButton" parent="VBoxContainer/CenterContainer2/VBoxContainer"]
+margin_right = 192.0
+margin_bottom = 64.0
+texture_normal = ExtResource( 4 )
+texture_focused = ExtResource( 5 )
+
+[node name="Quit" type="TextureButton" parent="VBoxContainer/CenterContainer2/VBoxContainer"]
+margin_top = 76.0
+margin_right = 192.0
+margin_bottom = 140.0
+texture_normal = ExtResource( 3 )
+texture_focused = ExtResource( 2 )
+
+[node name="Summary" type="VBoxContainer" parent="."]
+margin_left = 320.0
+margin_top = 10.0
+margin_right = 640.0
+margin_bottom = 196.0
+custom_constants/separation = 30
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Score" type="Label" parent="Summary"]
+margin_right = 320.0
+margin_bottom = 24.0
+theme = ExtResource( 6 )
+text = "Score: "
+autowrap = true
+
+[node name="Combo" type="Label" parent="Summary"]
+margin_top = 54.0
+margin_right = 320.0
+margin_bottom = 78.0
+theme = ExtResource( 6 )
+text = "Highest Combo: "
+autowrap = true
+
+[node name="Breaks" type="Label" parent="Summary"]
+margin_top = 108.0
+margin_right = 320.0
+margin_bottom = 132.0
+theme = ExtResource( 6 )
+text = "Combo breaks: "
+autowrap = true
+
+[node name="Accuracy" type="Label" parent="Summary"]
+margin_top = 162.0
+margin_right = 320.0
+margin_bottom = 186.0
+theme = ExtResource( 6 )
+text = "Accuracy: "
+autowrap = true
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+margin_left = 320.0
+margin_top = 200.0
+margin_right = 590.0
+margin_bottom = 360.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GridContainer" type="GridContainer" parent="CenterContainer"]
+margin_left = 57.0
+margin_top = 11.0
+margin_right = 213.0
+margin_bottom = 149.0
+custom_constants/vseparation = 10
+custom_constants/hseparation = 120
+columns = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Sweet" type="VBoxContainer" parent="CenterContainer/GridContainer"]
+margin_right = 18.0
+margin_bottom = 64.0
+custom_constants/separation = 40
+
+[node name="CenterContainer" type="CenterContainer" parent="CenterContainer/GridContainer/Sweet"]
+margin_right = 18.0
+
+[node name="Control" type="Control" parent="CenterContainer/GridContainer/Sweet/CenterContainer"]
+margin_left = 9.0
+margin_right = 9.0
+
+[node name="Sprite" type="Sprite" parent="CenterContainer/GridContainer/Sweet/CenterContainer/Control"]
+texture = ExtResource( 7 )
+offset = Vector2( 0, 16 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 64, 32 )
+
+[node name="Label" type="Label" parent="CenterContainer/GridContainer/Sweet"]
+margin_top = 40.0
+margin_right = 18.0
+margin_bottom = 64.0
+theme = ExtResource( 6 )
+text = "0"
+align = 1
+
+[node name="Good" type="VBoxContainer" parent="CenterContainer/GridContainer"]
+margin_left = 138.0
+margin_right = 156.0
+margin_bottom = 64.0
+custom_constants/separation = 40
+
+[node name="CenterContainer" type="CenterContainer" parent="CenterContainer/GridContainer/Good"]
+margin_right = 18.0
+
+[node name="Control" type="Control" parent="CenterContainer/GridContainer/Good/CenterContainer"]
+margin_left = 9.0
+margin_right = 9.0
+
+[node name="Sprite" type="Sprite" parent="CenterContainer/GridContainer/Good/CenterContainer/Control"]
+texture = ExtResource( 7 )
+offset = Vector2( 0, 16 )
+region_enabled = true
+region_rect = Rect2( 0, 32, 62, 32 )
+
+[node name="Label" type="Label" parent="CenterContainer/GridContainer/Good"]
+margin_top = 40.0
+margin_right = 18.0
+margin_bottom = 64.0
+theme = ExtResource( 6 )
+text = "0"
+align = 1
+
+[node name="Ok" type="VBoxContainer" parent="CenterContainer/GridContainer"]
+margin_top = 74.0
+margin_right = 18.0
+margin_bottom = 138.0
+custom_constants/separation = 40
+
+[node name="CenterContainer" type="CenterContainer" parent="CenterContainer/GridContainer/Ok"]
+margin_right = 18.0
+
+[node name="Control" type="Control" parent="CenterContainer/GridContainer/Ok/CenterContainer"]
+margin_left = 9.0
+margin_right = 9.0
+
+[node name="Sprite" type="Sprite" parent="CenterContainer/GridContainer/Ok/CenterContainer/Control"]
+texture = ExtResource( 7 )
+offset = Vector2( 0, 16 )
+region_enabled = true
+region_rect = Rect2( 0, 64, 29, 32 )
+
+[node name="Label" type="Label" parent="CenterContainer/GridContainer/Ok"]
+margin_top = 40.0
+margin_right = 18.0
+margin_bottom = 64.0
+theme = ExtResource( 6 )
+text = "0"
+align = 1
+
+[node name="Eh" type="VBoxContainer" parent="CenterContainer/GridContainer"]
+margin_left = 138.0
+margin_top = 74.0
+margin_right = 156.0
+margin_bottom = 138.0
+custom_constants/separation = 40
+
+[node name="CenterContainer" type="CenterContainer" parent="CenterContainer/GridContainer/Eh"]
+margin_right = 18.0
+
+[node name="Control" type="Control" parent="CenterContainer/GridContainer/Eh/CenterContainer"]
+margin_left = 9.0
+margin_right = 9.0
+
+[node name="Sprite" type="Sprite" parent="CenterContainer/GridContainer/Eh/CenterContainer/Control"]
+texture = ExtResource( 7 )
+offset = Vector2( 0, 16 )
+region_enabled = true
+region_rect = Rect2( 0, 96, 44, 32 )
+
+[node name="Label" type="Label" parent="CenterContainer/GridContainer/Eh"]
+margin_top = 40.0
+margin_right = 18.0
+margin_bottom = 64.0
+theme = ExtResource( 6 )
+text = "0"
+align = 1
+
+[node name="Fade" type="ColorRect" parent="."]
+visible = false
+margin_right = 640.0
+margin_bottom = 360.0
+mouse_filter = 2
+color = Color( 0, 0, 0, 1 )
+
+[node name="Tween" type="Tween" parent="."]
+
+[connection signal="pressed" from="VBoxContainer/CenterContainer2/VBoxContainer/Restart" to="." method="_on_Restart_pressed"]
+[connection signal="pressed" from="VBoxContainer/CenterContainer2/VBoxContainer/Quit" to="." method="_on_Quit_pressed"]

@@ -9,6 +9,10 @@ onready var tween = $Tween
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	# This really isn't working... I was hoping to make web exports playable
+	if OS.has_feature("web"):
+		Engine.set_iterations_per_second(30)
+		Engine.target_fps = 30
 	Settings.load_config()
 	FPS.hide_fps()
 	set_process(false)

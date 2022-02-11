@@ -19,7 +19,7 @@ func _ready():
 		if file.open(songs[song], File.READ) == OK:
 			var content = JSON.parse(file.get_as_text()).result
 			if content is Dictionary:
-				if content.song_info.icons[0] != null and content.song_info.icons[1] != null:
+				if content.song_info.icons[0] != "" and content.song_info.icons[1] != "":
 					new_button.set_textures(load(content.song_info.icons[0]), load(content.song_info.icons[1]))
 			file.close()
 		song_selector.remove_child(new_button)

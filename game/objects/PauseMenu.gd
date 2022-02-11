@@ -11,7 +11,7 @@ onready var stuff_and_things = [$CenterContainer, $CenterContainer2]
 
 var number : float = 3.0
 
-enum Mode { PAUSE, WIN, OTHER }
+enum Mode { PAUSE, OTHER }
 
 export(Mode) var mode = Mode.PAUSE
 
@@ -21,8 +21,6 @@ func _physics_process(delta):
 func pause():
 	get_tree().paused = true
 	match mode:
-		Mode.WIN:
-			resume.visible = false
 		Mode.OTHER:
 			restart.visible = false
 		_:
@@ -33,6 +31,22 @@ func _input(event):
 	if event.is_action_pressed("pause"):
 		for i in stuff_and_things:
 			i.visible = false
+		if mode == Mode.PAUSE:
+			if get_parent().time > 0:
+				get_parent().time = 2 + MusicPlayer.get_playback_position() - AudioServer.get_time_to_next_mix() - AudioServer.get_output_latency() + (Settings.latency/1000)
+			countdown.visible = true
+			var tween = Tween.new()
+			add_child(tween)
+			tween.interpolate_property(self, "number", 3, 0, 3.0, Tween.TRANS_LINEAR)
+			tween.start()
+			yield(tween, "tween_all_completed")
+		get_tree().paused = false
+		queue_free()
+
+func _on_Resume_pressed():
+	for i in stuff_and_things:
+		i.visible = false
+	if mode == Mode.PAUSE:
 		if get_parent().time > 0:
 			get_parent().time = 2 + MusicPlayer.get_playback_position() - AudioServer.get_time_to_next_mix() - AudioServer.get_output_latency() + (Settings.latency/1000)
 		countdown.visible = true
@@ -41,20 +55,6 @@ func _input(event):
 		tween.interpolate_property(self, "number", 3, 0, 3.0, Tween.TRANS_LINEAR)
 		tween.start()
 		yield(tween, "tween_all_completed")
-		get_tree().paused = false
-		queue_free()
-
-func _on_Resume_pressed():
-	for i in stuff_and_things:
-		i.visible = false
-	if get_parent().time > 0:
-			get_parent().time = 2 + MusicPlayer.get_playback_position() - AudioServer.get_time_to_next_mix() - AudioServer.get_output_latency() + (Settings.latency/1000)
-	countdown.visible = true
-	var tween = Tween.new()
-	add_child(tween)
-	tween.interpolate_property(self, "number", 3, 0, 3.0, Tween.TRANS_LINEAR)
-	tween.start()
-	yield(tween, "tween_all_completed")
 	get_tree().paused = false
 	queue_free()
 

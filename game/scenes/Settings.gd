@@ -6,16 +6,22 @@ onready var fullscreen = $Options/Visual/Fullscreen/Fullscreen
 onready var fps = $Options/Visual/FPS/ShowFPS
 onready var latency = $Options/LatencyComp/Latency
 onready var background = $Options/Visual/Backgrounds/Backgrounds
+onready var scroll = $Options/Scroll/Scroll
+onready var effects = $Options/Visual/Effects/Effects
 onready var back = $Back
 onready var bg = $BackgroundScene/ParallaxBackground
 
 func _ready():
+	scroll.add_item("Downscroll")
+	scroll.add_item("Upscroll")
+	scroll.selected = -(Settings.scroll - 1 / 2)
 	music_vol.value = Settings.music_volume
 	sfx_vol.value = Settings.sound_volume
 	fullscreen.pressed = Settings.fullscreen
 	fps.pressed = Settings.show_fps
 	latency.value = Settings.latency
 	background.pressed = Settings.backgrounds
+	effects.pressed = Settings.effects
 	
 
 func _on_Back_pressed():
@@ -45,3 +51,13 @@ func _on_Backgrounds_toggled(button_pressed):
 	Settings.set_background(button_pressed)
 	Settings.save_config()
 	bg.set_enabled(button_pressed)
+
+
+func _on_Scroll_item_selected(index):
+	Settings.scroll = -(index * 2 - 1)
+	Settings.save_config()
+
+
+func _on_Effects_toggled(button_pressed):
+	Settings.effects = button_pressed
+	Settings.save_config()

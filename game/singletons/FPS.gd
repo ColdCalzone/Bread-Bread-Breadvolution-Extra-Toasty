@@ -2,21 +2,19 @@ extends CanvasLayer
 
 onready var fps = $Label
 onready var ifps = $Label2
-# Called when the node enters the scene tree for the first time.
-func _physics_process(delta):
-	ifps.text = "Input FPS: " + String( round(1 / delta) )
+
+func _ready():
+	ifps.text = "Input FPS: " + String(Engine.get_iterations_per_second())
 
 func _process(delta):
 	fps.text = "FPS: " + String(round(1 / delta))
 
 func hide_fps():
-	set_physics_process(false)
 	set_process(false)
 	fps.visible = false
 	ifps.visible = false
 
 func show_fps():
-	set_physics_process(true)
 	set_process(true)
 	fps.visible = true
 	ifps.visible = true
