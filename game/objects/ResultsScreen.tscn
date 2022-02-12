@@ -76,10 +76,10 @@ texture_focused = ExtResource( 2 )
 
 [node name="Summary" type="VBoxContainer" parent="."]
 margin_left = 320.0
-margin_top = 10.0
+margin_top = 32.0
 margin_right = 640.0
 margin_bottom = 196.0
-custom_constants/separation = 30
+custom_constants/separation = 12
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -92,27 +92,37 @@ text = "Score: "
 autowrap = true
 
 [node name="Combo" type="Label" parent="Summary"]
-margin_top = 54.0
+margin_top = 36.0
 margin_right = 320.0
-margin_bottom = 78.0
+margin_bottom = 60.0
 theme = ExtResource( 6 )
 text = "Highest Combo: "
 autowrap = true
 
 [node name="Breaks" type="Label" parent="Summary"]
-margin_top = 108.0
+modulate = Color( 1, 0.760784, 0.760784, 1 )
+margin_top = 72.0
 margin_right = 320.0
-margin_bottom = 132.0
+margin_bottom = 96.0
 theme = ExtResource( 6 )
 text = "Combo breaks: "
 autowrap = true
 
 [node name="Accuracy" type="Label" parent="Summary"]
-margin_top = 162.0
+margin_top = 108.0
 margin_right = 320.0
-margin_bottom = 186.0
+margin_bottom = 132.0
 theme = ExtResource( 6 )
 text = "Accuracy: "
+autowrap = true
+
+[node name="Toast" type="Label" parent="Summary"]
+modulate = Color( 1, 0.760784, 0.760784, 1 )
+margin_top = 144.0
+margin_right = 320.0
+margin_bottom = 168.0
+theme = ExtResource( 6 )
+text = "Highest Toast: "
 autowrap = true
 
 [node name="CenterContainer" type="CenterContainer" parent="."]

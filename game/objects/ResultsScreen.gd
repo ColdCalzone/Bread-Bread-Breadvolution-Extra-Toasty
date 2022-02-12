@@ -7,6 +7,7 @@ onready var score = $Summary/Score
 onready var combo = $Summary/Combo
 onready var breaks = $Summary/Breaks
 onready var accuracy = $Summary/Accuracy
+onready var toast = $Summary/Toast
 
 onready var sweets = $CenterContainer/GridContainer/Sweet/Label
 onready var goods = $CenterContainer/GridContainer/Good/Label
@@ -29,9 +30,12 @@ func fade_in():
 	combo.text += String(game.highest_combo)
 	breaks.text += String(game.combo_breaks)
 	accuracy.text += String(
-		stepify(100 * (float((4 * game.sweets) + (3 * game.goods) + (2 * game.oks) + (game.ehs)) / float(4 * game.total_notes)), 0.01)
+		stepify(100 * (float((4 * game.sweets) + (3 * game.goods) + (2 * game.oks) + (game.ehs)) / float(4 * game.total_notes + game.misses)), 0.01)
 	) + "%"
+	toast.text += String(stepify(game.highest_toast, 0.1))
 	score.text += String(int(game.score))
+	if not (SongData.aim_bot or SongData.unkillable):
+		SongData.save_to_file(int(game.score))
 
 func _on_Restart_pressed():
 	MusicPlayer.stop()

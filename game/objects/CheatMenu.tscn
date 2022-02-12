@@ -1,0 +1,97 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://src/Normal.tres" type="Theme" id=1]
+[ext_resource path="res://src/ChartEditor.tres" type="Theme" id=2]
+[ext_resource path="res://objects/CheatMenu.gd" type="Script" id=3]
+
+[node name="CheatMenu" type="Control"]
+anchor_right = 0.337
+anchor_bottom = 0.333
+margin_right = 0.319992
+margin_bottom = 0.119995
+mouse_filter = 1
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="Panel" parent="."]
+margin_right = 217.0
+margin_bottom = 120.0
+mouse_filter = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel"]
+margin_right = 216.0
+margin_bottom = 120.0
+scroll_horizontal_enabled = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/ScrollContainer"]
+margin_right = 204.0
+margin_bottom = 216.0
+
+[node name="Blind" type="CheckButton" parent="Panel/ScrollContainer/VBoxContainer"]
+margin_right = 204.0
+margin_bottom = 40.0
+hint_tooltip = "Limits your ability to see incoming notes.
+Grants a trinket upon completion."
+theme = ExtResource( 1 )
+text = "Blind"
+
+[node name="NoMiss" type="CheckButton" parent="Panel/ScrollContainer/VBoxContainer"]
+margin_top = 44.0
+margin_right = 204.0
+margin_bottom = 84.0
+hint_tooltip = "Instantly ends your run if you miss a note.
+Grants a trinket upon completion."
+theme = ExtResource( 1 )
+text = "No miss"
+
+[node name="Perfect" type="CheckButton" parent="Panel/ScrollContainer/VBoxContainer"]
+margin_top = 88.0
+margin_right = 204.0
+margin_bottom = 128.0
+hint_tooltip = "Instantly ends your run if you miss a SWEET.
+Grants a trinket upon completion."
+theme = ExtResource( 1 )
+text = "Perfect"
+
+[node name="Aimbot" type="CheckButton" parent="Panel/ScrollContainer/VBoxContainer"]
+margin_top = 132.0
+margin_right = 204.0
+margin_bottom = 172.0
+hint_tooltip = "Hits notes automatically.
+Cool to look at, invalidates your score."
+theme = ExtResource( 1 )
+text = "Aimbot"
+
+[node name="Unkillable" type="CheckButton" parent="Panel/ScrollContainer/VBoxContainer"]
+margin_top = 176.0
+margin_right = 204.0
+margin_bottom = 216.0
+hint_tooltip = "Prevents you from recieving a game over under any circumstances.
+Invalidates your score."
+theme = ExtResource( 1 )
+text = "No fail"
+
+[node name="Button" type="Button" parent="Panel"]
+margin_left = -20.0
+margin_top = 65.0
+margin_right = 45.0
+margin_bottom = 85.0
+rect_rotation = -90.0
+mouse_filter = 1
+theme = ExtResource( 2 )
+text = "Cheats"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Tween" type="Tween" parent="."]
+
+[connection signal="button_down" from="Panel/Button" to="." method="_on_Button_button_down"]

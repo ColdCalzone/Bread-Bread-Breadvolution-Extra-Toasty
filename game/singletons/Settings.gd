@@ -13,6 +13,8 @@ var backgrounds : bool = true setget set_background
 var scroll : int = ScrollDirections.DOWN
 var effects : bool = true
 
+var cheats : bool = false
+
 var key_binds : Array = [68, 70, 74, 75]
 
 var config : ConfigFile
@@ -31,6 +33,8 @@ func load_config():
 		set_background(config.get_value("video", "backgrounds", true))
 		latency = config.get_value("game", "latency", 0)
 		scroll = config.get_value("game", "scroll", ScrollDirections.DOWN)
+		cheats = config.get_value("game", "cheats", false)
+		
 		key_binds = config.get_value("game", "keybinds", [68, 70, 74, 75])
 		var left = InputEventKey.new()
 		left.scancode = key_binds[0]
@@ -62,6 +66,7 @@ func save_config():
 	config.set_value("game", "scroll", scroll)
 	config.set_value("video", "effects", effects)
 	config.set_value("game", "keybinds", key_binds)
+	config.set_value("game", "cheats", cheats)
 	config.save(CONFIG_PATH)
 
 func set_music_volume(value):
@@ -85,3 +90,7 @@ func set_fps(value):
 
 func set_background(value):
 	backgrounds = value
+
+func set_cheat_mode():
+	cheats = true
+	save_config()

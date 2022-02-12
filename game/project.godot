@@ -34,6 +34,7 @@ _global_script_class_icons={
 
 config/name="Bread Bread Breadvolution: Extra Toasty"
 run/main_scene="res://scenes/Ident.tscn"
+run/delta_smoothing=false
 boot_splash/image="res://wallpaper.png"
 boot_splash/bg_color=Color( 0, 0, 0, 1 )
 config/icon="res://icon.png"

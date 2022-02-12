@@ -32,7 +32,7 @@ func _input(event):
 		for i in stuff_and_things:
 			i.visible = false
 		if mode == Mode.PAUSE:
-			if get_parent().time > 0:
+			if get_parent().timer.is_stopped():
 				get_parent().time = 2 + MusicPlayer.get_playback_position() - AudioServer.get_time_to_next_mix() - AudioServer.get_output_latency() + (Settings.latency/1000)
 			countdown.visible = true
 			var tween = Tween.new()
@@ -65,6 +65,7 @@ func _on_Restart_pressed():
 	queue_free()
 
 func _on_Quit_pressed():
+	MusicPlayer.disconnect("finished", get_parent(), "end_game")
 	MusicPlayer.stop()
 	TransitionManager.transition_to("title")
 	get_tree().paused = false

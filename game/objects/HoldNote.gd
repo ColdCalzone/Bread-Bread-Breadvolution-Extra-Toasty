@@ -11,5 +11,5 @@ var time : float = 0.0
 
 func set_texture(value):
 	part = value
-	$Sprite.region_rect.position.y = part * 64
+	$Sprite.region_rect.position.y = abs(part + (Settings.scroll - 1)) * 64 
 	self.visible = true

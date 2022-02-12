@@ -3,12 +3,18 @@ extends Control
 onready var button = preload("res://objects/SongButton.tscn")
 onready var song_selector = $CenterContainer/SongSelect
 
+onready var chart_button = $ChartEditor
+onready var cheats = $CheatMenu
+
 var cheat_buffer : Array = []
 var seq : Array = [0, 0, 1, 1, 2, 3, 2, 3, 4, 5]
 
 var being_held : bool = false
 
 func _ready():
+	if Settings.cheats:
+		cheats.rect_position.x -= 20
+		chart_button.rect_position.x -= 20
 	var songs = SongData.get_songs()
 	var file = File.new()
 	for song in songs.keys():
@@ -22,6 +28,8 @@ func _ready():
 				if content.song_info.icons[0] != "" and content.song_info.icons[1] != "":
 					new_button.set_textures(load(content.song_info.icons[0]), load(content.song_info.icons[1]))
 			file.close()
+		new_button.set_trinkets(int(SongData.save_data[song].trinkets))
+		new_button.set_score(SongData.save_data[song].score)
 		song_selector.remove_child(new_button)
 		song_selector.add_song(new_button)
 		
@@ -35,7 +43,7 @@ func play_level(song : String):
 		TransitionManager.transition_to("game")
 
 func _input(event):
-	if event is InputEventKey:
+	if event is InputEventKey and not Settings.cheats:
 		if event.pressed and not event.echo:
 			match event.scancode:
 				KEY_UP:
@@ -56,5 +64,11 @@ func _input(event):
 						if key == seq[offset]:
 							offset += 1
 							if offset == 10:
-								MusicPlayer.stop()
-								TransitionManager.transition_to("chart")
+								Settings.set_cheat_mode()
+								cheats.rect_position.x -= 20
+								chart_button.rect_position.x -= 20
+
+
+func _on_Button_pressed():
+	MusicPlayer.stop()
+	TransitionManager.transition_to("chart")

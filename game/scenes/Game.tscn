@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://scenes/Game.gd" type="Script" id=1]
 [ext_resource path="res://objects/Key.tscn" type="PackedScene" id=2]
@@ -8,10 +8,30 @@
 [ext_resource path="res://sprites/SweetMeterBacking.png" type="Texture" id=6]
 [ext_resource path="res://objects/ScoreIndicator.tscn" type="PackedScene" id=7]
 [ext_resource path="res://sprites/SweetMeter.png" type="Texture" id=8]
+[ext_resource path="res://sprites/ToastMeterBacking.png" type="Texture" id=9]
+[ext_resource path="res://sprites/ToastMeter.png" type="Texture" id=10]
+[ext_resource path="res://objects/SpinnyBread.tscn" type="PackedScene" id=11]
+
+[sub_resource type="Shader" id=2]
+code = "shader_type canvas_item;
+
+uniform float point = 2.8;
+
+void fragment() {
+	COLOR = texture(TEXTURE, UV);
+	COLOR = vec4(0.0, 0.0, 0.0, point - (UV.y * 5.0));
+}"
+
+[sub_resource type="ShaderMaterial" id=3]
+shader = SubResource( 2 )
+shader_param/point = 2.8
 
 [sub_resource type="StyleBoxTexture" id=1]
 texture = ExtResource( 6 )
 region_rect = Rect2( 0, 0, 130, 15 )
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 320, 10 )
 
 [node name="Game" type="Control"]
 anchor_right = 1.0
@@ -72,6 +92,43 @@ margin_right = 268.0
 margin_bottom = 64.0
 direction = 1
 
+[node name="Blind" type="ColorRect" parent="."]
+visible = false
+material = SubResource( 3 )
+margin_right = 640.0
+margin_bottom = 360.0
+rect_pivot_offset = Vector2( 320, 180 )
+color = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SpinnyBread" parent="." instance=ExtResource( 11 )]
+margin_left = 548.0
+margin_top = 48.0
+margin_right = -92.0
+margin_bottom = -312.0
+
+[node name="ProgressCenter" type="CenterContainer" parent="."]
+margin_top = 344.0
+margin_right = 640.0
+margin_bottom = 360.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SongProgress" type="HSlider" parent="ProgressCenter"]
+margin_left = 20.0
+margin_right = 620.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 600, 0 )
+rect_pivot_offset = Vector2( 300, 8 )
+theme = ExtResource( 3 )
+custom_styles/slider = SubResource( 1 )
+custom_styles/grabber_area = SubResource( 1 )
+max_value = 1.0
+step = 0.0
+
 [node name="PopupsCenter" type="CenterContainer" parent="."]
 margin_top = 196.0
 margin_right = 640.0
@@ -110,26 +167,6 @@ margin_right = 640.0
 margin_bottom = 372.0
 rect_scale = Vector2( 1, 1 )
 
-[node name="ProgressCenter" type="CenterContainer" parent="."]
-margin_top = 344.0
-margin_right = 640.0
-margin_bottom = 360.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="SongProgress" type="HSlider" parent="ProgressCenter"]
-margin_left = 20.0
-margin_right = 620.0
-margin_bottom = 16.0
-rect_min_size = Vector2( 600, 0 )
-rect_pivot_offset = Vector2( 300, 8 )
-theme = ExtResource( 3 )
-custom_styles/slider = SubResource( 1 )
-custom_styles/grabber_area = SubResource( 1 )
-max_value = 1.0
-step = 0.0
-
 [node name="Score" type="Label" parent="."]
 margin_left = 8.0
 margin_top = 8.0
@@ -141,32 +178,75 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Multiplier" type="HBoxContainer" parent="."]
+[node name="Multiplier" type="VBoxContainer" parent="."]
 margin_left = 8.0
 margin_top = 40.0
-margin_right = 314.0
-margin_bottom = 80.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+margin_right = 180.0
+margin_bottom = 95.0
+custom_constants/separation = 7
 
 [node name="Multiplier" type="Label" parent="Multiplier"]
-margin_top = 8.0
 margin_right = 172.0
-margin_bottom = 32.0
+margin_bottom = 24.0
 theme = ExtResource( 3 )
 text = "Multiplier: "
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TextureProgress" type="TextureProgress" parent="Multiplier"]
-margin_left = 176.0
-margin_top = 13.0
-margin_right = 306.0
-margin_bottom = 28.0
+[node name="CenterContainer" type="CenterContainer" parent="Multiplier"]
+margin_top = 31.0
+margin_right = 172.0
+margin_bottom = 46.0
+rect_min_size = Vector2( 130, 0 )
+
+[node name="TextureProgress" type="TextureProgress" parent="Multiplier/CenterContainer"]
+margin_left = 21.0
+margin_right = 151.0
+margin_bottom = 15.0
 rect_min_size = Vector2( 0, 15 )
 max_value = 20.0
 step = 0.0
 texture_under = ExtResource( 6 )
 texture_progress = ExtResource( 8 )
+
+[node name="Toast" type="VBoxContainer" parent="."]
+margin_left = 8.0
+margin_top = 88.0
+margin_right = 180.0
+margin_bottom = 143.0
+custom_constants/separation = 7
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Toast" type="Label" parent="Toast"]
+margin_right = 172.0
+margin_bottom = 24.0
+theme = ExtResource( 3 )
+text = "Toast: "
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CenterContainer" type="CenterContainer" parent="Toast"]
+margin_top = 31.0
+margin_right = 172.0
+margin_bottom = 51.0
+rect_min_size = Vector2( 130, 0 )
+
+[node name="TextureProgress" type="TextureProgress" parent="Toast/CenterContainer"]
+margin_left = 36.0
+margin_right = 136.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 0, 15 )
+max_value = 15.0
+step = 0.0
+texture_under = ExtResource( 9 )
+texture_progress = ExtResource( 10 )
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2( 320, 370 )
+shape = SubResource( 4 )
