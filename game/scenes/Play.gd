@@ -12,6 +12,7 @@ var seq : Array = [0, 0, 1, 1, 2, 3, 2, 3, 4, 5]
 var being_held : bool = false
 
 func _ready():
+	MusicPlayer.set_music("res://Music/Just_Existing_v4.wav", true)
 	if Settings.cheats:
 		cheats.rect_position.x -= 20
 		chart_button.rect_position.x -= 20

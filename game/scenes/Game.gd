@@ -49,6 +49,7 @@ onready var toast_meter = $Toast/CenterContainer/TextureProgress
 onready var spinny_bread = $SpinnyBread
 
 var toast = 1.0
+var base_toast = 1.0
 var highest_toast = 1.0
 
 onready var pause_menu = preload("res://objects/PauseMenu.tscn")
@@ -63,7 +64,14 @@ var scroll_direction = 0
 
 var is_game_over : bool = false
 
-var tween = Tween.new()
+onready var tween = $Tween
+
+onready var credits = [$Credits1, $Credits2]
+
+onready var title = $Credits1/Title
+onready var length = $Credits1/Time
+onready var artist = $Credits2/Artist
+onready var bpm_text = $Credits2/BPM
 
 var actions = ["key_left", "key_down", "key_up", "key_right"]
 
@@ -83,9 +91,12 @@ func _ready():
 	blind.visible = SongData.blind
 	multiplier += (int(SongData.no_miss) * 10) + (int(SongData.perfect) * 15) + (int(SongData.blind) * 5)
 	if SongData.no_miss:
-		toast = 10.0
+		base_toast += 10.0
 	if SongData.perfect:
-		toast = 20.0
+		base_toast += 15.0
+	if SongData.blind:
+		base_toast += 4.0
+	toast = base_toast
 	MusicPlayer.stop()
 	song_progress.value = 0
 	
@@ -100,9 +111,14 @@ func _ready():
 		var data = JSON.parse(file.get_as_text()).result
 		if data is Dictionary:
 			bpm = data.song_info.bpm
+			bpm_text.text = "BPM: " + String(bpm)
+			artist.text = data.song_info.artist
+			title.text = data.song_info.name
 			speed = data.song_info.speed
 			pattern = data.pattern
 			MusicPlayer.set_music(data.song_info.song)
+			var seconds = int(MusicPlayer.stream.get_length()) % 60
+			length.text = "Length: " + String(int(MusicPlayer.stream.get_length() / 60)) + ":" + ("0" if seconds < 10 else "") + String(seconds)
 			# preprocessing for hold notes
 			# 2 = begin 3 = end 4 = middle (can be ignored)
 			for notes in range(pattern.size()):
@@ -121,13 +137,27 @@ func _ready():
 		key.speed = speed
 	bg.speed = speed
 	
+	tween.interpolate_property(credits[0], "rect_position:x", 674, 210, 0.4, Tween.TRANS_LINEAR, Tween.EASE_IN)
+	tween.interpolate_property(credits[1], "rect_position:x", -326, 114, 0.4, Tween.TRANS_LINEAR, Tween.EASE_IN)
+	tween.interpolate_property(credits[0], "rect_position:x", 210, 114, 1.0, Tween.TRANS_LINEAR, Tween.EASE_IN, 0.4)
+	tween.interpolate_property(credits[1], "rect_position:x", 114, 210, 1.0, Tween.TRANS_LINEAR, Tween.EASE_IN, 0.4)
+	tween.interpolate_property(credits[0], "rect_position:x", 114, -326 - credits[0].rect_size.x, 0.2, Tween.TRANS_LINEAR, Tween.EASE_IN, 1.4)
+	tween.interpolate_property(credits[1], "rect_position:x", 210, 674 + credits[0].rect_size.x, 0.2, Tween.TRANS_LINEAR, Tween.EASE_IN, 1.4)
+	
+	set_process(false)
+	tween.start()
+	yield(tween, "tween_all_completed")
+	set_process(true)
+	
 	time -= AudioServer.get_time_to_next_mix() + AudioServer.get_output_latency()
 	timer = Timer.new()
 	timer.wait_time =  2 - float(Settings.latency) / 1000
 	add_child(timer)
 	timer.start()
 	yield(timer, "timeout")
-	MusicPlayer.connect("finished", self, "end_game")
+	var err = MusicPlayer.connect("finished", self, "end_game")
+	if err != OK:
+		get_tree().quit()
 	MusicPlayer.play()
 
 func _process(delta):
@@ -154,25 +184,51 @@ func _physics_process(delta):
 			note_pointer += 1
 	
 	for note in get_tree().get_nodes_in_group("note"):
-			note.rect_position.y = ((time + phys_time) - note.time) * speed * scroll_direction
+			note.rect_position.y = (time - note.time) * speed * scroll_direction
 			if beat - (note.time / 60 * bpm) > 60 / bpm / 4:
-				note.get_parent().remove_note(0)
-				if (SongData.no_miss or SongData.perfect) and not SongData.unkillable:
-					game_over()
-				if combo > 0:
-					combo_breaks += 1
-				combo = 0
 				if note is HoldNote:
 					if note.part == 2:
 						score -= 100 * multiplier * toast
 						misses += 1
-					else:
+						note.remove_self()
+						if (SongData.no_miss or SongData.perfect) and not SongData.unkillable:
+							game_over()
+						if combo > 0:
+							combo_breaks += 1
+						combo = 0
+						multiplier = 1
+						toast += 0.5
+					elif note.part == 1 and beat - (note.time / 60 * bpm) > 60 / bpm / 2:
 						score -= 10
+						note.remove_self()
+						if (SongData.no_miss or SongData.perfect) and not SongData.unkillable:
+							game_over()
+						if combo > 0:
+							combo_breaks += 1
+						combo = 0
+						multiplier = 1
+						toast += 0.5
+					elif note.part == 0:
+						score -= 10
+						note.remove_self()
+						if (SongData.no_miss or SongData.perfect) and not SongData.unkillable:
+							game_over()
+						if combo > 0:
+							combo_breaks += 1
+						combo = 0
+						multiplier = 1
+						toast += 0.5
 				else:
+					note.remove_self()
 					score -= 100 * multiplier * toast
 					misses += 1
-				multiplier = 1
-				toast += 0.5
+					if (SongData.no_miss or SongData.perfect) and not SongData.unkillable:
+						game_over()
+					if combo > 0:
+						combo_breaks += 1
+					combo = 0
+					multiplier = 1
+					toast += 0.5
 	
 	if SongData.aim_bot:
 		for key in range(keys.size()):
@@ -196,7 +252,7 @@ func _physics_process(delta):
 					multiplier += 0.05
 					
 	if Input.is_action_pressed("key_down") and keys[1].holding:
-		if keys[0].notes.size() > 0:
+		if keys[1].notes.size() > 0:
 			if keys[1].notes[0] is HoldNote:
 				if keys[1].notes[0].time / 60 * bpm - beat <= 0:
 					# is this the end?
@@ -207,7 +263,7 @@ func _physics_process(delta):
 					multiplier += 0.05
 	
 	if Input.is_action_pressed("key_up") and keys[2].holding:
-		if keys[0].notes.size() > 0:
+		if keys[2].notes.size() > 0:
 			if keys[2].notes[0] is HoldNote:
 				if keys[2].notes[0].time / 60 * bpm - beat <= 0:
 					# is this the end?
@@ -218,7 +274,7 @@ func _physics_process(delta):
 					multiplier += 0.05
 	
 	if Input.is_action_pressed("key_right") and keys[3].holding:
-		if keys[0].notes.size() > 0:
+		if keys[3].notes.size() > 0:
 			if keys[3].notes[0] is HoldNote:
 				if keys[3].notes[0].time / 60 * bpm - beat <= 0:
 					# is this the end?
@@ -354,6 +410,8 @@ func _physics_process(delta):
 	toast_meter.value = (toast - 1)
 	if toast > 20 and not SongData.unkillable:
 		game_over()
+	if toast < base_toast:
+		toast = base_toast
 	
 	if combo > highest_combo:
 		highest_combo = combo
@@ -361,8 +419,8 @@ func _physics_process(delta):
 	if toast > highest_toast:
 		highest_toast = toast
 	
-	if combo > 0 and toast > 0:
-		toast -= delta / 10
+	if combo > 0 and toast > 1:
+		toast -= (delta / 10) * (notes_hit + 1)
 	
 	score_text.text = "Score: " + String(int(score))
 	
@@ -379,15 +437,16 @@ func end_game():
 
 func _input(event : InputEvent):
 	if event is InputEventKey and is_game_over:
-		MusicPlayer.disconnect("finished", self, "end_game")
-		if event.is_pressed() and not event.is_echo():
-			tween.stop_all()
-			timer.stop()
-			MusicPlayer.stop()
-			MusicPlayer.pitch_scale = 1
-			var gameover = _game_over.instance()
-			self.add_child(gameover)
-			gameover.game_over()
+			if event.is_pressed() and not event.is_echo():
+				if event.scancode == KEY_SPACE:
+					MusicPlayer.disconnect("finished", self, "end_game")
+					tween.stop_all()
+					timer.stop()
+					MusicPlayer.stop()
+					MusicPlayer.pitch_scale = 1
+					var gameover = _game_over.instance()
+					self.add_child(gameover)
+					gameover.game_over()
 
 func game_over():
 	is_game_over = true

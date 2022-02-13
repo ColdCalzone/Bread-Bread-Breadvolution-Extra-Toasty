@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://scenes/Game.gd" type="Script" id=1]
 [ext_resource path="res://objects/Key.tscn" type="PackedScene" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://sprites/ToastMeterBacking.png" type="Texture" id=9]
 [ext_resource path="res://sprites/ToastMeter.png" type="Texture" id=10]
 [ext_resource path="res://objects/SpinnyBread.tscn" type="PackedScene" id=11]
+[ext_resource path="res://src/KarmaticArcade.ttf" type="DynamicFontData" id=12]
 
 [sub_resource type="Shader" id=2]
 code = "shader_type canvas_item;
@@ -32,6 +33,18 @@ region_rect = Rect2( 0, 0, 130, 15 )
 
 [sub_resource type="RectangleShape2D" id=4]
 extents = Vector2( 320, 10 )
+
+[sub_resource type="DynamicFont" id=5]
+size = 41
+outline_size = 6
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 12 )
+
+[sub_resource type="DynamicFont" id=6]
+size = 31
+outline_size = 5
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 12 )
 
 [node name="Game" type="Control"]
 anchor_right = 1.0
@@ -250,3 +263,51 @@ texture_progress = ExtResource( 10 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
 position = Vector2( 320, 370 )
 shape = SubResource( 4 )
+
+[node name="Tween" type="Tween" parent="."]
+
+[node name="Credits1" type="VBoxContainer" parent="."]
+margin_left = 210.0
+margin_top = 75.0
+margin_right = 502.0
+margin_bottom = 220.0
+custom_constants/separation = 62
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Title" type="Label" parent="Credits1"]
+margin_right = 292.0
+margin_bottom = 47.0
+custom_fonts/font = SubResource( 5 )
+text = "Songtitle"
+
+[node name="Time" type="Label" parent="Credits1"]
+margin_top = 109.0
+margin_right = 292.0
+margin_bottom = 145.0
+custom_fonts/font = SubResource( 6 )
+text = "Time"
+
+[node name="Credits2" type="VBoxContainer" parent="."]
+margin_left = 96.0
+margin_top = 129.0
+margin_right = 388.0
+margin_bottom = 288.0
+custom_constants/separation = 52
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Artist" type="Label" parent="Credits2"]
+margin_right = 292.0
+margin_bottom = 47.0
+custom_fonts/font = SubResource( 5 )
+text = "Artist"
+
+[node name="BPM" type="Label" parent="Credits2"]
+margin_top = 99.0
+margin_right = 292.0
+margin_bottom = 135.0
+custom_fonts/font = SubResource( 6 )
+text = "BPM"

@@ -45,6 +45,6 @@ func _on_Restart_pressed():
 
 func _on_Quit_pressed():
 	MusicPlayer.stop()
-	TransitionManager.transition_to("title")
+	TransitionManager.transition_to("play")
 	get_tree().paused = false
 	queue_free()

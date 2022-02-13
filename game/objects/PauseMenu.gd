@@ -59,6 +59,7 @@ func _on_Resume_pressed():
 	queue_free()
 
 func _on_Restart_pressed():
+	MusicPlayer.disconnect("finished", get_parent(), "end_game")
 	MusicPlayer.stop()
 	TransitionManager.transition_to("game")
 	get_tree().paused = false
@@ -67,6 +68,6 @@ func _on_Restart_pressed():
 func _on_Quit_pressed():
 	MusicPlayer.disconnect("finished", get_parent(), "end_game")
 	MusicPlayer.stop()
-	TransitionManager.transition_to("title")
+	TransitionManager.transition_to("play")
 	get_tree().paused = false
 	queue_free()
