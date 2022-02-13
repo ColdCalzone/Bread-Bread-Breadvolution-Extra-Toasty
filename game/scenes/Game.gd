@@ -98,6 +98,7 @@ func pause():
 
 func _ready():
 	set_process_input(false)
+	MusicPlayer.stop()
 	MusicPlayer.seek(0)
 	blind.visible = SongData.blind
 	multiplier += (int(SongData.no_miss) * 10) + (int(SongData.perfect) * 15) + (int(SongData.blind) * 5)
@@ -462,7 +463,6 @@ func _input(event : InputEvent):
 	elif event is InputEventKey and is_game_over:
 		if event.is_pressed() and not event.is_echo():
 			if event.scancode == KEY_SPACE:
-				MusicPlayer.disconnect("finished", self, "end_game")
 				tween.stop_all()
 				timer.stop()
 				MusicPlayer.stop()
@@ -472,13 +472,12 @@ func _input(event : InputEvent):
 				gameover.game_over()
 
 func game_over():
-	is_game_over = true
 	MusicPlayer.disconnect("finished", self, "end_game")
+	is_game_over = true
 	set_physics_process(false)
 	set_process(false)
 	if Settings.effects:
 		spinny_bread.die()
-		add_child(tween)
 		tween.interpolate_property(MusicPlayer, "pitch_scale", 1, 0, 1.0)
 		tween.start()
 		yield(tween, "tween_all_completed")

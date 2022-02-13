@@ -73,7 +73,7 @@ func fade_in():
 		toast_objs.append(new_toast)
 	for toast_obj in range(toast_objs.size()):
 		toast_objs[toast_obj].slide_in(toast_obj * 128)
-		yield(get_tree().create_timer(0.05), "timeout")
+		yield(get_tree().create_timer(0.1), "timeout")
 	if not (SongData.aim_bot or SongData.unkillable):
 		SongData.save_to_file(int(game.score))
 	yield(tween, "tween_all_completed")
