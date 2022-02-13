@@ -311,3 +311,7 @@ margin_right = 292.0
 margin_bottom = 135.0
 custom_fonts/font = SubResource( 6 )
 text = "BPM"
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true

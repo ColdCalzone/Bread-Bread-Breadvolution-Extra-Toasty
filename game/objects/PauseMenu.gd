@@ -32,8 +32,7 @@ func _input(event):
 		for i in stuff_and_things:
 			i.visible = false
 		if mode == Mode.PAUSE:
-			if get_parent().timer.is_stopped():
-				get_parent().time = 2 + MusicPlayer.get_playback_position() - AudioServer.get_time_to_next_mix() - AudioServer.get_output_latency() + (Settings.latency/1000)
+			get_parent().time = 2 + MusicPlayer.get_playback_position() - AudioServer.get_time_to_next_mix() - AudioServer.get_output_latency() + (Settings.latency/1000) - get_parent().timer.time_left
 			countdown.visible = true
 			var tween = Tween.new()
 			add_child(tween)

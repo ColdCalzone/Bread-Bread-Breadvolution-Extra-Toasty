@@ -58,7 +58,7 @@ onready var results = preload("res://objects/ResultsScreen.tscn")
 
 onready var _game_over = preload("res://objects/GameOver.tscn")
 
-var timer = null
+onready var timer = $Timer
 
 var scroll_direction = 0
 
@@ -81,13 +81,24 @@ var actions = ["key_left", "key_down", "key_up", "key_right"]
 
 var phys_time : float = 0.0
 
+# Stuff used for comparison, i.e half a beat for checking accuracy
+var half_beat : float = 0.0
+var quarter_beat : float = 0.0
+var sixth_beat : float = 0.0
+var eigth_beat : float = 0.0
+var bps : float = 0.0
+var inverse_bps : float = 0.0
+
 func pause():
+	
 	var new_pause = pause_menu.instance()
 	self.add_child(new_pause)
 	#time = MusicPlayer.get_playback_position()
 	new_pause.pause()
 
 func _ready():
+	set_process_input(false)
+	MusicPlayer.seek(0)
 	blind.visible = SongData.blind
 	multiplier += (int(SongData.no_miss) * 10) + (int(SongData.perfect) * 15) + (int(SongData.blind) * 5)
 	if SongData.no_miss:
@@ -133,6 +144,14 @@ func _ready():
 							scan += 1
 		else:
 			get_tree().quit()
+	
+	bps = bpm * 60.0
+	inverse_bps = 60.0 / bpm
+	half_beat = 60.0 / bpm / 2
+	quarter_beat = 60.0 / bpm / 4
+	sixth_beat = 60.0 / bpm / 6
+	eigth_beat = 60.0 / bpm / 8
+	
 	for key in keys:
 		key.speed = speed
 	bg.speed = speed
@@ -147,12 +166,13 @@ func _ready():
 	set_process(false)
 	tween.start()
 	yield(tween, "tween_all_completed")
+	set_process_input(true)
 	set_process(true)
 	
 	time -= AudioServer.get_time_to_next_mix() + AudioServer.get_output_latency()
-	timer = Timer.new()
+	
 	timer.wait_time =  2 - float(Settings.latency) / 1000
-	add_child(timer)
+	
 	timer.start()
 	yield(timer, "timeout")
 	var err = MusicPlayer.connect("finished", self, "end_game")
@@ -167,7 +187,7 @@ func _process(delta):
 
 func _physics_process(delta):
 	phys_time += delta
-	var beat = (time + phys_time) / 60 * bpm
+	var beat = (time + phys_time) / inverse_bps
 	if int(beat) > last_beat and Settings.effects:
 		last_beat = int(beat)
 		spinny_bread.bunmp()
@@ -186,7 +206,7 @@ func _physics_process(delta):
 	for note in get_tree().get_nodes_in_group("note"):
 		note.rect_position.y = (time - note.time) * speed * scroll_direction
 		if not note.perished:
-			if beat - (note.time / 60 * bpm) > 60 / bpm / 4:
+			if beat - (note.time / inverse_bps) > quarter_beat:
 				if note is HoldNote:
 					if note.part == 2:
 						score -= 100 * multiplier * toast
@@ -199,7 +219,7 @@ func _physics_process(delta):
 						combo = 0
 						multiplier = 1
 						toast += 0.5
-					elif note.part == 1 and beat - (note.time / 60 * bpm) > 60 / bpm / 2:
+					elif note.part == 1 and beat - (note.time / inverse_bps) > half_beat:
 						score -= 10
 						note.remove_self()
 						if (SongData.no_miss or SongData.perfect) and not SongData.unkillable:
@@ -244,7 +264,7 @@ func _physics_process(delta):
 	if Input.is_action_pressed("key_left") and keys[0].holding:
 		if keys[0].notes.size() > 0:
 			if keys[0].notes[0] is HoldNote:
-				if keys[0].notes[0].time / 60 * bpm - beat <= 0:
+				if keys[0].notes[0].time / inverse_bps - beat <= 0:
 					# is this the end?
 					if keys[0].notes[0].part == 0:
 						keys[0].holding = false
@@ -255,7 +275,7 @@ func _physics_process(delta):
 	if Input.is_action_pressed("key_down") and keys[1].holding:
 		if keys[1].notes.size() > 0:
 			if keys[1].notes[0] is HoldNote:
-				if keys[1].notes[0].time / 60 * bpm - beat <= 0:
+				if keys[1].notes[0].time / inverse_bps - beat <= 0:
 					# is this the end?
 					if keys[1].notes[0].part == 0:
 						keys[1].holding = false
@@ -266,7 +286,7 @@ func _physics_process(delta):
 	if Input.is_action_pressed("key_up") and keys[2].holding:
 		if keys[2].notes.size() > 0:
 			if keys[2].notes[0] is HoldNote:
-				if keys[2].notes[0].time / 60 * bpm - beat <= 0:
+				if keys[2].notes[0].time / inverse_bps - beat <= 0:
 					# is this the end?
 					if keys[2].notes[0].part == 0:
 						keys[2].holding = false
@@ -277,7 +297,7 @@ func _physics_process(delta):
 	if Input.is_action_pressed("key_right") and keys[3].holding:
 		if keys[3].notes.size() > 0:
 			if keys[3].notes[0] is HoldNote:
-				if keys[3].notes[0].time / 60 * bpm - beat <= 0:
+				if keys[3].notes[0].time / inverse_bps - beat <= 0:
 					# is this the end?
 					if keys[3].notes[0].part == 0:
 						keys[3].holding = false
@@ -289,7 +309,7 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("key_left"):
 		keys[0].press()
 		if keys[0].notes.size() > 0:
-			if (keys[0].notes[0].time / 60 * bpm) - beat <= 60 / bpm / 2:
+			if keys[0].notes[0].time / inverse_bps - beat <= half_beat:
 				if keys[0].notes[0] is HoldNote:
 					# is it the beginning?
 					if keys[0].notes[0].part == 2:
@@ -314,7 +334,7 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("key_down"):
 		keys[1].press()
 		if keys[1].notes.size() > 0:
-			if (keys[1].notes[0].time / 60 * bpm) - beat < 60 / bpm / 2:
+			if (keys[1].notes[0].time / inverse_bps) - beat <= half_beat:
 				if keys[1].notes[0] is HoldNote:
 					# is it the beginning?
 					if keys[1].notes[0].part == 2:
@@ -339,7 +359,7 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("key_up"):
 		keys[2].press()
 		if keys[2].notes.size() > 0:
-			if (keys[2].notes[0].time / 60 * bpm) - beat <= 60 / bpm / 2:
+			if (keys[2].notes[0].time / inverse_bps) - beat <= half_beat:
 				if keys[2].notes[0] is HoldNote:
 					# is it the beginning?
 					if keys[2].notes[0].part == 2:
@@ -364,7 +384,7 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("key_right"):
 		keys[3].press()
 		if keys[3].notes.size() > 0:
-			if (keys[3].notes[0].time / 60 * bpm) - beat <= 60 / bpm / 2:
+			if (keys[3].notes[0].time / inverse_bps) - beat <= half_beat:
 				if keys[3].notes[0] is HoldNote:
 					# is it the beginning?
 					if keys[3].notes[0].part == 2:
@@ -391,19 +411,19 @@ func _physics_process(delta):
 		ms_accuracy.text= String(stepify(accuracy, 0.0001) * 1000) + "MS"
 		# God these values are bad
 		# TODO make these make sense
-		if abs(accuracy / 60 * bpm) < 60 / bpm / 8:
+		if abs(accuracy / inverse_bps) < eigth_beat:
 			popup.set_popup(0)
 			sweets += notes_hit
 			score += notes_hit * 300 * multiplier * toast
 			multiplier += 0.5
 		elif SongData.perfect:
 			game_over()
-		elif abs(accuracy / 60 * bpm) < 60 / bpm / 6:
+		elif abs(accuracy / inverse_bps) < sixth_beat:
 			popup.set_popup(1)
 			goods += notes_hit
 			score += notes_hit * 150 * multiplier * toast
 			multiplier += 0.1
-		elif abs(accuracy / 60 * bpm) < 60 / bpm / 4:
+		elif abs(accuracy / inverse_bps) < quarter_beat:
 			popup.set_popup(2)
 			oks += notes_hit
 			score += notes_hit * 50 * multiplier * toast
@@ -433,9 +453,6 @@ func _physics_process(delta):
 	
 	score_text.text = "Score: " + String(int(score))
 	
-	if Input.is_action_just_pressed("pause"):
-		pause()
-	
 	combo_text.set_combo(combo)
 
 func end_game():
@@ -445,17 +462,19 @@ func end_game():
 	new_results.fade_in()
 
 func _input(event : InputEvent):
-	if event is InputEventKey and is_game_over:
-			if event.is_pressed() and not event.is_echo():
-				if event.scancode == KEY_SPACE:
-					MusicPlayer.disconnect("finished", self, "end_game")
-					tween.stop_all()
-					timer.stop()
-					MusicPlayer.stop()
-					MusicPlayer.pitch_scale = 1
-					var gameover = _game_over.instance()
-					self.add_child(gameover)
-					gameover.game_over()
+	if event.is_action_pressed("pause"):
+		pause()
+	elif event is InputEventKey and is_game_over:
+		if event.is_pressed() and not event.is_echo():
+			if event.scancode == KEY_SPACE:
+				MusicPlayer.disconnect("finished", self, "end_game")
+				tween.stop_all()
+				timer.stop()
+				MusicPlayer.stop()
+				MusicPlayer.pitch_scale = 1
+				var gameover = _game_over.instance()
+				self.add_child(gameover)
+				gameover.game_over()
 
 func game_over():
 	is_game_over = true
