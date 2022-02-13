@@ -1,12 +1,17 @@
 extends Control
 
+# Couldn't get this to feel right, leaving this for those who want to add it ig
+const SMOKE = preload("res://objects/Smoke.tscn")
+
 onready var sprite = $Sprite
+onready var particles = $Particles2D
 
-onready var normal = preload("res://sprites/bread_outline.png")
-onready var pulse = preload("res://sprites/bread_pulse.png")
+const normal = preload("res://sprites/bread_outline.png")
+const pulse = preload("res://sprites/bread_pulse.png")
 
-onready var note = preload("res://objects/Note.tscn")
-onready var hold_note = preload("res://objects/HoldNote.tscn")
+const note = preload("res://objects/Note.tscn")
+const hold_note = preload("res://objects/HoldNote.tscn")
+
 
 enum Direction {UP, RIGHT, DOWN, LEFT}
 
@@ -16,11 +21,20 @@ var notes : Array = []
 
 var speed = 1
 
+var countdown = 0
+
 # Used for hold note detection
 var holding : bool = false
 
 func _ready():
 	sprite.region_rect.position.x = direction * 64
+
+func _process(delta):
+	countdown -= delta
+	if countdown < 0:
+		countdown = 0
+		set_process(false)
+		particles.emitting = false
 
 func press():
 	sprite.texture = pulse
@@ -61,8 +75,13 @@ func spawn_hold(target_start, target_end):
 	self.add_child(end_note)
 	self.notes.append(end_note)
 
-func remove_note(which, delayed = false):
-	self.notes[which].queue_free()
+func remove_note(which, natural = false):
+	if not natural:
+		self.notes[which].queue_free()
 	self.notes.remove(which)
-	if delayed:
-		yield(get_tree().create_timer(1), "timeout")
+
+func emit():
+	if Settings.effects:
+		countdown += 0.05
+		particles.emitting = true
+		set_process(true)

@@ -27,7 +27,10 @@ func _ready():
 			var content = JSON.parse(file.get_as_text()).result
 			if content is Dictionary:
 				if content.song_info.icons[0] != "" and content.song_info.icons[1] != "":
-					new_button.set_textures(load(content.song_info.icons[0]), load(content.song_info.icons[1]))
+					var image1 = load(content.song_info.icons[0])
+					var image2 = load(content.song_info.icons[1])
+					if image1 != null and image2 != null:
+						new_button.set_textures(image1, image2)
 			file.close()
 		new_button.set_trinkets(int(SongData.save_data[song].trinkets))
 		new_button.set_score(SongData.save_data[song].score)

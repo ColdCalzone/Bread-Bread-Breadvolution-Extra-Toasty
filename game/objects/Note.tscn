@@ -4,7 +4,6 @@
 [ext_resource path="res://objects/Note.gd" type="Script" id=2]
 
 [node name="Note" type="Control" groups=["note"]]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -576.0
@@ -19,3 +18,7 @@ texture = ExtResource( 1 )
 centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 64, 64 )
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.25
+one_shot = true

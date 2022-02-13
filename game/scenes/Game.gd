@@ -184,7 +184,8 @@ func _physics_process(delta):
 			note_pointer += 1
 	
 	for note in get_tree().get_nodes_in_group("note"):
-			note.rect_position.y = (time - note.time) * speed * scroll_direction
+		note.rect_position.y = (time - note.time) * speed * scroll_direction
+		if not note.perished:
 			if beat - (note.time / 60 * bpm) > 60 / bpm / 4:
 				if note is HoldNote:
 					if note.part == 2:
@@ -229,15 +230,15 @@ func _physics_process(delta):
 					combo = 0
 					multiplier = 1
 					toast += 0.5
-	
-	if SongData.aim_bot:
-		for key in range(keys.size()):
-			if keys[key].notes.size() > 0:
-				if keys[key].notes[0].time  <= time + (phys_time / 2):
-					Input.action_press(actions[key])
-				elif not keys[key].holding:
-					Input.action_release(actions[key])
-				
+		
+		if SongData.aim_bot:
+			for key in range(keys.size()):
+				if keys[key].notes.size() > 0:
+					if keys[key].notes[0].time  <= time + (phys_time / 2):
+						Input.action_press(actions[key])
+					elif not keys[key].holding:
+						Input.action_release(actions[key])
+					
 	
 	# Hold notes
 	if Input.is_action_pressed("key_left") and keys[0].holding:
@@ -295,11 +296,13 @@ func _physics_process(delta):
 						keys[0].holding = true
 						accuracy = keys[0].notes[0].time - (time + phys_time)
 						keys[0].remove_note(0)
+						keys[0].emit()
 						combo += 1
 						notes_hit += 1
 				else:
 					accuracy = keys[0].notes[0].time - (time + phys_time)
 					keys[0].remove_note(0)
+					keys[0].emit()
 					combo += 1
 					notes_hit += 1
 			else:
@@ -318,11 +321,13 @@ func _physics_process(delta):
 						keys[1].holding = true
 						accuracy = keys[1].notes[0].time - (time + phys_time)
 						keys[1].remove_note(0)
+						keys[1].emit()
 						combo += 1
 						notes_hit += 1
 				else:
 					accuracy = keys[1].notes[0].time - (time + phys_time)
 					keys[1].remove_note(0)
+					keys[1].emit()
 					combo += 1
 					notes_hit += 1
 			else:
@@ -341,11 +346,13 @@ func _physics_process(delta):
 						keys[2].holding = true
 						accuracy = keys[2].notes[0].time - (time + phys_time)
 						keys[2].remove_note(0)
+						keys[2].emit()
 						combo += 1
 						notes_hit += 1
 				else:
 					accuracy = keys[2].notes[0].time - (time + phys_time)
 					keys[2].remove_note(0)
+					keys[2].emit()
 					combo += 1
 					notes_hit += 1
 			else:
@@ -364,11 +371,13 @@ func _physics_process(delta):
 						keys[3].holding = true
 						accuracy = keys[3].notes[0].time - (time + phys_time)
 						keys[3].remove_note(0)
+						keys[3].emit()
 						combo += 1
 						notes_hit += 1
 				else:
 					accuracy = keys[3].notes[0].time - (time + phys_time)
 					keys[3].remove_note(0)
+					keys[3].emit()
 					combo += 1
 					notes_hit += 1
 			else:

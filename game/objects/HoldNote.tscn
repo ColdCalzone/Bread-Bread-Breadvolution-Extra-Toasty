@@ -18,3 +18,7 @@ texture = ExtResource( 1 )
 centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 64, 64 )
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.25
+one_shot = true

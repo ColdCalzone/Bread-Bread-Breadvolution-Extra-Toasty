@@ -9,7 +9,11 @@ export(Direction) var direction = Direction.UP setget set_texture
 
 onready var parent = get_parent()
 
+onready var timer = $Timer
+
 var time : float = 0.0
+
+var perished : bool = false
 
 func set_texture(value):
 	direction = value
@@ -17,6 +21,10 @@ func set_texture(value):
 	self.visible = true
 
 func remove_self():
+	perished = true
 	# slightly hacky, could go wrong
 	# TODO if anything goes wrong, fix this.
-	parent.remove_note(0)
+	parent.remove_note(0, true)
+	timer.start()
+	yield(timer, "timeout")
+	queue_free()
