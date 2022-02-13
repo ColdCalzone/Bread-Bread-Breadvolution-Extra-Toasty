@@ -23,11 +23,17 @@ _global_script_classes=[ {
 "class": "Note",
 "language": "GDScript",
 "path": "res://objects/Note.gd"
+}, {
+"base": "Panel",
+"class": "Toast",
+"language": "GDScript",
+"path": "res://objects/Toast.gd"
 } ]
 _global_script_class_icons={
 "ChartButton": "",
 "HoldNote": "",
-"Note": ""
+"Note": "",
+"Toast": ""
 }
 
 [application]

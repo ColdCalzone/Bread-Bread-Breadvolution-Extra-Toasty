@@ -30,14 +30,14 @@ func _on_Button_button_down():
 func set_cheat(button_pressed : bool, cheat : String):
 	if cheat == "NoMiss" and button_pressed:
 		cheats[2].pressed = false
-		cheats[3].pressed = false
-		cheats[4].pressed = false
+		#cheats[3].pressed = false
+		#cheats[4].pressed = false
 	if cheat == "Perfect" and button_pressed:
 		cheats[1].pressed = false
-		cheats[3].pressed = false
-		cheats[4].pressed = false
-	if (cheat == "Aimbot" or cheat == "Unkillable") and button_pressed:
-		cheats[0].pressed = false
-		cheats[1].pressed = false
-		cheats[2].pressed = false
+		#cheats[3].pressed = false
+		#cheats[4].pressed = false
+	#if (cheat == "Aimbot" or cheat == "Unkillable") and button_pressed:
+		#cheats[0].pressed = false
+		#cheats[1].pressed = false
+		#cheats[2].pressed = false
 	SongData.set_cheats([cheats[0].pressed, cheats[1].pressed, cheats[2].pressed, cheats[3].pressed, cheats[4].pressed])

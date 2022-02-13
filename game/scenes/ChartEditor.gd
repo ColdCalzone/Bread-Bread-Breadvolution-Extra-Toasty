@@ -9,7 +9,7 @@ onready var song_name = $VBoxContainer/Name/Text
 onready var artist = $VBoxContainer/Artist/Text
 onready var bpm = $VBoxContainer/BPM/BPM
 onready var speed = $VBoxContainer/Speed/Speed
-onready var file_dialog = $FileDialog
+onready var file_dialog = $CanvasLayer/FileDialog
 onready var measures_amount = $Label
 
 onready var music_button = $Audio/Button
@@ -17,6 +17,30 @@ onready var music_progress = $Audio/HSlider
 
 onready var default_icon_button = $VBoxContainer/Default
 onready var clicked_icon_button = $VBoxContainer/Clicked
+
+onready var camera = $Camera2D
+
+# Toasts
+
+onready var completed_button = $ToastEditor/Toasts/Completed/Icon/Button
+var completed_path : String = ""
+onready var completed_title = $ToastEditor/Toasts/Completed/Title/TextEdit
+onready var completed_subtitle = $ToastEditor/Toasts/Completed/Flavor/TextEdit
+
+onready var blind_button = $ToastEditor/Toasts/Blind/Icon/Button
+var blind_path : String = ""
+onready var blind_title = $ToastEditor/Toasts/Blind/Title/TextEdit
+onready var blind_subtitle = $ToastEditor/Toasts/Blind/Flavor/TextEdit
+
+onready var nomiss_button = $ToastEditor/Toasts/NoMiss/Icon/Button
+var nomiss_path : String = ""
+onready var nomiss_title = $ToastEditor/Toasts/NoMiss/Title/TextEdit
+onready var nomiss_subtitle = $ToastEditor/Toasts/NoMiss/Flavor/TextEdit
+
+onready var perfect_button = $ToastEditor/Toasts/Perfect/Icon/Button
+var perfect_path : String = ""
+onready var perfect_title = $ToastEditor/Toasts/Perfect/Title/TextEdit
+onready var perfect_subtitle = $ToastEditor/Toasts/Perfect/Flavor/TextEdit
 
 var default_icon : Image = Image.new()
 var clicked_icon : Image = Image.new()
@@ -48,7 +72,7 @@ onready var chart_style = preload("res://src/chart_checkerboard.tres")
 
 onready var chart_grid : Array = []
 
-enum LoadingMode { CHART, SONG, DEFAULT_ICON, CLICK_ICON }
+enum LoadingMode { CHART, SONG, DEFAULT_ICON, CLICK_ICON, TOAST_COMPLETED, TOAST_BLIND, TOAST_NOMISS, TOAST_PERFECT }
 
 var loading_mode = LoadingMode.SONG
 
@@ -209,10 +233,9 @@ func _on_SongFile_pressed():
 	file_dialog.popup()
 
 func _on_FileDialog_file_selected(path : String):
-	file_dialog.clear_filters()
 	if file_dialog.mode == FileDialog.MODE_OPEN_FILE:
-		# Loading a bread file
 		match loading_mode:
+			# Loading a bread file
 			LoadingMode.CHART:
 				var file = File.new()
 				if !file.open(path, File.READ):
@@ -243,7 +266,24 @@ func _on_FileDialog_file_selected(path : String):
 							texture = ImageTexture.new()
 							texture.create_from_image(clicked_icon)
 							clicked_icon_button.icon = texture
-						
+						if data.has("toasts"):
+							var toasts = data.toasts
+							completed_path = toasts.completed.icon
+							blind_path = toasts.blind.icon
+							nomiss_path = toasts.nomiss.icon
+							perfect_path = toasts.perfect.icon
+							completed_button.icon = load(completed_path)
+							blind_button.icon = load(blind_path)
+							nomiss_button.icon = load(nomiss_path)
+							perfect_button.icon = load(perfect_path)
+							completed_title.text = toasts.completed.title
+							completed_subtitle.text = toasts.completed.subtitle
+							blind_title.text = toasts.blind.title
+							blind_subtitle.text = toasts.blind.subtitle
+							nomiss_title.text = toasts.nomiss.title
+							nomiss_subtitle.text = toasts.nomiss.subtitle
+							perfect_title.text = toasts.perfect.title
+							perfect_subtitle.text = toasts.perfect.subtitle
 						var pattern = data.pattern
 						var formatted_pattern = []
 						var bar = []
@@ -304,6 +344,35 @@ func _on_FileDialog_file_selected(path : String):
 				var texture = ImageTexture.new()
 				texture.create_from_image(clicked_icon)
 				clicked_icon_button.icon = texture
+			LoadingMode.TOAST_COMPLETED:
+				completed_path = path
+				var image = Image.new()
+				image.load(path)
+				var texture = ImageTexture.new()
+				texture.create_from_image(image)
+				completed_button.icon = texture
+			LoadingMode.TOAST_BLIND:
+				blind_path = path
+				var image = Image.new()
+				image.load(path)
+				var texture = ImageTexture.new()
+				texture.create_from_image(image)
+				blind_button.icon = texture
+			LoadingMode.TOAST_NOMISS:
+				nomiss_path = path
+				var image = Image.new()
+				image.load(path)
+				var texture = ImageTexture.new()
+				texture.create_from_image(image)
+				nomiss_button.icon = texture
+			LoadingMode.TOAST_PERFECT:
+				perfect_path = path
+				var image = Image.new()
+				image.load(path)
+				var texture = ImageTexture.new()
+				texture.create_from_image(image)
+				perfect_button.icon = texture
+				
 	# Saving a bread file
 	else:
 		var file = File.new()
@@ -322,6 +391,28 @@ func _on_FileDialog_file_selected(path : String):
 					consecutive_empty_bars = 0
 			for _i in range(consecutive_empty_bars * 16):
 				pattern.pop_back()
+			var toasts = {
+				"completed": {
+					"icon": completed_path,
+					"title": completed_title.text,
+					"subtitle": completed_subtitle.text
+				},
+				"blind": {
+					"icon": blind_path,
+					"title": blind_title.text,
+					"subtitle": blind_subtitle.text
+				},
+				"nomiss": {
+					"icon": nomiss_path,
+					"title": nomiss_title.text,
+					"subtitle": nomiss_subtitle.text
+				},
+				"perfect": {
+					"icon": perfect_path,
+					"title": perfect_title.text,
+					"subtitle": perfect_subtitle.text
+				},
+			}
 			var data = {
 				"song_info": {
 					"name" : song_name.text,
@@ -331,7 +422,8 @@ func _on_FileDialog_file_selected(path : String):
 					"speed" : speed.value,
 					"icons" : [default_icon_path, clicked_icon_path]
 				},
-				"pattern" : pattern
+				"pattern" : pattern,
+				"toasts": toasts
 			}
 			file.store_string(JSON.print(data))
 			file.close()
@@ -367,11 +459,13 @@ func _on_Speed_value_changed(value : float):
 	MusicPlayer.pitch_scale = value
 
 func _on_Save_pressed():
+	file_dialog.clear_filters()
 	file_dialog.set_mode(FileDialog.MODE_SAVE_FILE)
 	file_dialog.add_filter("*.bread ; BBB Chart File")
 	file_dialog.popup()
 
 func _on_Load_pressed():
+	file_dialog.clear_filters()
 	file_dialog.set_mode(FileDialog.MODE_OPEN_FILE)
 	file_dialog.add_filter("*.bread ; BBB Chart File")
 	loading_mode = LoadingMode.CHART
@@ -408,6 +502,7 @@ func _on_BPM_value_changed(value):
 
 
 func _on_DefaultIcon_pressed():
+	file_dialog.clear_filters()
 	file_dialog.set_mode(FileDialog.MODE_OPEN_FILE)
 	file_dialog.add_filter("*.png ; PNG Images")
 	loading_mode = LoadingMode.DEFAULT_ICON
@@ -415,6 +510,7 @@ func _on_DefaultIcon_pressed():
 
 
 func _on_ClickedIcon_pressed():
+	file_dialog.clear_filters()
 	file_dialog.set_mode(FileDialog.MODE_OPEN_FILE)
 	file_dialog.add_filter("*.png ; PNG Images")
 	loading_mode = LoadingMode.CLICK_ICON
@@ -425,3 +521,43 @@ func _on_Titlescreen_pressed():
 		FPS.show_fps()
 	MusicPlayer.pitch_scale = 1
 	TransitionManager.transition_to("title")
+
+
+func _on_ToastEdit_pressed():
+	camera.position.x = 640
+
+
+func _on_Return_pressed():
+	camera.position.x = 0
+
+
+func _on_CompletedButton_pressed():
+	file_dialog.clear_filters()
+	file_dialog.set_mode(FileDialog.MODE_OPEN_FILE)
+	file_dialog.add_filter("*.png ; PNG Images")
+	loading_mode = LoadingMode.TOAST_COMPLETED
+	file_dialog.popup()
+
+
+func _on_BlindButton_pressed():
+	file_dialog.clear_filters()
+	file_dialog.set_mode(FileDialog.MODE_OPEN_FILE)
+	file_dialog.add_filter("*.png ; PNG Images")
+	loading_mode = LoadingMode.TOAST_BLIND
+	file_dialog.popup()
+
+
+func _on_NoMissButton_pressed():
+	file_dialog.clear_filters()
+	file_dialog.set_mode(FileDialog.MODE_OPEN_FILE)
+	file_dialog.add_filter("*.png ; PNG Images")
+	loading_mode = LoadingMode.TOAST_NOMISS
+	file_dialog.popup()
+
+
+func _on_PerfectButton_pressed():
+	file_dialog.clear_filters()
+	file_dialog.set_mode(FileDialog.MODE_OPEN_FILE)
+	file_dialog.add_filter("*.png ; PNG Images")
+	loading_mode = LoadingMode.TOAST_PERFECT
+	file_dialog.popup()

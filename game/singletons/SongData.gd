@@ -8,6 +8,10 @@ var save_data : Dictionary = {
 
 var current_level : String
 
+var toast_data : Dictionary = {
+	
+}
+
 var level_name : String
 
 var songs : Dictionary = {
@@ -40,10 +44,13 @@ func load_songs():
 				if data is Dictionary:
 					if songs.has(data.song_info.name):
 						file_name = song_data.get_next()
+						file.close()
 						continue
 					songs[data.song_info.name] = "res://song_data/" + file_name
+					toast_data[data.song_info.name] = data["toasts"]
 					if save_data.has(data.song_info.name):
 						file_name = song_data.get_next()
+						file.close()
 						continue
 					save_data[data.song_info.name] = {
 						"score" : 0,
