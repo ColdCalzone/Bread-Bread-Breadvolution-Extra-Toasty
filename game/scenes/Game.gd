@@ -224,11 +224,6 @@ func _physics_process(delta):
 						note.remove_self()
 						if (SongData.no_miss or SongData.perfect) and not SongData.unkillable:
 							game_over()
-						if combo > 0:
-							combo_breaks += 1
-						combo = 0
-						multiplier = 1
-						toast += 0.5
 					elif note.part == 0:
 						score -= 10
 						note.remove_self()
