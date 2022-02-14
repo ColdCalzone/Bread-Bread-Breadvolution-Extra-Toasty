@@ -29,6 +29,7 @@ func pause():
 
 func _input(event):
 	if event.is_action_pressed("pause"):
+		set_process_input(false)
 		for i in stuff_and_things:
 			i.visible = false
 		if mode == Mode.PAUSE:
@@ -43,6 +44,9 @@ func _input(event):
 		queue_free()
 
 func _on_Resume_pressed():
+	resume.disabled = true
+	restart.disabled = true
+	quit.disabled = true
 	for i in stuff_and_things:
 		i.visible = false
 	if mode == Mode.PAUSE:
@@ -58,6 +62,9 @@ func _on_Resume_pressed():
 	queue_free()
 
 func _on_Restart_pressed():
+	resume.disabled = true
+	restart.disabled = true
+	quit.disabled = true
 	MusicPlayer.disconnect("finished", get_parent(), "end_game")
 	MusicPlayer.stop()
 	TransitionManager.transition_to("game")
@@ -65,6 +72,9 @@ func _on_Restart_pressed():
 	queue_free()
 
 func _on_Quit_pressed():
+	resume.disabled = true
+	restart.disabled = true
+	quit.disabled = true
 	MusicPlayer.disconnect("finished", get_parent(), "end_game")
 	MusicPlayer.stop()
 	TransitionManager.transition_to("play")

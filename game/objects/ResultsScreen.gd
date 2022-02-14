@@ -55,7 +55,7 @@ func fade_in():
 		new_toast.set_title(SongData.toast_data[SongData.level_name]["blind"]["title"])
 		new_toast.set_subtitle(SongData.toast_data[SongData.level_name]["blind"]["subtitle"])
 		toast_objs.append(new_toast)
-	if (current_trinkets & 4) == 0 and SongData.no_miss:
+	if (current_trinkets & 4) == 0 and SongData.no_miss or SongData.perfect:
 		var new_toast = TOAST.instance()
 		add_child(new_toast)
 		new_toast.rect_position.y = TOAST_POS

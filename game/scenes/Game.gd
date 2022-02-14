@@ -89,6 +89,8 @@ var eigth_beat : float = 0.0
 var bps : float = 0.0
 var inverse_bps : float = 0.0
 
+var can_die = false
+
 func pause():
 	
 	var new_pause = pause_menu.instance()
@@ -109,7 +111,6 @@ func _ready():
 	if SongData.blind:
 		base_toast += 4.0
 	toast = base_toast
-	MusicPlayer.stop()
 	song_progress.value = 0
 	
 	scroll_direction = Settings.scroll
@@ -179,7 +180,11 @@ func _ready():
 	var err = MusicPlayer.connect("finished", self, "end_game")
 	if err != OK:
 		get_tree().quit()
-	MusicPlayer.play()
+	# this should NEVER be false yet previous testing proved otherwise
+	# This fixes a bug with perfect insta-restarting bullshit
+	if not is_game_over:
+		MusicPlayer.play()
+	can_die = true
 
 func _process(delta):
 	time += delta
@@ -412,7 +417,7 @@ func _physics_process(delta):
 			sweets += notes_hit
 			score += notes_hit * 300 * multiplier * toast
 			multiplier += 0.5
-		elif SongData.perfect:
+		elif SongData.perfect and not SongData.unkillable:
 			game_over()
 		elif abs(accuracy / inverse_bps) < sixth_beat:
 			popup.set_popup(1)
@@ -429,7 +434,7 @@ func _physics_process(delta):
 			score += notes_hit * 10 * multiplier * toast
 			if multiplier > 1:
 				multiplier -= 0.1
-	if misses > 0 and SongData.perfect:
+	if misses > 0 and SongData.perfect and not SongData.unkillable:
 		game_over()
 	multi_progress.value = multiplier - 1
 	toast_meter.value = (toast - 1)
@@ -458,18 +463,17 @@ func end_game():
 	new_results.fade_in()
 
 func _input(event : InputEvent):
-	if event.is_action_pressed("pause"):
+	if event.is_action_pressed("pause") and not is_game_over:
 		pause()
-	elif event is InputEventKey and is_game_over:
-		if event.is_pressed() and not event.is_echo():
-			if event.scancode == KEY_SPACE:
-				tween.stop_all()
-				timer.stop()
-				MusicPlayer.stop()
-				MusicPlayer.pitch_scale = 1
-				var gameover = _game_over.instance()
-				self.add_child(gameover)
-				gameover.game_over()
+	elif is_game_over:
+		if event.is_action_pressed("ui_accept"):
+			tween.stop_all()
+			timer.stop()
+			MusicPlayer.stop()
+			MusicPlayer.pitch_scale = 1
+			var gameover = _game_over.instance()
+			self.add_child(gameover)
+			gameover.game_over()
 
 func game_over():
 	MusicPlayer.disconnect("finished", self, "end_game")
@@ -487,5 +491,7 @@ func game_over():
 		MusicPlayer.stop()
 		MusicPlayer.pitch_scale = 1
 	var gameover = _game_over.instance()
+	if not can_die:
+		yield(self, "ready")
 	self.add_child(gameover)
 	gameover.game_over()
