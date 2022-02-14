@@ -1,6 +1,7 @@
 extends Node
 
 const SAVE_PATH = "user://save.json"
+const SONG_DATA_GLOABAL = "user://song_data/"
 
 var save_data : Dictionary = {
 	
@@ -33,20 +34,30 @@ func _ready():
 	load_songs()
 
 func load_songs():
+	var song_data_res = Directory.new()
+	if song_data_res.open("res://song_data") == OK:
+		if not song_data_res.dir_exists(SONG_DATA_GLOABAL):
+			song_data_res.list_dir_begin(true)
+			song_data_res.make_dir(SONG_DATA_GLOABAL)
+			var file_name = song_data_res.get_next()
+			while file_name != "":
+				song_data_res.copy("res://song_data/" + file_name, SONG_DATA_GLOABAL + file_name)
+				file_name = song_data_res.get_next()
 	var song_data = Directory.new()
-	if song_data.open("res://song_data/") == OK:
+	if song_data.open(SONG_DATA_GLOABAL) == OK:
+		
 		song_data.list_dir_begin(true)
 		var file = File.new()
 		var file_name = song_data.get_next()
 		while file_name != "":
-			if file.open("res://song_data/" + file_name, File.READ) == OK:
+			if file.open(SONG_DATA_GLOABAL + file_name, File.READ) == OK:
 				var data = JSON.parse(file.get_as_text()).result
 				if data is Dictionary:
 					if songs.has(data.song_info.name):
 						file_name = song_data.get_next()
 						file.close()
 						continue
-					songs[data.song_info.name] = "res://song_data/" + file_name
+					songs[data.song_info.name] = SONG_DATA_GLOABAL + file_name
 					toast_data[data.song_info.name] = data["toasts"]
 					if save_data.has(data.song_info.name):
 						file_name = song_data.get_next()

@@ -144,5 +144,8 @@ margin_right = 195.0
 margin_bottom = 357.0
 texture_normal = ExtResource( 3 )
 texture_focused = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [connection signal="pressed" from="TextureButton" to="." method="_on_TextureButton_pressed"]

@@ -712,9 +712,11 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = 0.119999
 rect_min_size = Vector2( 150, 52.5 )
+access = 1
 show_hidden_files = true
+current_dir = "user://song_data"
 current_file = "song_data"
-current_path = "res://song_data"
+current_path = "user://song_data/song_data"
 __meta__ = {
 "_edit_use_anchors_": false
 }

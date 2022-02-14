@@ -42,9 +42,6 @@ var perfect_path : String = ""
 onready var perfect_title = $ToastEditor/Toasts/Perfect/Title/TextEdit
 onready var perfect_subtitle = $ToastEditor/Toasts/Perfect/Flavor/TextEdit
 
-var default_icon : Image = Image.new()
-var clicked_icon : Image = Image.new()
-
 var default_icon_path : String = ""
 var clicked_icon_path : String = ""
 
@@ -254,18 +251,10 @@ func _on_FileDialog_file_selected(path : String):
 						if data.song_info.has("icons"):
 							#LoadingMode.DEFAULT_ICON:
 							default_icon_path = data.song_info.icons[0]
-# warning-ignore:return_value_discarded
-							default_icon.load(default_icon_path)
-							var texture = ImageTexture.new()
-							texture.create_from_image(default_icon)
-							default_icon_button.icon = texture
+							default_icon_button.icon = load(default_icon_path)
 							#LoadingMode.CLICK_ICON:
 							clicked_icon_path = data.song_info.icons[1]
-# warning-ignore:return_value_discarded
-							clicked_icon.load(clicked_icon_path)
-							texture = ImageTexture.new()
-							texture.create_from_image(clicked_icon)
-							clicked_icon_button.icon = texture
+							clicked_icon_button.icon = load(clicked_icon_path)
 						if data.has("toasts"):
 							var toasts = data.toasts
 							completed_path = toasts.completed.icon
@@ -332,18 +321,10 @@ func _on_FileDialog_file_selected(path : String):
 				MusicPlayer.set_music(audio)
 			LoadingMode.DEFAULT_ICON:
 				default_icon_path = path
-# warning-ignore:return_value_discarded
-				default_icon.load(path)
-				var texture = ImageTexture.new()
-				texture.create_from_image(default_icon)
-				default_icon_button.icon = texture
+				default_icon_button.icon = load(default_icon_path)
 			LoadingMode.CLICK_ICON:
 				clicked_icon_path = path
-# warning-ignore:return_value_discarded
-				clicked_icon.load(path)
-				var texture = ImageTexture.new()
-				texture.create_from_image(clicked_icon)
-				clicked_icon_button.icon = texture
+				clicked_icon_button.icon = load(clicked_icon_path)
 			LoadingMode.TOAST_COMPLETED:
 				completed_path = path
 				var image = Image.new()

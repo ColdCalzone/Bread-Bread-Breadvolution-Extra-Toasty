@@ -6,10 +6,15 @@ onready var song_selector = $CenterContainer/SongSelect
 onready var chart_button = $ChartEditor
 onready var cheats = $CheatMenu
 
+onready var tween = $Tween
+onready var hint = $Hint
+
 var cheat_buffer : Array = []
 var seq : Array = [0, 0, 1, 1, 2, 3, 2, 3, 4, 5]
 
 var being_held : bool = false
+
+var show_hint : bool
 
 func _ready():
 	MusicPlayer.set_music("res://Music/Just_Existing_v4.wav", true)
@@ -22,7 +27,6 @@ func _ready():
 		var new_button = button.instance()
 		song_selector.add_child(new_button)
 		new_button.set_label(song)
-		var textures : Array = []
 		if file.open(songs[song], File.READ) == OK:
 			var content = JSON.parse(file.get_as_text()).result
 			if content is Dictionary:
@@ -33,11 +37,16 @@ func _ready():
 						new_button.set_textures(image1, image2)
 			file.close()
 		new_button.set_trinkets(int(SongData.save_data[song].trinkets))
+		if not Settings.cheats and int(SongData.save_data[song].trinkets) > 0:
+			show_hint = true
 		new_button.set_score(SongData.save_data[song].score)
 		song_selector.remove_child(new_button)
 		song_selector.add_song(new_button)
 		
 		new_button.button.connect("pressed", self, "play_level", [song])
+	if show_hint:
+		tween.interpolate_property(hint, "rect_position:x", 645, 485, 5.0, Tween.TRANS_LINEAR, Tween.EASE_IN, 10.0)
+		tween.start()
 
 func _on_Back_pressed():
 	TransitionManager.transition_to("title")

@@ -1,6 +1,6 @@
 extends CanvasLayer
 
-var scenes = {
+onready var scenes = {
 	"title" : preload("res://scenes/Titlescreen.tscn"),
 	"settings" : preload("res://scenes/Settings.tscn"),
 	"chart" : preload("res://scenes/ChartEditor.tscn"),

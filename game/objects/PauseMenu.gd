@@ -15,7 +15,7 @@ enum Mode { PAUSE, OTHER }
 
 export(Mode) var mode = Mode.PAUSE
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	label.text = String(ceil(number))
 
 func pause():

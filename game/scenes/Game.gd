@@ -91,6 +91,8 @@ var inverse_bps : float = 0.0
 
 var can_die = false
 
+var delay = 0.0
+
 func pause():
 	
 	var new_pause = pause_menu.instance()
@@ -173,6 +175,8 @@ func _ready():
 	
 	time -= AudioServer.get_time_to_next_mix() + AudioServer.get_output_latency()
 	
+	delay = 2 - (float(Settings.latency) / 1000) + (AudioServer.get_time_to_next_mix() + AudioServer.get_output_latency())
+	
 	timer.wait_time =  2 - float(Settings.latency) / 1000
 	
 	timer.start()
@@ -188,6 +192,9 @@ func _ready():
 
 func _process(delta):
 	time += delta
+#	if int(time) > last_second:
+#		last_second = int(time) + 5
+#		time = 2 + MusicPlayer.get_playback_position() + delay + timer.time_left
 	phys_time = 0
 	song_progress.value = MusicPlayer.get_playback_position() / MusicPlayer.stream.get_length()
 
@@ -437,7 +444,9 @@ func _physics_process(delta):
 	if misses > 0 and SongData.perfect and not SongData.unkillable:
 		game_over()
 	multi_progress.value = multiplier - 1
-	toast_meter.value = (toast - 1)
+	toast_meter.value = log(toast)
+	if Settings.effects:
+		spinny_bread.set_sprite(int(toast_meter.value))
 	if toast > 20 and not SongData.unkillable:
 		game_over()
 	if toast < base_toast:
