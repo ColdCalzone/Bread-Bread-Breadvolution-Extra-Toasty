@@ -5,7 +5,8 @@ var scenes = {
 	"settings" : preload("res://scenes/Settings.tscn"),
 	"chart" : preload("res://scenes/ChartEditor.tscn"),
 	"play" : preload("res:///scenes/Play.tscn"),
-	"game" : preload("res://scenes/Game.tscn")
+	"game" : preload("res://scenes/Game.tscn"),
+	"credits" : preload("res://scenes/Credits.tscn")
 }
 
 onready var tween = $TransitionManager/Tween

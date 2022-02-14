@@ -41,3 +41,7 @@ func _on_Settings_pressed():
 
 func _on_Play_pressed():
 	TransitionManager.transition_to("play")
+
+
+func _on_Credits_pressed():
+	TransitionManager.transition_to("credits")
