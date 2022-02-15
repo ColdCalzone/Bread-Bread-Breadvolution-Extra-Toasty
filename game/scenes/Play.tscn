@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://objects/BG/BackgroundScene.tscn" type="PackedScene" id=1]
 [ext_resource path="res://sprites/ButtonBackPressed.png" type="Texture" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://objects/SongSelect.tscn" type="PackedScene" id=5]
 [ext_resource path="res://objects/CheatMenu.tscn" type="PackedScene" id=6]
 [ext_resource path="res://src/ChartEditor.tres" type="Theme" id=7]
+[ext_resource path="res://sprites/descend_sort.png" type="Texture" id=8]
 
 [node name="Play" type="Control"]
 anchor_right = 1.0
@@ -75,5 +76,32 @@ __meta__ = {
 
 [node name="Tween" type="Tween" parent="."]
 
+[node name="Sort" type="Button" parent="."]
+anchor_left = 0.688
+anchor_top = 0.028
+anchor_right = 0.708
+anchor_bottom = 0.059
+margin_left = -0.319977
+margin_top = -0.0799999
+margin_right = 30.88
+margin_bottom = 26.76
+rect_scale = Vector2( 0.4, 0.4 )
+theme = ExtResource( 7 )
+toggle_mode = true
+icon = ExtResource( 8 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Sort"]
+margin_left = 54.6667
+margin_top = 1.66675
+margin_right = 94.6667
+margin_bottom = 14.6667
+rect_scale = Vector2( 3, 3 )
+theme = ExtResource( 7 )
+text = "Sort Difficulty"
+
 [connection signal="pressed" from="Back" to="." method="_on_Back_pressed"]
 [connection signal="pressed" from="ChartEditor" to="." method="_on_Button_pressed"]
+[connection signal="toggled" from="Sort" to="." method="_on_Sort_toggled"]

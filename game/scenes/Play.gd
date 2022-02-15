@@ -1,5 +1,8 @@
 extends Control
 
+const ASC_ICON = preload("res://sprites/descend_sort.png")
+const DES_ICON = preload("res://sprites/ascend_sort.png")
+
 onready var button = preload("res://objects/SongButton.tscn")
 onready var song_selector = $CenterContainer/SongSelect
 
@@ -9,12 +12,27 @@ onready var cheats = $CheatMenu
 onready var tween = $Tween
 onready var hint = $Hint
 
+onready var sort = $Sort
+
 var cheat_buffer : Array = []
 var seq : Array = [0, 0, 1, 1, 2, 3, 2, 3, 4, 5]
 
 var being_held : bool = false
 
 var show_hint : bool
+
+var all_buttons_asc : Array = []
+var all_buttons_des : Array = []
+
+class DifficultySorter:
+	static func sort_ascending(button_a : SongButton, button_b : SongButton):
+		if (button_a.difficulty < button_b.difficulty):
+			return true
+		elif (button_a.difficulty == button_b.difficulty) and (button_a.song_name < button_b.song_name):
+			return true
+		return false
+	static func sort_descending(button_a : SongButton, button_b : SongButton):
+		return !sort_ascending(button_a, button_b)
 
 func _ready():
 	MusicPlayer.set_music("res://Music/Just_Existing_v4.wav", true)
@@ -35,15 +53,20 @@ func _ready():
 					var image2 = load(content.song_info.icons[1])
 					if image1 != null and image2 != null:
 						new_button.set_textures(image1, image2)
+				new_button.difficulty = content.song_info.difficulty
 			file.close()
 		new_button.set_trinkets(int(SongData.save_data[song].trinkets))
 		if not Settings.cheats and int(SongData.save_data[song].trinkets) > 0:
 			show_hint = true
 		new_button.set_score(SongData.save_data[song].score)
 		song_selector.remove_child(new_button)
-		song_selector.add_song(new_button)
-		
+		all_buttons_asc.append(new_button)
 		new_button.button.connect("pressed", self, "play_level", [song])
+	all_buttons_asc.sort_custom(DifficultySorter, "sort_ascending")
+	all_buttons_des = all_buttons_asc.duplicate()
+	all_buttons_des.sort_custom(DifficultySorter, "sort_descending")
+	for button in all_buttons_asc:
+		song_selector.add_song(button)
 	if show_hint:
 		tween.interpolate_property(hint, "rect_position:x", 645, 485, 5.0, Tween.TRANS_LINEAR, Tween.EASE_IN, 10.0)
 		tween.start()
@@ -85,3 +108,15 @@ func _input(event):
 func _on_Button_pressed():
 	MusicPlayer.stop()
 	TransitionManager.transition_to("chart")
+
+
+func _on_Sort_toggled(button_pressed):
+	song_selector.remove_all_songs()
+	if button_pressed:
+		sort.icon = DES_ICON
+		for button in all_buttons_des:
+			song_selector.add_song(button)
+	else:
+		sort.icon = ASC_ICON
+		for button in all_buttons_asc:
+			song_selector.add_song(button)

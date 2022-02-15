@@ -15,6 +15,10 @@ func add_song(button):
 		else:
 			self.rect_min_size.y = 360
 
+func remove_all_songs():
+	while vbox.get_child_count() > 0:
+		vbox.remove_child(vbox.get_child(0))
+	self.rect_min_size.y = 0
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

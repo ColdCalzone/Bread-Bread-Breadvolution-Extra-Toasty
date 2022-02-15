@@ -1,9 +1,14 @@
 extends HBoxContainer
 
+class_name SongButton
+
 onready var button : TextureButton = $TextureButton
 onready var label = $TextureButton/CenterContainer/Label
+var song_name : String = ""
 onready var score = $VBoxContainer/Score
 onready var trinkets = $VBoxContainer/Trinkets.get_children()
+
+var difficulty : int = 0
 
 enum Trinkets {COMPLETE = 1, BLIND = 2, NOMISS = 4, PERFECT = 8}
 
@@ -14,7 +19,8 @@ func set_textures(default : Texture, clicked : Texture):
 
 func set_label(text):
 	label.visible = true
-	label.text = String(text)
+	song_name = String(text)
+	label.text = song_name
 
 func set_score(amount):
 	score.text = "Score: " + String(amount)

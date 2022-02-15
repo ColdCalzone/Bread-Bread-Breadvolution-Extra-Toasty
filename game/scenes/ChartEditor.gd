@@ -97,6 +97,10 @@ var current_bar = 1
 var delay = AudioServer.get_time_to_next_mix() + AudioServer.get_output_latency()
 
 var song_path : String = ""
+
+onready var difficulty_spinner = $Difficulty
+var difficulty : int = 0
+
 # I experimented with being able to add more than 4 coloums / keys. that didn't work. it crashed the
 #game. The scene never even got added to the tree. I don't know why. I don't want to know why. 
 
@@ -273,6 +277,10 @@ func _on_FileDialog_file_selected(path : String):
 							nomiss_subtitle.text = toasts.nomiss.subtitle
 							perfect_title.text = toasts.perfect.title
 							perfect_subtitle.text = toasts.perfect.subtitle
+						if data.song_info.has("difficulty"):
+							difficulty = data.song_info.difficulty
+							difficulty_spinner.value = difficulty
+							
 						var pattern = data.pattern
 						var formatted_pattern = []
 						var bar = []
@@ -401,7 +409,8 @@ func _on_FileDialog_file_selected(path : String):
 					"song" : song_path,
 					"bpm" : bpm_value,
 					"speed" : speed.value,
-					"icons" : [default_icon_path, clicked_icon_path]
+					"icons" : [default_icon_path, clicked_icon_path],
+					"difficulty": difficulty
 				},
 				"pattern" : pattern,
 				"toasts": toasts
@@ -542,3 +551,7 @@ func _on_PerfectButton_pressed():
 	file_dialog.add_filter("*.png ; PNG Images")
 	loading_mode = LoadingMode.TOAST_PERFECT
 	file_dialog.popup()
+
+
+func _on_Difficulty_value_changed(value):
+	difficulty = value

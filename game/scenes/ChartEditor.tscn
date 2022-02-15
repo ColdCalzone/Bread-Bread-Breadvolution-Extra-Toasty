@@ -363,16 +363,6 @@ rect_min_size = Vector2( 0, 70 )
 custom_fonts/font = SubResource( 10 )
 text = "Load Chart"
 
-[node name="OutputChart" type="Button" parent="."]
-margin_left = 281.0
-margin_top = 337.0
-margin_right = 434.0
-margin_bottom = 357.0
-text = "Output chart contents"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="Titlescreen" type="Button" parent="."]
 margin_left = 534.0
 margin_top = 3.0
@@ -380,6 +370,18 @@ margin_right = 637.0
 margin_bottom = 22.0
 theme = ExtResource( 2 )
 text = "Titlescreen"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Difficulty" type="SpinBox" parent="."]
+margin_left = 448.0
+margin_top = 3.0
+margin_right = 522.0
+margin_bottom = 26.0
+theme = ExtResource( 2 )
+allow_greater = true
+allow_lesser = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -721,6 +723,14 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Label2" type="Label" parent="."]
+margin_left = 361.0
+margin_top = 6.0
+margin_right = 438.0
+margin_bottom = 20.0
+theme = ExtResource( 2 )
+text = "Difficulty"
+
 [connection signal="value_changed" from="ChartBox/VBoxContainer/BarNum" to="." method="_on_BarNum_value_changed"]
 [connection signal="pressed" from="VBoxContainer/Song/Button" to="." method="_on_SongFile_pressed"]
 [connection signal="value_changed" from="VBoxContainer/BPM/BPM" to="." method="_on_BPM_value_changed"]
@@ -732,8 +742,8 @@ __meta__ = {
 [connection signal="value_changed" from="AudioSpeed/HSlider" to="." method="_on_Speed_value_changed"]
 [connection signal="pressed" from="SaveLoadBox/Save" to="." method="_on_Save_pressed"]
 [connection signal="pressed" from="SaveLoadBox/Load" to="." method="_on_Load_pressed"]
-[connection signal="pressed" from="OutputChart" to="." method="_on_OutputChart_pressed"]
 [connection signal="pressed" from="Titlescreen" to="." method="_on_Titlescreen_pressed"]
+[connection signal="value_changed" from="Difficulty" to="." method="_on_Difficulty_value_changed"]
 [connection signal="pressed" from="ToastEdit" to="." method="_on_ToastEdit_pressed"]
 [connection signal="pressed" from="ToastEditor/Return" to="." method="_on_Return_pressed"]
 [connection signal="pressed" from="ToastEditor/Toasts/Completed/Icon/Button" to="." method="_on_CompletedButton_pressed"]
