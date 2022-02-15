@@ -50,24 +50,25 @@ func load_songs():
 		var file = File.new()
 		var file_name = song_data.get_next()
 		while file_name != "":
-			if file.open(SONG_DATA_GLOABAL + file_name, File.READ) == OK:
-				var data = JSON.parse(file.get_as_text()).result
-				if data is Dictionary:
-					if songs.has(data.song_info.name):
-						file_name = song_data.get_next()
-						file.close()
-						continue
-					songs[data.song_info.name] = SONG_DATA_GLOABAL + file_name
-					toast_data[data.song_info.name] = data["toasts"]
-					if save_data.has(data.song_info.name):
-						file_name = song_data.get_next()
-						file.close()
-						continue
-					save_data[data.song_info.name] = {
-						"score" : 0,
-						"trinkets": 0,
-					}
-				file.close()
+			if file_name.ends_with(".bread"):
+				if file.open(SONG_DATA_GLOABAL + file_name, File.READ) == OK:
+					var data = JSON.parse(file.get_as_text()).result
+					if data is Dictionary:
+						if songs.has(data.song_info.name):
+							file_name = song_data.get_next()
+							file.close()
+							continue
+						songs[data.song_info.name] = SONG_DATA_GLOABAL + file_name
+						toast_data[data.song_info.name] = data["toasts"]
+						if save_data.has(data.song_info.name):
+							file_name = song_data.get_next()
+							file.close()
+							continue
+						save_data[data.song_info.name] = {
+							"score" : 0,
+							"trinkets": 0,
+						}
+					file.close()
 			file_name = song_data.get_next()
 
 func save_to_file(score):

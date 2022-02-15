@@ -248,27 +248,27 @@ func _on_FileDialog_file_selected(path : String):
 						song_button.text = song_path.rsplit("/", false, 1)[1]
 						bpm_value = data.song_info.bpm
 						speed.value = data.song_info.speed
-						audio = load(song_path)
+						audio = LoadHelper.load_audio(song_path)
 						MusicPlayer.set_music(audio)
 						bpm.value = data.song_info.bpm
 						
 						if data.song_info.has("icons"):
 							#LoadingMode.DEFAULT_ICON:
 							default_icon_path = data.song_info.icons[0]
-							default_icon_button.icon = load(default_icon_path)
+							default_icon_button.icon = LoadHelper.load_image(default_icon_path)
 							#LoadingMode.CLICK_ICON:
 							clicked_icon_path = data.song_info.icons[1]
-							clicked_icon_button.icon = load(clicked_icon_path)
+							clicked_icon_button.icon = LoadHelper.load_image(clicked_icon_path)
 						if data.has("toasts"):
 							var toasts = data.toasts
 							completed_path = toasts.completed.icon
 							blind_path = toasts.blind.icon
 							nomiss_path = toasts.nomiss.icon
 							perfect_path = toasts.perfect.icon
-							completed_button.icon = load(completed_path)
-							blind_button.icon = load(blind_path)
-							nomiss_button.icon = load(nomiss_path)
-							perfect_button.icon = load(perfect_path)
+							completed_button.icon = LoadHelper.load_image(completed_path)
+							blind_button.icon = LoadHelper.load_image(blind_path)
+							nomiss_button.icon = LoadHelper.load_image(nomiss_path)
+							perfect_button.icon = LoadHelper.load_image(perfect_path)
 							completed_title.text = toasts.completed.title
 							completed_subtitle.text = toasts.completed.subtitle
 							blind_title.text = toasts.blind.title
@@ -325,42 +325,26 @@ func _on_FileDialog_file_selected(path : String):
 			LoadingMode.SONG:
 				song_button.text = path.rsplit("/", false, 1)[1]
 				song_path = path
-				audio = load(path)
+				audio = LoadHelper.load_audio(path)
 				MusicPlayer.set_music(audio)
 			LoadingMode.DEFAULT_ICON:
 				default_icon_path = path
-				default_icon_button.icon = load(default_icon_path)
+				default_icon_button.icon = LoadHelper.load_image(default_icon_path)
 			LoadingMode.CLICK_ICON:
 				clicked_icon_path = path
-				clicked_icon_button.icon = load(clicked_icon_path)
+				clicked_icon_button.icon = LoadHelper.load_image(clicked_icon_path)
 			LoadingMode.TOAST_COMPLETED:
 				completed_path = path
-				var image = Image.new()
-				image.load(path)
-				var texture = ImageTexture.new()
-				texture.create_from_image(image)
-				completed_button.icon = texture
+				completed_button.icon = LoadHelper.load_image(path)
 			LoadingMode.TOAST_BLIND:
 				blind_path = path
-				var image = Image.new()
-				image.load(path)
-				var texture = ImageTexture.new()
-				texture.create_from_image(image)
-				blind_button.icon = texture
+				blind_button.icon = LoadHelper.load_image(path)
 			LoadingMode.TOAST_NOMISS:
 				nomiss_path = path
-				var image = Image.new()
-				image.load(path)
-				var texture = ImageTexture.new()
-				texture.create_from_image(image)
-				nomiss_button.icon = texture
+				nomiss_button.icon = LoadHelper.load_image(path)
 			LoadingMode.TOAST_PERFECT:
 				perfect_path = path
-				var image = Image.new()
-				image.load(path)
-				var texture = ImageTexture.new()
-				texture.create_from_image(image)
-				perfect_button.icon = texture
+				perfect_button.icon = LoadHelper.load_image(path)
 				
 	# Saving a bread file
 	else:

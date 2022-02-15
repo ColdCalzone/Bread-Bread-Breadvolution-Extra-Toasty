@@ -49,8 +49,8 @@ func _ready():
 			var content = JSON.parse(file.get_as_text()).result
 			if content is Dictionary:
 				if content.song_info.icons[0] != "" and content.song_info.icons[1] != "":
-					var image1 = load(content.song_info.icons[0])
-					var image2 = load(content.song_info.icons[1])
+					var image1 = LoadHelper.load_image(content.song_info.icons[0])
+					var image2 = LoadHelper.load_image(content.song_info.icons[1])
 					if image1 != null and image2 != null:
 						new_button.set_textures(image1, image2)
 				new_button.difficulty = content.song_info.difficulty

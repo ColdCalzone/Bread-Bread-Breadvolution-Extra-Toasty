@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Reference",
+"class": "AudioLoader",
+"language": "GDScript",
+"path": "res://singletons/GDScriptAudioImport.gd"
+}, {
 "base": "Panel",
 "class": "ChartButton",
 "language": "GDScript",
@@ -35,6 +40,7 @@ _global_script_classes=[ {
 "path": "res://objects/Toast.gd"
 } ]
 _global_script_class_icons={
+"AudioLoader": "",
 "ChartButton": "",
 "HoldNote": "",
 "Note": "",
@@ -58,6 +64,7 @@ FPS="*res://singletons/FPS.tscn"
 TransitionManager="*res://singletons/TransitionManager.tscn"
 SongData="*res://singletons/SongData.gd"
 Settings="*res://singletons/Settings.gd"
+LoadHelper="*res://singletons/LoadHelper.gd"
 
 [display]
 

@@ -42,7 +42,7 @@ func _ready():
 
 func set_icon(new_icon):
 	if new_icon is String:
-		new_icon = load(new_icon)
+		new_icon = LoadHelper.load_image(new_icon)
 	icon.texture = new_icon
 
 func set_flavor(text : String):
