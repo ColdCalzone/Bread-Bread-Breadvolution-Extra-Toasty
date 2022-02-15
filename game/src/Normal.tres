@@ -1,8 +1,30 @@
-[gd_resource type="Theme" load_steps=5 format=2]
+[gd_resource type="Theme" load_steps=10 format=2]
 
 [ext_resource path="res://src/KarmaticArcade.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://sprites/BreadGrabber.png" type="Texture" id=2]
 [ext_resource path="res://src/Karmatic.tres" type="DynamicFont" id=3]
+
+[sub_resource type="StyleBoxLine" id=3]
+color = Color( 0.921569, 0.921569, 0.921569, 1 )
+thickness = 5
+vertical = true
+
+[sub_resource type="StyleBoxLine" id=2]
+color = Color( 0.631373, 0.631373, 0.631373, 1 )
+thickness = 5
+vertical = true
+
+[sub_resource type="StyleBoxLine" id=4]
+color = Color( 0.305882, 0.305882, 0.305882, 1 )
+thickness = 5
+vertical = true
+
+[sub_resource type="StyleBoxLine" id=7]
+color = Color( 0, 0, 0, 0 )
+thickness = 5
+vertical = true
+
+[sub_resource type="StyleBoxEmpty" id=6]
 
 [sub_resource type="DynamicFont" id=1]
 size = 20
@@ -26,3 +48,8 @@ TooltipLabel/colors/font_color_shadow = Color( 0, 0, 0, 0.1 )
 TooltipLabel/constants/shadow_offset_x = 1
 TooltipLabel/constants/shadow_offset_y = 1
 TooltipLabel/fonts/font = ExtResource( 3 )
+VScrollBar/styles/grabber = SubResource( 3 )
+VScrollBar/styles/grabber_highlight = SubResource( 2 )
+VScrollBar/styles/grabber_pressed = SubResource( 4 )
+VScrollBar/styles/scroll = SubResource( 7 )
+VScrollBar/styles/scroll_focus = SubResource( 6 )
