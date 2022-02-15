@@ -12,7 +12,7 @@ func load_image(path : String) -> Texture:
 		texture.create_from_image(image)
 		return texture
 
-func load_audio(path : String) -> AudioStream:
+func load_audio(path : String, loop : bool = false) -> AudioStream:
 	if path.begins_with("res://"):
 		return load(path) as AudioStream
 	else:
@@ -21,4 +21,4 @@ func load_audio(path : String) -> AudioStream:
 		# Who decided that loading resources from user:// wouldn't be allowed, but instead
 		#one must open the file, get the bytes of it, and create the resource manually?
 		# A fool and a moron, that's who.
-		return audio_loader.loadfile(path)
+		return audio_loader.loadfile(path, loop)

@@ -50,7 +50,7 @@ func report_errors(err, filepath):
 	else:
 		print("Unknown error with file ", filepath, " error code: ", err)
 
-func loadfile(filepath):
+func loadfile(filepath, loop : bool = false):
 	var file = File.new()
 	var err = file.open(filepath, File.READ)
 	if err != OK:
@@ -143,14 +143,14 @@ func loadfile(filepath):
 	#if file is ogg
 	elif filepath.ends_with(".ogg"):
 		var newstream = AudioStreamOGGVorbis.new()
-		newstream.loop = true #set to false or delete this line if you don't want to loop
+		newstream.loop = loop #set to false or delete this line if you don't want to loop
 		newstream.data = bytes
 		return newstream
 
 	#if file is mp3
 	elif filepath.ends_with(".mp3"):
 		var newstream = AudioStreamMP3.new()
-		newstream.loop = true #set to false or delete this line if you don't want to loop
+		newstream.loop = loop #set to false or delete this line if you don't want to loop
 		newstream.data = bytes
 		return newstream
 
