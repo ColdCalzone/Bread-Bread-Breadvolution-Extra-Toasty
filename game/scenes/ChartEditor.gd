@@ -130,6 +130,8 @@ func add_rows():
 		notes[current_bar - 1].append(notes[current_bar - 1][0].duplicate())
 
 func _ready():
+	if OS.has_feature("editor"):
+		file_dialog.access = FileDialog.ACCESS_RESOURCES
 	FPS.hide_fps()
 	add_rows()
 	MusicPlayer.set_music(audio)
@@ -494,6 +496,7 @@ func _on_Titlescreen_pressed():
 	if Settings.show_fps:
 		FPS.show_fps()
 	MusicPlayer.pitch_scale = 1
+	SongData.load_songs()
 	TransitionManager.transition_to("title")
 
 

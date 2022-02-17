@@ -62,16 +62,32 @@ func spawn_hold(target_start, target_end):
 	self.add_child(new_note)
 	self.notes.append(new_note)
 	# measured in pixels per second
-	var distance = 64/speed
-	while distance < (target_end - target_start) - 64/speed:
-		var middle_note = hold_note.instance()
-		middle_note.part = middle_note.Part.MIDDLE
-		middle_note.time = target_start + distance
-		#var temp_var_for_middle_note_thingy = middle_note.duplicate()
-		self.add_child(middle_note)
-		self.notes.append(middle_note)
-		distance += 64/speed
-		
+	if (target_end - target_start) - 64/speed < 64/speed and (target_end - target_start) - 64/speed > 0:
+		var shorty = hold_note.instance()
+		shorty.part = shorty.Part.MIDDLE
+		shorty.time = target_end - 64/speed
+		shorty.rect_scale.y = target_end / (target_start + 64/speed)
+		print(shorty.rect_scale.y)
+		self.add_child(shorty)
+		self.notes.append(shorty)
+	else:
+		var distance = 64/speed
+		while distance < (target_end - target_start) - 64/speed:
+			var middle_note = hold_note.instance()
+			middle_note.part = middle_note.Part.MIDDLE
+			middle_note.time = target_start + distance
+			#var temp_var_for_middle_note_thingy = middle_note.duplicate()
+			self.add_child(middle_note)
+			self.notes.append(middle_note)
+			distance += 64/speed
+			if distance > (target_end - target_start) - 64/speed and (target_end - target_start) - 64/speed > 0:
+				var shorty = hold_note.instance()
+				shorty.part = shorty.Part.MIDDLE
+				shorty.time = target_end - 64/speed
+				shorty.rect_scale.y = (target_end - 64/speed) / middle_note.time
+				print(shorty.rect_scale.y)
+				self.add_child(shorty)
+				self.notes.append(shorty)
 	self.add_child(end_note)
 	self.notes.append(end_note)
 

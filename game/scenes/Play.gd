@@ -53,7 +53,7 @@ func _ready():
 					var image2 = LoadHelper.load_image(content.song_info.icons[1])
 					if image1 != null and image2 != null:
 						new_button.set_textures(image1, image2)
-				new_button.difficulty = content.song_info.difficulty
+				new_button.set_difficulty(content.song_info.difficulty)
 			file.close()
 		new_button.set_trinkets(int(SongData.save_data[song].trinkets))
 		if not Settings.cheats and int(SongData.save_data[song].trinkets) > 0:

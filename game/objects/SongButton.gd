@@ -6,8 +6,9 @@ onready var button : TextureButton = $TextureButton
 onready var label = $TextureButton/CenterContainer/Label
 var song_name : String = ""
 onready var score = $VBoxContainer/Score
-onready var trinkets = $VBoxContainer/Trinkets.get_children()
+onready var trinkets = $VBoxContainer/HBoxContainer/Trinkets.get_children()
 
+onready var difficulty_label = $VBoxContainer/HBoxContainer/VBoxContainer/Difficulty
 var difficulty : int = 0
 
 enum Trinkets {COMPLETE = 1, BLIND = 2, NOMISS = 4, PERFECT = 8}
@@ -24,6 +25,10 @@ func set_label(text):
 
 func set_score(amount):
 	score.text = "Score: " + String(amount)
+
+func set_difficulty(level):
+	difficulty = level
+	difficulty_label.text = "LVL: " + String(level)
 
 func set_trinkets(trinket_bits):
 	trinket_bits = int(trinket_bits)
