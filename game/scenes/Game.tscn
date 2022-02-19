@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://scenes/Game.gd" type="Script" id=1]
 [ext_resource path="res://objects/Key.tscn" type="PackedScene" id=2]
@@ -12,6 +12,7 @@
 [ext_resource path="res://sprites/ToastMeter.png" type="Texture" id=10]
 [ext_resource path="res://objects/SpinnyBread.tscn" type="PackedScene" id=11]
 [ext_resource path="res://src/KarmaticArcade.ttf" type="DynamicFontData" id=12]
+[ext_resource path="res://sprites/Pause.png" type="Texture" id=13]
 
 [sub_resource type="Shader" id=2]
 code = "shader_type canvas_item;
@@ -57,6 +58,7 @@ __meta__ = {
 [node name="BackgroundScene" parent="." instance=ExtResource( 5 )]
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
+margin_left = 44.0
 margin_top = 270.0
 margin_right = 640.0
 margin_bottom = 344.0
@@ -65,10 +67,11 @@ __meta__ = {
 }
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer"]
-margin_left = 186.0
+margin_left = 140.0
 margin_top = 5.0
-margin_right = 454.0
+margin_right = 456.0
 margin_bottom = 69.0
+custom_constants/separation = 20
 
 [node name="Left" parent="CenterContainer/HBoxContainer" instance=ExtResource( 2 )]
 anchor_right = 0.0
@@ -82,26 +85,26 @@ direction = 3
 [node name="Down" parent="CenterContainer/HBoxContainer" instance=ExtResource( 2 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 68.0
+margin_left = 84.0
 margin_top = 0.0
-margin_right = 132.0
+margin_right = 148.0
 margin_bottom = 64.0
 direction = 2
 
 [node name="Up" parent="CenterContainer/HBoxContainer" instance=ExtResource( 2 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 136.0
+margin_left = 168.0
 margin_top = 0.0
-margin_right = 200.0
+margin_right = 232.0
 margin_bottom = 64.0
 
 [node name="Right" parent="CenterContainer/HBoxContainer" instance=ExtResource( 2 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 204.0
+margin_left = 252.0
 margin_top = 0.0
-margin_right = 268.0
+margin_right = 316.0
 margin_bottom = 64.0
 direction = 1
 
@@ -164,6 +167,9 @@ theme = ExtResource( 3 )
 text = "ms"
 align = 2
 valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="ComboCenter" type="CenterContainer" parent="."]
 margin_right = 1280.0
@@ -290,9 +296,9 @@ custom_fonts/font = SubResource( 6 )
 text = "Time"
 
 [node name="Credits2" type="VBoxContainer" parent="."]
-margin_left = 96.0
+margin_left = 208.0
 margin_top = 129.0
-margin_right = 388.0
+margin_right = 500.0
 margin_bottom = 288.0
 custom_constants/separation = 52
 __meta__ = {
@@ -315,3 +321,12 @@ text = "BPM"
 [node name="Timer" type="Timer" parent="."]
 wait_time = 2.0
 one_shot = true
+
+[node name="Pause" type="Button" parent="."]
+margin_left = 593.0
+margin_top = 3.0
+margin_right = 637.0
+margin_bottom = 41.0
+icon = ExtResource( 13 )
+
+[connection signal="pressed" from="Pause" to="." method="_on_Pause_pressed"]

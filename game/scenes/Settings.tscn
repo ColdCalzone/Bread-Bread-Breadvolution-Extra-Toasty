@@ -165,28 +165,6 @@ step = 0.1
 allow_greater = true
 align = 1
 
-[node name="Scroll" type="VBoxContainer" parent="Options"]
-margin_left = 322.0
-margin_top = 200.0
-margin_right = 639.0
-margin_bottom = 262.0
-
-[node name="Label" type="Label" parent="Options/Scroll"]
-margin_right = 317.0
-margin_bottom = 24.0
-theme = ExtResource( 4 )
-text = "Scroll"
-align = 1
-
-[node name="Scroll" type="OptionButton" parent="Options/Scroll"]
-margin_top = 28.0
-margin_right = 317.0
-margin_bottom = 62.0
-rect_min_size = Vector2( 0, 34 )
-theme = ExtResource( 4 )
-text = "Scroll"
-align = 1
-
 [node name="Back" type="TextureButton" parent="."]
 margin_left = 3.0
 margin_top = 293.0
@@ -198,69 +176,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-margin_left = 324.0
-margin_top = 282.0
-margin_right = 637.0
-margin_bottom = 357.0
-grow_horizontal = 0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="VBoxContainer"]
-margin_right = 313.0
-margin_bottom = 24.0
-theme = ExtResource( 4 )
-text = "Controls"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Buttons" type="HBoxContainer" parent="VBoxContainer"]
-margin_top = 28.0
-margin_right = 313.0
-margin_bottom = 68.0
-grow_horizontal = 0
-custom_constants/separation = 20
-alignment = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Left" type="Button" parent="VBoxContainer/Buttons"]
-margin_left = 46.0
-margin_right = 86.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 40, 40 )
-theme = ExtResource( 4 )
-text = "D"
-
-[node name="Down" type="Button" parent="VBoxContainer/Buttons"]
-margin_left = 106.0
-margin_right = 146.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 40, 40 )
-theme = ExtResource( 4 )
-text = "F"
-
-[node name="Up" type="Button" parent="VBoxContainer/Buttons"]
-margin_left = 166.0
-margin_right = 206.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 40, 40 )
-theme = ExtResource( 4 )
-text = "J"
-
-[node name="Right" type="Button" parent="VBoxContainer/Buttons"]
-margin_left = 226.0
-margin_right = 266.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 40, 40 )
-theme = ExtResource( 4 )
-text = "K"
-
 [connection signal="value_changed" from="Options/SoundOptions/Music/MusicVol" to="." method="_on_MusicVol_value_changed"]
 [connection signal="value_changed" from="Options/SoundOptions/SFX/SFXVol" to="." method="_on_SFXVol_value_changed"]
 [connection signal="toggled" from="Options/Visual/Fullscreen/Fullscreen" to="." method="_on_Fullscreen_toggled"]
@@ -268,9 +183,4 @@ text = "K"
 [connection signal="toggled" from="Options/Visual/Backgrounds/Backgrounds" to="." method="_on_Backgrounds_toggled"]
 [connection signal="toggled" from="Options/Visual/Effects/Effects" to="." method="_on_Effects_toggled"]
 [connection signal="value_changed" from="Options/LatencyComp/Latency" to="." method="_on_Latency_value_changed"]
-[connection signal="item_selected" from="Options/Scroll/Scroll" to="." method="_on_Scroll_item_selected"]
 [connection signal="pressed" from="Back" to="." method="_on_Back_pressed"]
-[connection signal="pressed" from="VBoxContainer/Buttons/Left" to="." method="_on_Left_pressed"]
-[connection signal="pressed" from="VBoxContainer/Buttons/Down" to="." method="_on_Down_pressed"]
-[connection signal="pressed" from="VBoxContainer/Buttons/Up" to="." method="_on_Up_pressed"]
-[connection signal="pressed" from="VBoxContainer/Buttons/Right" to="." method="_on_Right_pressed"]

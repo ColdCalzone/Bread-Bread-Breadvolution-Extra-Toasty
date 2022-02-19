@@ -38,7 +38,7 @@ func _ready():
 var time = 0.0
 
 func _input(event):
-	if event is InputEventKey:
+	if event is InputEventKey or event is InputEventScreenTouch:
 		tween.stop_all()
 		if Settings.show_fps:
 			FPS.show_fps()

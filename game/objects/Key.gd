@@ -67,7 +67,6 @@ func spawn_hold(target_start, target_end):
 		shorty.part = shorty.Part.MIDDLE
 		shorty.time = target_end - 64/speed
 		shorty.rect_scale.y = target_end / (target_start + 64/speed)
-		print(shorty.rect_scale.y)
 		self.add_child(shorty)
 		self.notes.append(shorty)
 	else:
@@ -85,7 +84,6 @@ func spawn_hold(target_start, target_end):
 				shorty.part = shorty.Part.MIDDLE
 				shorty.time = target_end - 64/speed
 				shorty.rect_scale.y = (target_end - 64/speed) / middle_note.time
-				print(shorty.rect_scale.y)
 				self.add_child(shorty)
 				self.notes.append(shorty)
 	self.add_child(end_note)

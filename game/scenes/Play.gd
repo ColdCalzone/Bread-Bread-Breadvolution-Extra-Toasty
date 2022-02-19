@@ -6,12 +6,6 @@ const DES_ICON = preload("res://sprites/ascend_sort.png")
 onready var button = preload("res://objects/SongButton.tscn")
 onready var song_selector = $CenterContainer/SongSelect
 
-onready var chart_button = $ChartEditor
-onready var cheats = $CheatMenu
-
-onready var tween = $Tween
-onready var hint = $Hint
-
 onready var sort = $Sort
 
 var cheat_buffer : Array = []
@@ -36,9 +30,6 @@ class DifficultySorter:
 
 func _ready():
 	MusicPlayer.set_music("res://Music/Just_Existing_v4.wav", true)
-	if Settings.cheats:
-		cheats.rect_position.x -= 20
-		chart_button.rect_position.x -= 20
 	var songs = SongData.get_songs()
 	var file = File.new()
 	for song in songs.keys():
@@ -67,9 +58,6 @@ func _ready():
 	all_buttons_des.sort_custom(DifficultySorter, "sort_descending")
 	for button in all_buttons_asc:
 		song_selector.add_song(button)
-	if show_hint:
-		tween.interpolate_property(hint, "rect_position:x", 645, 485, 5.0, Tween.TRANS_LINEAR, Tween.EASE_IN, 10.0)
-		tween.start()
 
 func _on_Back_pressed():
 	TransitionManager.transition_to("title")
@@ -77,33 +65,6 @@ func _on_Back_pressed():
 func play_level(song : String):
 	if SongData.set_level(song):
 		TransitionManager.transition_to("game")
-
-func _input(event):
-	if event is InputEventKey and not Settings.cheats:
-		if event.pressed and not event.echo:
-			match event.scancode:
-				KEY_UP:
-					cheat_buffer.push_back(0)
-				KEY_DOWN:
-					cheat_buffer.push_back(1)
-				KEY_LEFT:
-					cheat_buffer.push_back(2)
-				KEY_RIGHT:
-					cheat_buffer.push_back(3)
-				KEY_B:
-					cheat_buffer.push_back(4)
-				KEY_A:
-					cheat_buffer.push_back(5)
-				KEY_ENTER:
-					var offset = 0
-					for key in cheat_buffer:
-						if key == seq[offset]:
-							offset += 1
-							if offset == 10:
-								Settings.set_cheat_mode()
-								cheats.rect_position.x -= 20
-								chart_button.rect_position.x -= 20
-
 
 func _on_Button_pressed():
 	MusicPlayer.stop()

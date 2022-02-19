@@ -198,14 +198,18 @@ func _process(delta):
 	phys_time = 0
 	song_progress.value = MusicPlayer.get_playback_position() / MusicPlayer.stream.get_length()
 
+var accuracy
+var beat
+var notes_hit
+
 func _physics_process(delta):
 	phys_time += delta
-	var beat = (time + phys_time) / inverse_bps
+	beat = (time + phys_time) / inverse_bps
 	if int(beat) > last_beat and Settings.effects:
 		last_beat = int(beat)
 		spinny_bread.bunmp()
-	var accuracy = null
-	var notes_hit = 0
+	accuracy = null
+	notes_hit = 0
 	if note_pointer < pattern.size():
 		if pattern[note_pointer][1] <= (time + phys_time) + 2:
 			for key in range(pattern[note_pointer][0].size()):
@@ -313,108 +317,6 @@ func _physics_process(delta):
 					score += 10 * multiplier * toast
 					multiplier += 0.05
 	
-	# regular notes
-	if Input.is_action_just_pressed("key_left"):
-		keys[0].press()
-		if keys[0].notes.size() > 0:
-			if keys[0].notes[0].time / inverse_bps - beat <= half_beat:
-				if keys[0].notes[0] is HoldNote:
-					# is it the beginning?
-					if keys[0].notes[0].part == 2:
-						keys[0].holding = true
-						accuracy = keys[0].notes[0].time - (time + phys_time)
-						keys[0].remove_note(0)
-						keys[0].emit()
-						combo += 1
-						notes_hit += 1
-				else:
-					accuracy = keys[0].notes[0].time - (time + phys_time)
-					keys[0].remove_note(0)
-					keys[0].emit()
-					combo += 1
-					notes_hit += 1
-			else:
-				score -= 10 * toast * multiplier
-				misses += 1
-	elif Input.is_action_just_released("key_left"):
-		keys[0].release()
-		keys[0].holding = false
-	if Input.is_action_just_pressed("key_down"):
-		keys[1].press()
-		if keys[1].notes.size() > 0:
-			if (keys[1].notes[0].time / inverse_bps) - beat <= half_beat:
-				if keys[1].notes[0] is HoldNote:
-					# is it the beginning?
-					if keys[1].notes[0].part == 2:
-						keys[1].holding = true
-						accuracy = keys[1].notes[0].time - (time + phys_time)
-						keys[1].remove_note(0)
-						keys[1].emit()
-						combo += 1
-						notes_hit += 1
-				else:
-					accuracy = keys[1].notes[0].time - (time + phys_time)
-					keys[1].remove_note(0)
-					keys[1].emit()
-					combo += 1
-					notes_hit += 1
-			else:
-				score -= 10 * toast * multiplier
-				misses += 1
-	elif Input.is_action_just_released("key_down"):
-		keys[1].release()
-		keys[1].holding = false
-	if Input.is_action_just_pressed("key_up"):
-		keys[2].press()
-		if keys[2].notes.size() > 0:
-			if (keys[2].notes[0].time / inverse_bps) - beat <= half_beat:
-				if keys[2].notes[0] is HoldNote:
-					# is it the beginning?
-					if keys[2].notes[0].part == 2:
-						keys[2].holding = true
-						accuracy = keys[2].notes[0].time - (time + phys_time)
-						keys[2].remove_note(0)
-						keys[2].emit()
-						combo += 1
-						notes_hit += 1
-				else:
-					accuracy = keys[2].notes[0].time - (time + phys_time)
-					keys[2].remove_note(0)
-					keys[2].emit()
-					combo += 1
-					notes_hit += 1
-			else:
-				score -= 10 * toast * multiplier
-				misses += 1
-	elif Input.is_action_just_released("key_up"):
-		keys[2].release()
-		keys[2].holding = false
-	if Input.is_action_just_pressed("key_right"):
-		keys[3].press()
-		if keys[3].notes.size() > 0:
-			if (keys[3].notes[0].time / inverse_bps) - beat <= half_beat:
-				if keys[3].notes[0] is HoldNote:
-					# is it the beginning?
-					if keys[3].notes[0].part == 2:
-						keys[3].holding = true
-						accuracy = keys[3].notes[0].time - (time + phys_time)
-						keys[3].remove_note(0)
-						keys[3].emit()
-						combo += 1
-						notes_hit += 1
-				else:
-					accuracy = keys[3].notes[0].time - (time + phys_time)
-					keys[3].remove_note(0)
-					keys[3].emit()
-					combo += 1
-					notes_hit += 1
-			else:
-				score -= 10 * toast * multiplier
-				misses += 1
-	elif Input.is_action_just_released("key_right"):
-		keys[3].release()
-		keys[3].holding = false
-	
 	if accuracy != null:
 		ms_accuracy.text= String(stepify(accuracy, 0.0001) * 1000) + "MS"
 		# God these values are bad
@@ -472,17 +374,121 @@ func end_game():
 	new_results.fade_in()
 
 func _input(event : InputEvent):
-	if event.is_action_pressed("pause") and not is_game_over:
-		pause()
-	elif is_game_over:
-		if event.is_action_pressed("ui_accept"):
-			tween.stop_all()
-			timer.stop()
-			MusicPlayer.stop()
-			MusicPlayer.pitch_scale = 1
-			var gameover = _game_over.instance()
-			self.add_child(gameover)
-			gameover.game_over()
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			if is_game_over:
+				tween.stop_all()
+				timer.stop()
+				MusicPlayer.stop()
+				MusicPlayer.pitch_scale = 1
+				var gameover = _game_over.instance()
+				self.add_child(gameover)
+				gameover.game_over()
+			else:
+				if event.position > Vector2(184, 275) and event.position < Vector2(248, 339):
+					if event.pressed:
+						keys[0].press()
+						if keys[0].notes.size() > 0:
+							if keys[0].notes[0].time / inverse_bps - beat <= half_beat:
+								if keys[0].notes[0] is HoldNote:
+									# is it the beginning?
+									if keys[0].notes[0].part == 2:
+										keys[0].holding = true
+										accuracy = keys[0].notes[0].time - (time + phys_time)
+										keys[0].remove_note(0)
+										keys[0].emit()
+										combo += 1
+										notes_hit += 1
+								else:
+									accuracy = keys[0].notes[0].time - (time + phys_time)
+									keys[0].remove_note(0)
+									keys[0].emit()
+									combo += 1
+									notes_hit += 1
+							else:
+								score -= 10 * toast * multiplier
+								misses += 1
+					else:
+						keys[0].release()
+						keys[0].holding = false
+				elif event.position > Vector2(268, 275) and event.position < Vector2(332, 339):
+					if event.pressed:
+						keys[1].press()
+						if keys[1].notes.size() > 0:
+							if keys[1].notes[0].time / inverse_bps - beat <= half_beat:
+								if keys[1].notes[0] is HoldNote:
+									# is it the beginning?
+									if keys[1].notes[0].part == 2:
+										keys[1].holding = true
+										accuracy = keys[1].notes[0].time - (time + phys_time)
+										keys[1].remove_note(0)
+										keys[1].emit()
+										combo += 1
+										notes_hit += 1
+								else:
+									accuracy = keys[1].notes[0].time - (time + phys_time)
+									keys[1].remove_note(0)
+									keys[1].emit()
+									combo += 1
+									notes_hit += 1
+							else:
+								score -= 10 * toast * multiplier
+								misses += 1
+					else:
+						keys[1].release()
+						keys[1].holding = false
+				elif event.position > Vector2(352, 275) and event.position < Vector2(416, 339):
+					if event.pressed:
+						keys[2].press()
+						if keys[2].notes.size() > 0:
+							if keys[2].notes[0].time / inverse_bps - beat <= half_beat:
+								if keys[2].notes[0] is HoldNote:
+									# is it the beginning?
+									if keys[2].notes[0].part == 2:
+										keys[2].holding = true
+										accuracy = keys[2].notes[0].time - (time + phys_time)
+										keys[2].remove_note(0)
+										keys[2].emit()
+										combo += 1
+										notes_hit += 1
+								else:
+									accuracy = keys[0].notes[0].time - (time + phys_time)
+									keys[2].remove_note(0)
+									keys[2].emit()
+									combo += 1
+									notes_hit += 1
+							else:
+								score -= 10 * toast * multiplier
+								misses += 1
+					else:
+						keys[2].release()
+						keys[2].holding = false
+				elif event.position > Vector2(436, 275) and event.position < Vector2(500, 339):
+					if event.pressed:
+						keys[3].press()
+						if keys[3].notes.size() > 0:
+							if keys[3].notes[0].time / inverse_bps - beat <= half_beat:
+								if keys[3].notes[0] is HoldNote:
+									# is it the beginning?
+									if keys[3].notes[0].part == 2:
+										keys[3].holding = true
+										accuracy = keys[3].notes[0].time - (time + phys_time)
+										keys[3].remove_note(0)
+										keys[3].emit()
+										combo += 1
+										notes_hit += 1
+								else:
+									accuracy = keys[3].notes[0].time - (time + phys_time)
+									keys[3].remove_note(0)
+									keys[3].emit()
+									combo += 1
+									notes_hit += 1
+							else:
+								score -= 10 * toast * multiplier
+								misses += 1
+					else:
+						keys[3].release()
+						keys[3].holding = false
 
 func game_over():
 	MusicPlayer.disconnect("finished", self, "end_game")
@@ -504,3 +510,8 @@ func game_over():
 		yield(self, "ready")
 	self.add_child(gameover)
 	gameover.game_over()
+
+
+func _on_Pause_pressed():
+	if not is_game_over:
+		pause()
