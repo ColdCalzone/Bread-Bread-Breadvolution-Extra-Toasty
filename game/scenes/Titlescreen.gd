@@ -7,6 +7,8 @@ const MIN_DB = 60
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	DiscordManager.set_activity()
+	DiscordManager.discord.run_callbacks()
 	MusicPlayer.set_music("res://Music/Just_Existing_v4.wav", true, true)
 	spectrum = AudioServer.get_bus_effect_instance(1,0)
 	while true:

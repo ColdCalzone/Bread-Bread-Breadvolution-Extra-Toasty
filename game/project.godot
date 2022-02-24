@@ -19,6 +19,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://objects/ChartButton.gd"
 }, {
+"base": "Reference",
+"class": "Discord",
+"language": "GDScript",
+"path": "res://discord_sdk/discord.gd"
+}, {
 "base": "Note",
 "class": "HoldNote",
 "language": "GDScript",
@@ -42,6 +47,7 @@ _global_script_classes=[ {
 _global_script_class_icons={
 "AudioLoader": "",
 "ChartButton": "",
+"Discord": "",
 "HoldNote": "",
 "Note": "",
 "SongButton": "",
@@ -65,6 +71,7 @@ TransitionManager="*res://singletons/TransitionManager.tscn"
 SongData="*res://singletons/SongData.gd"
 Settings="*res://singletons/Settings.gd"
 LoadHelper="*res://singletons/LoadHelper.gd"
+DiscordManager="*res://singletons/DiscordManager.gd"
 
 [display]
 
@@ -72,6 +79,10 @@ window/size/width=640
 window/size/height=360
 window/stretch/mode="2d"
 window/stretch/aspect="keep"
+
+[gdnative]
+
+singletons=[  ]
 
 [input]
 

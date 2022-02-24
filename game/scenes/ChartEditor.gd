@@ -132,6 +132,9 @@ func add_rows():
 func _ready():
 	if OS.has_feature("editor"):
 		file_dialog.access = FileDialog.ACCESS_RESOURCES
+	DiscordManager.current_state = DiscordManager.GameState.CHARTING
+	DiscordManager.set_activity()
+	DiscordManager.discord.run_callbacks()
 	FPS.hide_fps()
 	add_rows()
 	MusicPlayer.set_music(audio)

@@ -94,7 +94,8 @@ var can_die = false
 var delay = 0.0
 
 func pause():
-	
+	DiscordManager.current_state = DiscordManager.GameState.PAUSED
+	DiscordManager.set_activity()
 	var new_pause = pause_menu.instance()
 	self.add_child(new_pause)
 	#time = MusicPlayer.get_playback_position()
@@ -191,12 +192,15 @@ func _ready():
 	can_die = true
 
 func _process(delta):
+	DiscordManager.discord.run_callbacks()
 	time += delta
 #	if int(time) > last_second:
 #		last_second = int(time) + 5
 #		time = 2 + MusicPlayer.get_playback_position() + delay + timer.time_left
 	phys_time = 0
 	song_progress.value = MusicPlayer.get_playback_position() / MusicPlayer.stream.get_length()
+	DiscordManager.set_activity(score, OS.get_unix_time() + MusicPlayer.stream.get_length() - MusicPlayer.get_playback_position())
+	
 
 func _physics_process(delta):
 	phys_time += delta

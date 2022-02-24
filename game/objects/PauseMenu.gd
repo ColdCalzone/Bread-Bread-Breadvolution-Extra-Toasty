@@ -41,6 +41,8 @@ func _input(event):
 			tween.start()
 			yield(tween, "tween_all_completed")
 		get_tree().paused = false
+		DiscordManager.current_state = DiscordManager.GameState.IN_GAME
+		DiscordManager.discord.run_callbacks()
 		queue_free()
 
 func _on_Resume_pressed():
@@ -59,6 +61,8 @@ func _on_Resume_pressed():
 		tween.start()
 		yield(tween, "tween_all_completed")
 	get_tree().paused = false
+	DiscordManager.current_state = DiscordManager.GameState.IN_GAME
+	DiscordManager.discord.run_callbacks()
 	queue_free()
 
 func _on_Restart_pressed():
@@ -69,6 +73,8 @@ func _on_Restart_pressed():
 	MusicPlayer.stop()
 	TransitionManager.transition_to("game")
 	get_tree().paused = false
+	DiscordManager.current_state = DiscordManager.GameState.IN_GAME
+	DiscordManager.discord.run_callbacks()
 	queue_free()
 
 func _on_Quit_pressed():
