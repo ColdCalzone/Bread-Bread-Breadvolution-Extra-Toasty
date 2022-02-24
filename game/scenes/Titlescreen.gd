@@ -8,7 +8,6 @@ const MIN_DB = 60
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	DiscordManager.set_activity()
-	DiscordManager.discord.run_callbacks()
 	MusicPlayer.set_music("res://Music/Just_Existing_v4.wav", true, true)
 	spectrum = AudioServer.get_bus_effect_instance(1,0)
 	while true:
@@ -20,6 +19,7 @@ func _ready():
 var has_pulsed = false
 
 func _process(_delta):
+	DiscordManager.discord.run_callbacks()
 	# shamelessly stolen from the example in the docs - check "res://scenes/AudioAnalyzeTest.tscn"
 	# 1380 - 2070 is the frequency range I decided on
 	var magnitude: float = spectrum.get_magnitude_for_frequency_range(1380, 2070).length()

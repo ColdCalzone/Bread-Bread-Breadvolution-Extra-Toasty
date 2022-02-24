@@ -134,7 +134,6 @@ func _ready():
 		file_dialog.access = FileDialog.ACCESS_RESOURCES
 	DiscordManager.current_state = DiscordManager.GameState.CHARTING
 	DiscordManager.set_activity()
-	DiscordManager.discord.run_callbacks()
 	FPS.hide_fps()
 	add_rows()
 	MusicPlayer.set_music(audio)
@@ -154,6 +153,8 @@ func _process(_delta):
 		if int((current_note) / 16) > last_bar:
 			last_bar = int((current_note) / 16)
 			bar_selector.value = last_bar + 1
+	else:
+		DiscordManager.discord.run_callbacks()
 
 func change_note(mode : int, index : int):
 # warning-ignore:integer_division

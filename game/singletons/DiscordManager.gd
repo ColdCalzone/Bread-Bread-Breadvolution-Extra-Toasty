@@ -46,7 +46,7 @@ func set_activity(score : int = 0, end_time : int = 0):
 					activity.assets.small_text = "Going Up"
 				"Descent":
 					activity.assets.small_image = "descenticon"
-					activity.assets.small_text = "Loadout"
+					activity.assets.small_text = "Descent"
 				_:
 					activity.assets.small_image = "None"
 					activity.assets.small_text = SongData.level_name
@@ -67,7 +67,7 @@ func set_activity(score : int = 0, end_time : int = 0):
 					activity.assets.small_text = "Going Up"
 				"Descent":
 					activity.assets.small_image = "descenticon"
-					activity.assets.small_text = "Loadout"
+					activity.assets.small_text = "Descent"
 				_:
 					activity.assets.small_image = "None"
 					activity.assets.small_text = SongData.level_name
