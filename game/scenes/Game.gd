@@ -75,12 +75,6 @@ onready var bpm_text = $Credits2/BPM
 
 var actions = ["key_left", "key_down", "key_up", "key_right"]
 
-# weird timing things!!!
-# because of lag reasons using _physics_process to time the song doesn't work...
-# but it runs more than process. So I'm using both to be generally better at timing
-
-var phys_time : float = 0.0
-
 # Stuff used for comparison, i.e half a beat for checking accuracy
 var half_beat : float = 0.0
 var quarter_beat : float = 0.0
@@ -194,24 +188,15 @@ func _ready():
 func _process(delta):
 	DiscordManager.discord.run_callbacks()
 	time += delta
-#	if int(time) > last_second:
-#		last_second = int(time) + 5
-#		time = 2 + MusicPlayer.get_playback_position() + delay + timer.time_left
-	phys_time = 0
-	song_progress.value = MusicPlayer.get_playback_position() / MusicPlayer.stream.get_length()
-	DiscordManager.set_activity(score, OS.get_unix_time() + MusicPlayer.stream.get_length() - MusicPlayer.get_playback_position())
 	
-
-func _physics_process(delta):
-	phys_time += delta
-	var beat = (time + phys_time) / inverse_bps
+	var beat = (time) / inverse_bps
 	if int(beat) > last_beat and Settings.effects:
 		last_beat = int(beat)
 		spinny_bread.bunmp()
 	var accuracy = null
 	var notes_hit = 0
 	if note_pointer < pattern.size():
-		if pattern[note_pointer][1] <= (time + phys_time) + 2:
+		if pattern[note_pointer][1] <= (time) + 2:
 			for key in range(pattern[note_pointer][0].size()):
 				if pattern[note_pointer][0][key] is Array:
 					keys[key].spawn_hold(pattern[note_pointer][1] + 2, pattern[note_pointer][0][key][0] + 2)
@@ -266,7 +251,7 @@ func _physics_process(delta):
 		if SongData.aim_bot:
 			for key in range(keys.size()):
 				if keys[key].notes.size() > 0:
-					if keys[key].notes[0].time  <= time + (phys_time / 2):
+					if keys[key].notes[0].time <= time + delta:
 						Input.action_press(actions[key])
 					elif not keys[key].holding:
 						Input.action_release(actions[key])
@@ -321,18 +306,18 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("key_left"):
 		keys[0].press()
 		if keys[0].notes.size() > 0:
-			if keys[0].notes[0].time / inverse_bps - beat <= half_beat:
+			if keys[0].notes[0].time / inverse_bps - beat <= (half_beat + quarter_beat):
 				if keys[0].notes[0] is HoldNote:
 					# is it the beginning?
 					if keys[0].notes[0].part == 2:
 						keys[0].holding = true
-						accuracy = keys[0].notes[0].time - (time + phys_time)
+						accuracy = keys[0].notes[0].time - (time)
 						keys[0].remove_note(0)
 						keys[0].emit()
 						combo += 1
 						notes_hit += 1
 				else:
-					accuracy = keys[0].notes[0].time - (time + phys_time)
+					accuracy = keys[0].notes[0].time - (time)
 					keys[0].remove_note(0)
 					keys[0].emit()
 					combo += 1
@@ -346,18 +331,18 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("key_down"):
 		keys[1].press()
 		if keys[1].notes.size() > 0:
-			if (keys[1].notes[0].time / inverse_bps) - beat <= half_beat:
+			if (keys[1].notes[0].time / inverse_bps) - beat <= (half_beat + quarter_beat):
 				if keys[1].notes[0] is HoldNote:
 					# is it the beginning?
 					if keys[1].notes[0].part == 2:
 						keys[1].holding = true
-						accuracy = keys[1].notes[0].time - (time + phys_time)
+						accuracy = keys[1].notes[0].time - (time)
 						keys[1].remove_note(0)
 						keys[1].emit()
 						combo += 1
 						notes_hit += 1
 				else:
-					accuracy = keys[1].notes[0].time - (time + phys_time)
+					accuracy = keys[1].notes[0].time - (time)
 					keys[1].remove_note(0)
 					keys[1].emit()
 					combo += 1
@@ -371,18 +356,18 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("key_up"):
 		keys[2].press()
 		if keys[2].notes.size() > 0:
-			if (keys[2].notes[0].time / inverse_bps) - beat <= half_beat:
+			if (keys[2].notes[0].time / inverse_bps) - beat <= (half_beat + quarter_beat):
 				if keys[2].notes[0] is HoldNote:
 					# is it the beginning?
 					if keys[2].notes[0].part == 2:
 						keys[2].holding = true
-						accuracy = keys[2].notes[0].time - (time + phys_time)
+						accuracy = keys[2].notes[0].time - (time)
 						keys[2].remove_note(0)
 						keys[2].emit()
 						combo += 1
 						notes_hit += 1
 				else:
-					accuracy = keys[2].notes[0].time - (time + phys_time)
+					accuracy = keys[2].notes[0].time - (time)
 					keys[2].remove_note(0)
 					keys[2].emit()
 					combo += 1
@@ -396,18 +381,18 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("key_right"):
 		keys[3].press()
 		if keys[3].notes.size() > 0:
-			if (keys[3].notes[0].time / inverse_bps) - beat <= half_beat:
+			if (keys[3].notes[0].time / inverse_bps) - beat <= (half_beat + quarter_beat):
 				if keys[3].notes[0] is HoldNote:
 					# is it the beginning?
 					if keys[3].notes[0].part == 2:
 						keys[3].holding = true
-						accuracy = keys[3].notes[0].time - (time + phys_time)
+						accuracy = keys[3].notes[0].time - (time)
 						keys[3].remove_note(0)
 						keys[3].emit()
 						combo += 1
 						notes_hit += 1
 				else:
-					accuracy = keys[3].notes[0].time - (time + phys_time)
+					accuracy = keys[3].notes[0].time - (time)
 					keys[3].remove_note(0)
 					keys[3].emit()
 					combo += 1
@@ -468,9 +453,13 @@ func _physics_process(delta):
 	score_text.text = "Score: " + String(int(score))
 	
 	combo_text.set_combo(combo)
+	
+	song_progress.value = MusicPlayer.get_playback_position() / MusicPlayer.stream.get_length()
+	DiscordManager.set_activity(score, OS.get_unix_time() + MusicPlayer.stream.get_length() - MusicPlayer.get_playback_position())
+	
 
 func end_game():
-	set_physics_process(false)
+	set_process(false)
 	var new_results = results.instance()
 	add_child(new_results)
 	new_results.fade_in()
@@ -491,7 +480,6 @@ func _input(event : InputEvent):
 func game_over():
 	MusicPlayer.disconnect("finished", self, "end_game")
 	is_game_over = true
-	set_physics_process(false)
 	set_process(false)
 	if Settings.effects:
 		spinny_bread.die()
