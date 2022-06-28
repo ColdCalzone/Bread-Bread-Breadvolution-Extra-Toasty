@@ -14,6 +14,8 @@ onready var hint = $Hint
 
 onready var sort = $Sort
 
+onready var pitch_scale = $VBoxContainer/PitchScale
+
 var cheat_buffer : Array = []
 var seq : Array = [0, 0, 1, 1, 2, 3, 2, 3, 4, 5]
 
@@ -37,6 +39,8 @@ class DifficultySorter:
 func _ready():
 	DiscordManager.current_state = DiscordManager.GameState.TITLE
 	MusicPlayer.set_music("res://Music/Just_Existing_v4.wav", true)
+	MusicPlayer.pitch_scale = SongData.speed
+	pitch_scale.value = SongData.speed
 	if Settings.cheats:
 		cheats.rect_position.x -= 20
 		chart_button.rect_position.x -= 20
@@ -127,3 +131,8 @@ func _on_Sort_toggled(button_pressed):
 		sort.icon = ASC_ICON
 		for button in all_buttons_asc:
 			song_selector.add_song(button)
+
+
+func _on_PitchScale_value_changed(value):
+	SongData.speed = max(0.1, value)
+	MusicPlayer.pitch_scale = SongData.speed

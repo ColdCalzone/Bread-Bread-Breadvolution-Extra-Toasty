@@ -49,7 +49,6 @@ func report_errors(err, filepath):
 		print("Error: ", result_hash[err], " ", filepath)
 	else:
 		print("Unknown error with file ", filepath, " error code: ", err)
-
 func loadfile(filepath, loop : bool = false):
 	var file = File.new()
 	var err = file.open(filepath, File.READ)
@@ -137,7 +136,7 @@ func loadfile(filepath, loop : bool = false):
 		#get samples and set loop end
 		var samplenum = newstream.data.size() / 4
 		newstream.loop_end = samplenum
-		newstream.loop_mode = 1 #change to 0 or delete this line if you don't want loop, also check out modes 2 and 3 in the docs
+		newstream.loop_mode = 0 #change to 0 or delete this line if you don't want loop, also check out modes 2 and 3 in the docs
 		return newstream  #:D
 
 	#if file is ogg

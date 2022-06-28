@@ -88,6 +88,9 @@ margin_right = 40.0
 margin_bottom = 14.0
 theme = ExtResource( 12 )
 text = "V1.2.0"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [connection signal="pressed" from="CenterContainer2/VBoxContainer/Play" to="." method="_on_Play_pressed"]
 [connection signal="pressed" from="CenterContainer2/VBoxContainer/Settings" to="." method="_on_Settings_pressed"]

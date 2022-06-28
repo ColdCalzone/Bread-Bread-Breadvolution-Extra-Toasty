@@ -26,6 +26,8 @@ var perfect : bool = false
 var aim_bot : bool = false
 var unkillable : bool = false
 
+var speed : float = 1.0
+
 func _ready():
 	var save_file = File.new()
 	if save_file.open(SAVE_PATH, File.READ) == OK:

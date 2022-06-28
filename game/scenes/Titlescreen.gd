@@ -9,6 +9,7 @@ const MIN_DB = 60
 func _ready():
 	DiscordManager.set_activity()
 	MusicPlayer.set_music("res://Music/Just_Existing_v4.wav", true, true)
+	MusicPlayer.pitch_scale = 1.0
 	spectrum = AudioServer.get_bus_effect_instance(1,0)
 	while true:
 		logo.rotate_to(-1.5, 1.5)

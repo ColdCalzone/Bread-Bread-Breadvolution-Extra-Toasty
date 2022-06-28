@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://objects/BG/BackgroundScene.tscn" type="PackedScene" id=1]
 [ext_resource path="res://sprites/ButtonBackPressed.png" type="Texture" id=2]
@@ -8,6 +8,16 @@
 [ext_resource path="res://objects/CheatMenu.tscn" type="PackedScene" id=6]
 [ext_resource path="res://src/ChartEditor.tres" type="Theme" id=7]
 [ext_resource path="res://sprites/descend_sort.png" type="Texture" id=8]
+[ext_resource path="res://sprites/BreadGrabber.png" type="Texture" id=9]
+[ext_resource path="res://sprites/SweetMeterBacking.png" type="Texture" id=10]
+
+[sub_resource type="StyleBoxTexture" id=1]
+texture = ExtResource( 10 )
+region_rect = Rect2( 0, 0, 130, 15 )
+
+[sub_resource type="StyleBoxTexture" id=2]
+texture = ExtResource( 10 )
+region_rect = Rect2( 0, 0, 130, 15 )
 
 [node name="Play" type="Control"]
 anchor_right = 1.0
@@ -28,6 +38,60 @@ margin_right = 637.0
 margin_bottom = 357.0
 texture_normal = ExtResource( 3 )
 texture_focused = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_left = 440.0
+margin_top = 249.0
+margin_right = 640.0
+margin_bottom = 294.0
+custom_constants/separation = -12
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+margin_right = 200.0
+margin_bottom = 13.0
+custom_constants/separation = 46
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
+margin_right = 32.0
+margin_bottom = 13.0
+theme = ExtResource( 7 )
+text = "0.1x"
+
+[node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer"]
+margin_left = 78.0
+margin_right = 123.0
+margin_bottom = 13.0
+theme = ExtResource( 7 )
+text = "Speed"
+
+[node name="Label3" type="Label" parent="VBoxContainer/HBoxContainer"]
+margin_left = 169.0
+margin_right = 196.0
+margin_bottom = 13.0
+theme = ExtResource( 7 )
+text = "   	2x"
+
+[node name="PitchScale" type="HSlider" parent="VBoxContainer"]
+margin_top = 1.0
+margin_right = 200.0
+margin_bottom = 45.0
+rect_min_size = Vector2( 200, 44 )
+custom_icons/grabber_highlight = ExtResource( 9 )
+custom_icons/grabber = ExtResource( 9 )
+custom_styles/slider = SubResource( 1 )
+custom_styles/grabber_area = SubResource( 2 )
+max_value = 2.0
+step = 0.1
+value = 1.0
+scrollable = false
+tick_count = 5
+ticks_on_borders = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -104,5 +168,6 @@ __meta__ = {
 [node name="Tween" type="Tween" parent="."]
 
 [connection signal="pressed" from="Back" to="." method="_on_Back_pressed"]
+[connection signal="value_changed" from="VBoxContainer/PitchScale" to="." method="_on_PitchScale_value_changed"]
 [connection signal="pressed" from="ChartEditor" to="." method="_on_Button_pressed"]
 [connection signal="toggled" from="Sort" to="." method="_on_Sort_toggled"]
