@@ -310,7 +310,7 @@ func _process(delta):
 	if Input.is_action_just_pressed("key_left"):
 		keys[0].press()
 		if keys[0].notes.size() > 0:
-			if keys[0].notes[0].time / inverse_bps - beat <= (half_beat + quarter_beat) * (speed_multiplier / 2):
+			if keys[0].notes[0].time / inverse_bps - beat <= (half_beat + quarter_beat):# * (speed_multiplier / 2):
 				if keys[0].notes[0] is HoldNote:
 					# is it the beginning?
 					if keys[0].notes[0].part == 2:
@@ -335,7 +335,7 @@ func _process(delta):
 	if Input.is_action_just_pressed("key_down"):
 		keys[1].press()
 		if keys[1].notes.size() > 0:
-			if (keys[1].notes[0].time / inverse_bps) - beat <= (half_beat + quarter_beat) * (speed_multiplier / 2):
+			if (keys[1].notes[0].time / inverse_bps) - beat <= (half_beat + quarter_beat):# * (speed_multiplier / 2):
 				if keys[1].notes[0] is HoldNote:
 					# is it the beginning?
 					if keys[1].notes[0].part == 2:
@@ -360,7 +360,7 @@ func _process(delta):
 	if Input.is_action_just_pressed("key_up"):
 		keys[2].press()
 		if keys[2].notes.size() > 0:
-			if (keys[2].notes[0].time / inverse_bps) - beat <= (half_beat + quarter_beat) * (speed_multiplier / 2):
+			if (keys[2].notes[0].time / inverse_bps) - beat <= (half_beat + quarter_beat):# * (speed_multiplier / 2):
 				if keys[2].notes[0] is HoldNote:
 					# is it the beginning?
 					if keys[2].notes[0].part == 2:
@@ -385,7 +385,7 @@ func _process(delta):
 	if Input.is_action_just_pressed("key_right"):
 		keys[3].press()
 		if keys[3].notes.size() > 0:
-			if (keys[3].notes[0].time / inverse_bps) - beat <= (half_beat + quarter_beat) * (speed_multiplier / 2):
+			if (keys[3].notes[0].time / inverse_bps) - beat <= (half_beat + quarter_beat):# * (speed_multiplier / 2):
 				if keys[3].notes[0] is HoldNote:
 					# is it the beginning?
 					if keys[3].notes[0].part == 2:

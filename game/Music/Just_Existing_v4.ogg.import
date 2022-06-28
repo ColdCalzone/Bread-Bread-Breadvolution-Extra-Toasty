@@ -11,5 +11,5 @@ dest_files=[ "res://.import/Just_Existing_v4.ogg-73ef8d9c21d5061b382ffaea074fbd6
 
 [params]
 
-loop=false
+loop=true
 loop_offset=0
