@@ -38,7 +38,7 @@ class DifficultySorter:
 
 func _ready():
 	DiscordManager.current_state = DiscordManager.GameState.TITLE
-	MusicPlayer.set_music("res://Music/Just_Existing_v4.wav", true)
+	MusicPlayer.set_music("res://Music/Just_Existing_v4.ogg", true, true)
 	MusicPlayer.pitch_scale = SongData.speed
 	pitch_scale.value = SongData.speed
 	if Settings.cheats:

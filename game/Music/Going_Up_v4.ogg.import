@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/Going_Up_v4.ogg-98f706565a9e97db137a3637f18744b9.oggstr"
+
+[deps]
+
+source_file="res://Music/Going_Up_v4.ogg"
+dest_files=[ "res://.import/Going_Up_v4.ogg-98f706565a9e97db137a3637f18744b9.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

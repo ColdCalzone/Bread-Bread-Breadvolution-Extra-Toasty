@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/Into_the_Swing_v3.ogg-6f2ea27beda170cb94aaa56d996e5b1a.oggstr"
+
+[deps]
+
+source_file="res://Music/Into_the_Swing_v3.ogg"
+dest_files=[ "res://.import/Into_the_Swing_v3.ogg-6f2ea27beda170cb94aaa56d996e5b1a.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

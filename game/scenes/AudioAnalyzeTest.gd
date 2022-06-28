@@ -29,4 +29,4 @@ func _process(_delta):
 
 func _ready():
 	spectrum = AudioServer.get_bus_effect_instance(1,0)
-	MusicPlayer.set_music("res://Music/Just_Existing_v4.wav", true)
+	MusicPlayer.set_music("res://Music/Just_Existing_v4.ogg", true)
