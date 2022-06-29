@@ -87,7 +87,7 @@ __meta__ = {
 margin_right = 40.0
 margin_bottom = 14.0
 theme = ExtResource( 12 )
-text = "V1.2.1"
+text = "V1.2.2"
 __meta__ = {
 "_edit_use_anchors_": false
 }
