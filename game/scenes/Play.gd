@@ -82,12 +82,12 @@ func _on_Back_pressed():
 func play_level(song : String):
 	if SongData.set_level(song):
 		DiscordManager.current_state = DiscordManager.GameState.IN_GAME
-		DiscordManager.discord.run_callbacks()
+		DiscordManager.run_callbacks()
 		TransitionManager.transition_to("game")
 
 func _process(_delta):
 	DiscordManager.set_activity()
-	DiscordManager.discord.run_callbacks()
+	DiscordManager.run_callbacks()
 
 func _input(event):
 	if event is InputEventKey and not Settings.cheats:

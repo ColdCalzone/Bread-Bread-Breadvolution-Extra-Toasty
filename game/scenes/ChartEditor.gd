@@ -154,7 +154,7 @@ func _process(_delta):
 			last_bar = int((current_note) / 16)
 			bar_selector.value = last_bar + 1
 	else:
-		DiscordManager.discord.run_callbacks()
+		DiscordManager.run_callbacks()
 
 func change_note(mode : int, index : int):
 # warning-ignore:integer_division

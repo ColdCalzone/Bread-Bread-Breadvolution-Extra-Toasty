@@ -33,7 +33,28 @@ func _ready():
 	if save_file.open(SAVE_PATH, File.READ) == OK:
 		save_data = JSON.parse(save_file.get_as_text()).result
 		save_file.close()
+	# Too slow people can do it themselves
+	#unzip_files()
 	load_songs()
+
+func unzip_files():
+	var gdunzip = load('res://addons/gdunzip/gdunzip.gd').new()
+	var directory_path = OS.get_executable_path().rsplit("/", false, 1)[0]
+	var working_dir : Directory = Directory.new()
+	if working_dir.open(directory_path) == OK:
+		working_dir.list_dir_begin(true)
+		var file_name = working_dir.get_next()
+		while file_name != "":
+			print(file_name)
+			if file_name.ends_with(".zip"):
+				if gdunzip.load(directory_path + "/" + file_name):
+					for f in gdunzip.files:
+						var data = gdunzip.uncompress(f)
+						var file : File = File.new()
+						if file.open(SONG_DATA_GLOBAL + f, File.WRITE) == OK:
+							file.store_buffer(data)
+							file.close()
+			file_name = working_dir.get_next()
 
 func load_songs():
 	var song_data_res = Directory.new()

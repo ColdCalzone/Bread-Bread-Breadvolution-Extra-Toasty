@@ -20,6 +20,10 @@ func _ready():
 		return
 	activities = discord.get_activity_manager()
 
+func run_callbacks():
+	if discord != null:
+		discord.run_callbacks()
+
 func set_activity(score : int = 0, end_time : int = 0):
 	if activities == null: return
 	var activity = Discord.Activity.new()

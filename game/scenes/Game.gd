@@ -191,7 +191,7 @@ func _ready():
 	can_die = true
 
 func _process(delta):
-	DiscordManager.discord.run_callbacks()
+	DiscordManager.run_callbacks()
 	time += delta * speed_multiplier
 	var beat = (time / inverse_bps)
 	if int(beat) > last_beat and Settings.effects:

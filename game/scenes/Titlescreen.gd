@@ -20,7 +20,7 @@ func _ready():
 var has_pulsed = false
 
 func _process(_delta):
-	DiscordManager.discord.run_callbacks()
+	DiscordManager.run_callbacks()
 	# shamelessly stolen from the example in the docs - check "res://scenes/AudioAnalyzeTest.tscn"
 	# 1380 - 2070 is the frequency range I decided on
 	var magnitude: float = spectrum.get_magnitude_for_frequency_range(1380, 2070).length()
