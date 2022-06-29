@@ -9,7 +9,7 @@ func load_image(path : String) -> Texture:
 		var image = Image.new()
 		image.load(path)
 		var texture = ImageTexture.new()
-		texture.create_from_image(image)
+		texture.create_from_image(image, Texture.FLAGS_DEFAULT - Texture.FLAG_FILTER)
 		return texture
 
 func load_audio(path : String, loop : bool = false) -> AudioStream:
